@@ -1,22 +1,25 @@
+import { SecondaryCard } from "./Card";
+
 export default function Articles() {
   return (
     <>
-      <section className="bg-merahTua flex flex-col items-center justify-center p-20 text-white">
-        <h2 className="text-3xl font-semibold">Jelajahi Layanan Kami</h2>
-        <div className="my-20 flex gap-20">
-          <Card
+      <section className="bg-merahTua flex flex-col items-center justify-center px-5 py-20 text-white">
+        <h2 className="text-3xl font-semibold">Artikel Unggulan</h2>
+        <div className="my-20 flex w-300 flex-col gap-30">
+          <SecondaryCard
             title={"Penyakit"}
             body={
               "Learn about various sexually transmitteddiseases, their symptoms, and preventionmethods."
             }
           />
-          <Card
+          <SecondaryCard
             title={"penyakit"}
             body={
               "Learn about various sexually transmitteddiseases, their symptoms, and preventionmethods."
             }
+            layout={false}
           />
-          <Card
+          <SecondaryCard
             title={"penyakit"}
             body={
               "Learn about various sexually transmitteddiseases, their symptoms, and preventionmethods."
