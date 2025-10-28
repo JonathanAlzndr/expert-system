@@ -12,7 +12,7 @@ export default function Button({ text, onClick, color = "green" }) {
   }
   return (
     <button
-      className={`${variant} mt-5 h-10 cursor-pointer rounded-lg px-2 text-xs text-white shadow-lg text-shadow-md active:scale-93 lg:text-base`}
+      className={`${variant} h-10 w-full cursor-pointer rounded-lg text-xs text-white shadow-lg text-shadow-md active:scale-93 lg:text-sm`}
       onClick={onClick}
     >
       <b>{text}</b>
