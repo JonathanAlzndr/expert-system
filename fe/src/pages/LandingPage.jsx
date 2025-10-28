@@ -5,7 +5,7 @@ export default function LandingPage() {
   return (
     <>
       <Header />
-      <main>
+      <main className="h-screen">
         <Hero />
       </main>
     </>
