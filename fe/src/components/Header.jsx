@@ -1,5 +1,5 @@
 import { Link, NavLink, useNavigate } from "react-router";
-import Button from "./../components/Button";
+import Button from "./Button";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -10,7 +10,7 @@ export default function Header() {
         className={`bg-merahTua sticky top-0 z-50 flex h-15 w-full items-center justify-around p-3 text-slate-100 transition-colors duration-300 sm:p-4 lg:p-5`}
       >
         <div className="flex w-xs">
-          <img src="" alt="logo.png" />
+          <img src={"/"} alt="logo.png" />
           <Link
             className="mx-5 cursor-pointer text-base font-semibold hover:opacity-70 active:scale-90 lg:text-xl"
             to={"/"}

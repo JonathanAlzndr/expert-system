@@ -26,7 +26,7 @@ function SecondaryCard({ title, body, layout = true }) {
     <div className="flex h-60 w-full items-center justify-around gap-20">
       {layout ? (
         <>
-          <div className="h-full w-250">
+          <div className="h-full w-full">
             <Image alt={title} />
           </div>
           <Caption title={title} body={body} />
@@ -34,7 +34,7 @@ function SecondaryCard({ title, body, layout = true }) {
       ) : (
         <>
           <Caption title={title} body={body} />
-          <div className="h-full w-250">
+          <div className="h-full w-full">
             <Image alt={title} />
           </div>
         </>
