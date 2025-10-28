@@ -5,7 +5,7 @@ export default function Services() {
         <img className="h-full w-full" src="" alt={`${title}.png`} />
         <div className="flex flex-col items-center">
           <h3 className="mb-2 text-2xl font-semibold">{title}</h3>
-          <p className="text-center text-sm text-gray-300">{body}</p>
+          <p className="text-center text-base text-gray-300/80">{body}</p>
         </div>
       </div>
     );
@@ -15,7 +15,7 @@ export default function Services() {
       <h2 className="text-3xl font-semibold">Jelajahi Layanan Kami</h2>
       <div className="my-20 flex gap-20">
         <Card
-          title={"penyakit"}
+          title={"Penyakit"}
           body={
             "Learn about various sexually transmitteddiseases, their symptoms, and preventionmethods."
           }
