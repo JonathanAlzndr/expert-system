@@ -2,7 +2,6 @@
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import DiagnosisLayout from "./pages/Diagnosis/DiagnosisLayout";
-import DiagnosisLayout from "./pages/Diagnosis/DiagnosisLayout";
 
 //Hooks
 import { Routes, Route } from "react-router";
