@@ -16,7 +16,7 @@ function SecondaryCard({ title, body, layout = true }) {
       <h3 className="mb-2 text-2xl font-semibold">{title}</h3>
       <p className="text-base text-gray-300/80">{body}</p>
       <br />
-      <div className="w-50">
+      <div className="w-50 h-9">
         <Button text={"Baca selengkapnya"} color="secondRed" />
       </div>
     </div>
