@@ -1,11 +1,11 @@
 import { Link, NavLink } from "react-router";
-import Button from "../../../components/Button";
+import { IoMdNotificationsOutline } from "react-icons/io";
 
 export default function HeaderUser() {
   return (
     <>
       <header
-        className={`bg-white sticky top-0 z-50 flex h-16 w-full border-b-\[1px] border border-red-600 backdrop-blur-sm items-center justify-between p-3 text-black transition-colors duration-300 sm:p-4 lg:p-5`}
+        className={`bg-white sticky top-0 z-50 flex h-16 w-full border-b-\[1px] border border-red-600/40 backdrop-blur-sm items-center justify-between p-3 text-black transition-colors duration-300 sm:p-4 lg:p-5`}
       >
         <div className="flex w-full justify-center">
           <img src={"/"} alt="logo.png" />
@@ -17,7 +17,7 @@ export default function HeaderUser() {
           </Link>
         </div>
 
-        <div className="flex w-full gap-10 justify-center">
+        <div className="flex w-full gap-6 justify-center items-center">
           <ul className="flex items-center gap-7 text-sm lg:text-sm">
             <li>
               <NavLink>Beranda</NavLink>
@@ -32,6 +32,12 @@ export default function HeaderUser() {
               <NavLink>Kontak</NavLink>
             </li>
           </ul>
+          <button className="active:scale-90 cursor-pointer">
+            <IoMdNotificationsOutline
+              size={25}
+              className="text-shadow-gray-900"
+            />
+          </button>
           <div className=" rounded-full bg-gray-800 h-10 w-10 ">
             <img src="" alt="" className="" />
           </div>
