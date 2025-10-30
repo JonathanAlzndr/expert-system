@@ -14,7 +14,9 @@ export default function LoginPage() {
             <br />
             <Input label={"password"} type={"text"} placeholder={"Password"} />
             <br />
-            <Button text={"Masuk"} color="blue" />
+            <div className="h-9 w-full">
+              <Button text={"Masuk"} color="blue" />
+            </div>
           </div>
         </div>
       </div>
