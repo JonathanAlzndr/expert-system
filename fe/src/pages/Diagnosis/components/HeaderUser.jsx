@@ -38,9 +38,7 @@ export default function HeaderUser() {
               className="text-shadow-gray-900"
             />
           </button>
-          <div className=" rounded-full bg-gray-800 h-10 w-10 ">
-            <img src="" alt="" className="" />
-          </div>
+          <div className=" rounded-full bg-gray-800 h-10 w-10 "></div>
         </div>
       </header>
     </>

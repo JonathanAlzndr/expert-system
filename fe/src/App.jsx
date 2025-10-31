@@ -5,6 +5,7 @@ import DiagnosisLayout from "./pages/Diagnosis/DiagnosisLayout";
 
 //Hooks
 import { Routes, Route } from "react-router";
+import FormInput from "./pages/Diagnosis/components/FormInput";
 
 function App() {
   return (
@@ -12,8 +13,8 @@ function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path={"login"} element={<LoginPage />} />
       <Route path="diagnosis" element={<DiagnosisLayout />}>
-        <Route index element="" />
-        <Route path="questions" />
+        <Route index />
+        <Route path="questions" element={<FormInput />} />
         <Route path="results" />
       </Route>
       <Route path="disease" />

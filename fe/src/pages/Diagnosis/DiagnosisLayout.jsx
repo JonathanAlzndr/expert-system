@@ -5,7 +5,7 @@ export default function DiagnosisLayout() {
   return (
     <>
       <HeaderUser />
-      <main>
+      <main className="flex flex-col justify-center mx-auto">
         <Outlet />
       </main>
     </>
