@@ -9,13 +9,15 @@ export default function LoginPage() {
           <h1 className="text-3xl font-semibold">Kesehatan Admin</h1>
           <p className="text-lg">Silahkan masuk untuk melanjutkan</p>
           <br />
-          <div className="flex w-full flex-col">
+          <form className="flex w-full flex-col">
             <Input label={"username"} type={"text"} placeholder={"Username"} />
             <br />
             <Input label={"password"} type={"text"} placeholder={"Password"} />
             <br />
-            <Button text={"Masuk"} color="blue" />
-          </div>
+            <div className="h-9 w-full">
+              <Button text={"Masuk"} color="blue" />
+            </div>
+          </form>
         </div>
       </div>
     </>
