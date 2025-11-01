@@ -1,14 +1,18 @@
-import { useState } from 'react';
-import { FaChevronDown } from 'react-icons/fa';
-import Button from './../../../components/Button';
+import { useState } from "react";
+import { FaChevronDown } from "react-icons/fa";
+import Button from "./../../components/Button";
+import { useNavigate } from "react-router";
 
-export default function FormInput() {
+export default function DiagnosisQuestions() {
+  const navigate = useNavigate();
   return (
     <section className="mt-10 flex h-170 w-180 flex-col rounded-lg bg-white px-7 py-6 shadow-lg">
-      <h1 className="mb-2 text-3xl font-bold">Symptom Checker</h1>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, ducimus.</p>
+      <h1 className="mb-2 text-3xl font-bold">Pengecekan Gejala</h1>
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, ducimus.
+      </p>
       <br />
-      <form action="" className="w-full">
+      <form action="" className="w-full" onSubmit={(e) => e.preventDefault()}>
         <div className="mb-4 flex w-full justify-center gap-12">
           <div className="flex w-full flex-col gap-5">
             <Input question="Pertanyaan 1">
@@ -62,14 +66,18 @@ export default function FormInput() {
           <option value="C">C</option>
         </Input>
         <div className="mt-10 h-11 w-full">
-          <Button text={'kirim'} color={'red'} />
+          <Button
+            text={"kirim"}
+            color={"green"}
+            onClick={() => navigate({ pathname: "/diagnosis/results" })}
+          />
         </div>
       </form>
     </section>
   );
 }
 
-function Input({ id, question = 'Pertanyaan?', children }) {
+function Input({ id, question = "Pertanyaan?", children }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -79,7 +87,6 @@ function Input({ id, question = 'Pertanyaan?', children }) {
       </label>
 
       <div className="relative">
-        {/* Select */}
         <select
           id={id}
           onClick={() => setIsOpen((prev) => !prev)}
@@ -90,9 +97,8 @@ function Input({ id, question = 'Pertanyaan?', children }) {
           {children}
         </select>
 
-        {/* Panah pakai react-icons */}
         <span
-          className={`pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : 'rotate-0'}`}
+          className={`pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 transition-transform duration-200 ${isOpen ? "rotate-180" : "rotate-0"}`}
         >
           <FaChevronDown size={14} />
         </span>

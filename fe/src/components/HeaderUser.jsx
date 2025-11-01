@@ -5,7 +5,7 @@ export default function HeaderUser() {
   return (
     <>
       <header
-        className={`bg-white sticky top-0 z-50 flex h-16 w-full border-b-\[1px] border border-red-600/40 backdrop-blur-sm items-center justify-between p-3 text-black transition-colors duration-300 sm:p-4 lg:p-5`}
+        className={`bg-white sticky top-0 z-50 flex h-16 w-full border-b-\[1px] border border-green-600/40 backdrop-blur-sm items-center justify-between p-3 text-black transition-colors duration-300 sm:p-4 lg:p-5`}
       >
         <div className="flex w-full justify-center">
           <img src={"/"} alt="logo.png" />

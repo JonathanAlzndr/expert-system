@@ -1,6 +1,8 @@
 import Button from "../components/Button";
+import { useNavigate } from "react-router";
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   return (
     <>
       <div className="box-border flex h-screen w-full items-center justify-center">
@@ -15,7 +17,11 @@ export default function LoginPage() {
             <Input label={"password"} type={"text"} placeholder={"Password"} />
             <br />
             <div className="h-9 w-full">
-              <Button text={"Masuk"} color="blue" />
+              <Button
+                text={"Masuk"}
+                onClick={() => navigate({ pathname: "/diagnosis/questions" })}
+                color="blue"
+              />
             </div>
           </form>
         </div>
