@@ -1,12 +1,10 @@
 export default function Services() {
-  const Card = ({ title, body }) => {
+  const Card = ({ title, body, picture }) => {
     return (
       <div className="flex h-50 w-full flex-col items-center justify-around px-4 py-1">
         <img
-          className="h-full w-full rounded-xl object-cover object-[center_60%]"
-          src={
-            "https://lh3.googleusercontent.com/aida-public/AB6AXuDd3KIZ9USkV7-6apBmR9TUWbhYp3lZMQCPek1c5crKD6raK14X3TL6U0bHg-TcIgVYb3APEvSRO3nJaWB9TvHQohZ4TlM062CqTFh9j0clKD1FALhRHODYDl5Gy5rz5pBIpwzeS5zG1_hZGzEN_XUnlYtW1TM_MDNlP-Mm6yPk7bL3FqFgbml6CBMTx2WIzSfrLMb5vmiuoejb_6nY6ZcsHarvnr25czwP0NDTlH7uoDC2n3WDr-6Sz6OH0s_9N7Aytn7xZMn4l94"
-          }
+          className="h-full w-full transform rounded-xl object-cover object-[center_30%] shadow-xl transition-all duration-500 hover:scale-105"
+          src={`${picture}`}
           alt={`${title}.png`}
         />
         <br />
@@ -26,17 +24,26 @@ export default function Services() {
           body={
             "Learn about various sexually transmitteddiseases, their symptoms, and preventionmethods."
           }
-        />
-        <Card
-          title={"Penyakit"}
-          body={
-            "Learn about various sexually transmitteddiseases, their symptoms, and preventionmethods."
+          picture={
+            "https://media.istockphoto.com/id/1312616957/id/vektor/diagnosa-paru-paru-kesehatan-konsep-penyakit-paru-paru-pulmonologi-kanker-pneumonia.jpg?s=612x612&w=0&k=20&c=KvpEjO0K6FI5M313L81s31ZUOTajsewHb1y0mNLL79s="
           }
         />
         <Card
           title={"Penyakit"}
           body={
             "Learn about various sexually transmitteddiseases, their symptoms, and preventionmethods."
+          }
+          picture={
+            "https://media.istockphoto.com/id/1415126482/id/vektor/wanita-dengan-alergi-dari-serbuk-sari-bulu-kucing-jeruk-kacang-tanah-atau-berry-hidung-meler.jpg?s=612x612&w=0&k=20&c=2OTdNl64bXW-Z6lPoPcscJvz47BiSEKuNQtSfn2oBOA="
+          }
+        />
+        <Card
+          title={"Penyakit"}
+          body={
+            "Learn about various sexually transmitteddiseases, their symptoms, and preventionmethods."
+          }
+          picture={
+            "https://media.istockphoto.com/id/1454206700/id/vektor/pria-muda-mengalami-batuk-kering-pria-dengan-asma-alergi-atau-pilek-orang-sakit-pria-dengan.jpg?s=612x612&w=0&k=20&c=0HiK3qJy1GhYMepf8ItZ9Ia6OGwQRq2T44JXhLmVJhA="
           }
         />
       </div>
