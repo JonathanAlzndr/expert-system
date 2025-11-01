@@ -8,15 +8,14 @@ export default function Button({ text, onClick, color }) {
       variant = "bg-primary hover:bg-primary/80 active:bg-primary text-white";
       break;
     case "secondary":
-      variant =
-        "bg-white hover:bg-white/80 active:bg-white text-primary";
+      variant = "bg-white hover:bg-white/80 active:bg-white text-primary";
       break;
     default:
       variant = "bg-primary hover:bg-primary/80 active:bg-primary text-white";
   }
   return (
     <button
-      className={`${variant} h-full w-full cursor-pointer rounded-sm text-xs shadow-lg text-shadow-md active:scale-98 lg:text-sm`}
+      className={`${variant} h-full w-full cursor-pointer rounded-sm text-xs shadow-lg active:scale-98 lg:text-sm`}
       onClick={onClick}
     >
       <b>{text}</b>

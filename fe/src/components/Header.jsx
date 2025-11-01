@@ -7,30 +7,30 @@ export default function Header() {
   return (
     <>
       <header
-        className={`sticky top-0 z-50 flex h-16 w-full items-center justify-around border-green-900 bg-white p-3 text-black backdrop-blur-2xl transition-colors duration-300 sm:p-4 lg:p-5`}
+        className={`border-primary sticky top-0 z-50 flex h-16 w-full items-center justify-around border-b bg-white p-3 text-black backdrop-blur-2xl sm:p-4 lg:p-5`}
       >
         <div className="flex w-xs">
           <img src={"/"} alt="logo.png" />
           <Link
-            className="mx-5 cursor-pointer text-base font-bold hover:opacity-70 active:scale-90 lg:text-xl"
+            className="mx-5 cursor-pointer text-base font-semibold hover:opacity-70 active:scale-90 lg:text-xl"
             to={"/"}
           >
             Kesehatan Utama
           </Link>
         </div>
 
-        <ul className="flex items-center gap-7 text-sm lg:text-sm">
+        <ul className="flex items-center gap-7 text-sm font-semibold lg:text-base">
           <li>
-            <NavLink>Beranda</NavLink>
+            <NavLink className="hover:text-primary">Beranda</NavLink>
           </li>
           <li>
-            <NavLink>Layanan</NavLink>
+            <NavLink className="hover:text-primary">Layanan</NavLink>
           </li>
           <li>
-            <NavLink>Tentang Kami</NavLink>
+            <NavLink className="hover:text-primary">Tentang Kami</NavLink>
           </li>
           <li>
-            <NavLink>Kontak</NavLink>
+            <NavLink className="hover:text-primary">Kontak</NavLink>
           </li>
         </ul>
         <div className="ml-10 flex w-3xs justify-center">

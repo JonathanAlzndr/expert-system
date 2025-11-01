@@ -4,8 +4,10 @@ export default function Hero() {
   return (
     <>
       <section className="flex h-110 w-full items-center justify-center px-50">
-        <div className="flex flex-col items-center justify-center text-center text-white">
-          <h1 className="text-4xl font-bold">Prioritaskan Kesehatan mu</h1>
+        <div className="text-background flex flex-col items-center justify-center text-center">
+          <h1 className="text-4xl font-bold">
+            Prioritaskan Kesehatan mu
+          </h1>
           <br />
           <p className="text-lg">
             Selamat datang di HealthFirst, mitra tepercaya Anda dalam kesehatan

@@ -23,7 +23,7 @@ function SecondaryCard({ title, body, layout = true }) {
   );
 
   return (
-    <div className="flex h-60 w-full items-center justify-around gap-10">
+    <div className="flex h-60 w-full items-center justify-around gap-10 text-black">
       {layout ? (
         <>
           <div className="h-full w-full">

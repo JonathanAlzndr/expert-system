@@ -6,65 +6,70 @@ import { useNavigate } from "react-router";
 export default function DiagnosisQuestions() {
   const navigate = useNavigate();
   return (
-    <section className="mt-10 flex h-170 w-180 flex-col rounded-lg bg-white px-7 py-6 shadow-lg">
+    <section className="my-10 flex h-155 w-180 flex-col rounded-lg bg-white px-7 py-6 shadow-lg">
       <h1 className="mb-2 text-3xl font-bold">Pengecekan Gejala</h1>
       <p className="text-sm">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, ducimus.
       </p>
       <br />
       <form action="" className="w-full" onSubmit={(e) => e.preventDefault()}>
-        <div className="mb-4 flex w-full justify-center gap-12">
-          <div className="flex w-full flex-col gap-5">
-            <Input question="Pertanyaan 1">
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-            </Input>
-            <Input question="Pertanyaan 1">
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-            </Input>
-
-            <Input question="Pertanyaan 1">
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-            </Input>
-            <Input question="Pertanyaan 1">
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-            </Input>
-          </div>
-          <div className="flex w-full flex-col gap-5">
-            <Input question="Pertanyaan 2">
-              <option value="A">A</option>
-              <option value="B">B</option>
-              <option value="C">C</option>
-            </Input>
-            <Input question="Pertanyaan 2">
-              <option value="A">A</option>
-              <option value="B">B</option>
-              <option value="C">C</option>
-            </Input>
-            <Input question="Pertanyaan 2">
-              <option value="A">A</option>
-              <option value="B">B</option>
-              <option value="C">C</option>
-            </Input>
-            <Input question="Pertanyaan 2">
-              <option value="A">A</option>
-              <option value="B">B</option>
-              <option value="C">C</option>
-            </Input>
-          </div>
+        <div className="flex h-90 w-full flex-col gap-4 overflow-y-auto">
+          <Input question="Pertanyaan 1">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+          </Input>
+          <Input question="Pertanyaan 2">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+          </Input>
+          <Input question="Pertanyaan 2">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+          </Input>
+          <Input question="Pertanyaan 2">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+          </Input>
+          <Input question="Pertanyaan 2">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+          </Input>
+          <Input question="Pertanyaan 2">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+          </Input>
+          <Input question="Pertanyaan 2">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+          </Input>
+          <Input question="Pertanyaan 2">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+          </Input>
+          <Input question="Pertanyaan 2">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+          </Input>
+          <Input question="Pertanyaan 2">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+          </Input>
+          <Input question="Pertanyaan 2">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+          </Input>
         </div>
-        <Input question="Pertanyaan 3">
-          <option value="A">A</option>
-          <option value="B">B</option>
-          <option value="C">C</option>
-        </Input>
         <div className="mt-10 h-11 w-full">
           <Button
             text={"kirim"}

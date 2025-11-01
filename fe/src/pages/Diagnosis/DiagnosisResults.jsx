@@ -1,3 +1,7 @@
 export default function DiagnosisResults() {
-  return <></>;
+  return (
+    <>
+      <h1>Hasil</h1>
+    </>
+  );
 }
