@@ -9,8 +9,6 @@ class Penyakit(db.Model):
     deskripsi = db.Column(db.Text, nullable=True)
     solusi = db.Column(db.Text, nullable=True)
 
-    # Relasi one-to-many: Satu penyakit bisa memiliki banyak aturan (rule)
-    # cascade="all, delete-orphan" akan menghapus rules terkait jika penyakit dihapus
     rules = db.relationship("Rule", back_populates="penyakit", cascade="all, delete-orphan")
 
     def __repr__(self):
