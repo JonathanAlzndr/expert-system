@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  --color-merahTua: #261014;
-  --color-tahiti: #3ab7bf;
-  --color-bermuda: #78dcca;
-  --color-merahTua2: #58101c;
+  --color-primary: #176b87;
+  --color-secondary: #b4d4ff;
+  --color-background: #eef5ff;
+  --color-text: #111827;
 }
 
 body {
-  @apply bg-gray-100;
+  @apply bg-background;
 }

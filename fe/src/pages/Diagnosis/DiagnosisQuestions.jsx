@@ -8,7 +8,7 @@ export default function DiagnosisQuestions() {
   return (
     <section className="mt-10 flex h-170 w-180 flex-col rounded-lg bg-white px-7 py-6 shadow-lg">
       <h1 className="mb-2 text-3xl font-bold">Pengecekan Gejala</h1>
-      <p>
+      <p className="text-sm">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, ducimus.
       </p>
       <br />

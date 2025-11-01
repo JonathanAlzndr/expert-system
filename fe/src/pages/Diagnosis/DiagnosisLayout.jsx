@@ -1,10 +1,10 @@
-import { Outlet } from 'react-router';
-import HeaderUser from './../../components/HeaderUser';
+import { Outlet } from "react-router";
+import HeaderAdmin from "./../../components/HeaderAdmin";
 
 export default function DiagnosisLayout() {
   return (
     <>
-      <HeaderUser />
+      <HeaderAdmin />
       <main className="mx-auto flex flex-col justify-center">
         <Outlet />
       </main>

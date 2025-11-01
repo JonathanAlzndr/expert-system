@@ -1,18 +1,18 @@
-export default function Button({ text, onClick, color = 'green' }) {
-  let variant = '';
+export default function Button({ text, onClick, color }) {
+  let variant = "";
   switch (color) {
-    case 'blue':
-      variant = 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white';
+    case "blue":
+      variant = "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white";
       break;
-    case 'red':
-      variant = 'bg-red-700/90 hover:bg-red-700 active:bg-red-800 text-white';
+    case "primary":
+      variant = "bg-primary hover:bg-primary/80 active:bg-primary text-white";
       break;
-    case 'secondRed':
+    case "secondary":
       variant =
-        'bg-merahTua2 font-light hover:bg-red-500 active:bg-red-900 active:text-red-900 text-red-500 hover:text-red-900';
+        "bg-white hover:bg-white/80 active:bg-white text-primary";
       break;
     default:
-      variant = 'bg-green-600 hover:bg-green-700 active:bg-green-800 text-white';
+      variant = "bg-primary hover:bg-primary/80 active:bg-primary text-white";
   }
   return (
     <button
