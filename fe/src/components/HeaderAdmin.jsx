@@ -1,5 +1,4 @@
 import { Link, NavLink } from "react-router";
-import { IoMdNotificationsOutline } from "react-icons/io";
 
 export default function HeaderAdmin() {
   return (
@@ -29,7 +28,15 @@ export default function HeaderAdmin() {
               <NavLink to={"/diagnosis/results"}>Hasil</NavLink>
             </li>
           </ul>
-          <div className="h-10 w-10 rounded-full bg-gray-800"></div>
+          <button className="cursor-pointer active:scale-90" onClick={() => {}}>
+            <div className="h-10 w-10 rounded-full">
+              <img
+                src="https://media.istockphoto.com/id/1300845620/id/vektor/ikon-pengguna-datar-terisolasi-pada-latar-belakang-putih-simbol-pengguna-ilustrasi-vektor.jpg?s=612x612&w=0&k=20&c=QN0LOsRwA1dHZz9lsKavYdSqUUnis3__FQLtZTQ--Ro="
+                alt="profile.jpg"
+                className="object-cover"
+              />
+            </div>
+          </button>
         </div>
       </header>
     </>

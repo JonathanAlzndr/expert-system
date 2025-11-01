@@ -26,7 +26,7 @@ const ProgressBar = ({ title }) => {
         <p>{progress}</p>
       </div>
       <div class="relative my-2 h-5 overflow-hidden rounded-full bg-gray-300">
-        <div class="absolute top-0 bottom-0 left-0 w-10 rounded-full bg-green-400"></div>
+        <div class="absolute top-0 bottom-0 left-0 w-10 rounded-full bg-green-500"></div>
       </div>
     </>
   );
@@ -61,7 +61,7 @@ const Card = () => {
             "https://media.istockphoto.com/id/1421878861/id/vektor/batuk-pria-muda-yang-sakit-terisolasi-ilustrasi-kartun-gaya-datar-vektor.jpg?s=612x612&w=0&k=20&c=Rzpcjk_dR3TsnSzKiLB5xyqQYA8jr_B4emkwt1Y6dNo="
           }
           alt=""
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover transition-transform duration-500 hover:scale-110"
         />
       </div>
     </div>
