@@ -5,7 +5,7 @@ export default function HeaderUser() {
   return (
     <>
       <header
-        className={`bg-white sticky top-0 z-50 flex h-16 w-full border-b-\[1px] border border-red-600/40 backdrop-blur-sm items-center justify-between p-3 text-black transition-colors duration-300 sm:p-4 lg:p-5`}
+        className={`border-b-\[1px] sticky top-0 z-50 flex h-16 w-full items-center justify-between border border-green-600/40 bg-white p-3 text-black backdrop-blur-sm transition-colors duration-300 sm:p-4 lg:p-5`}
       >
         <div className="flex w-full justify-center">
           <img src={"/"} alt="logo.png" />
@@ -17,7 +17,7 @@ export default function HeaderUser() {
           </Link>
         </div>
 
-        <div className="flex w-full gap-6 justify-center items-center">
+        <div className="flex w-full items-center justify-center gap-6">
           <ul className="flex items-center gap-7 text-sm lg:text-sm">
             <li>
               <NavLink>Beranda</NavLink>
@@ -32,13 +32,13 @@ export default function HeaderUser() {
               <NavLink>Kontak</NavLink>
             </li>
           </ul>
-          <button className="active:scale-90 cursor-pointer">
+          <button className="cursor-pointer active:scale-90">
             <IoMdNotificationsOutline
               size={25}
               className="text-shadow-gray-900"
             />
           </button>
-          <div className=" rounded-full bg-gray-800 h-10 w-10 "></div>
+          <div className="h-10 w-10 rounded-full bg-gray-800"></div>
         </div>
       </header>
     </>
