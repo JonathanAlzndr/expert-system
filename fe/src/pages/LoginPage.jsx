@@ -18,7 +18,16 @@ export default function LoginPage() {
         data-aos="zoom-out"
       >
         <div className="flex w-sm flex-col items-center">
-          <img src={""} alt="logo.png" />
+          <div className="my-1 h-20 w-20 overflow-hidden rounded-full">
+            <img
+              src={
+                "https://media.istockphoto.com/id/1321617070/id/vektor/logo-medis-kesehatan.jpg?s=612x612&w=0&k=20&c=zCH2ajNmvD2Z0peBNjXmY1WoR8bDhvxAgYevGH9U_XI="
+              }
+              alt="logo.png"
+              className="object-cover"
+            />
+          </div>
+
           <h1 className="text-3xl font-semibold">Admin Kesehatan</h1>
           <p className="text-lg">Silahkan masuk untuk melanjutkan</p>
           <br />

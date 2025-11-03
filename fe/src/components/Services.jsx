@@ -16,7 +16,10 @@ export default function Services() {
     );
   };
   return (
-    <section className="flex flex-col items-center justify-center p-20">
+    <section
+      id="layanan"
+      className="flex flex-col items-center justify-center p-20"
+    >
       <h2 className="text-3xl font-semibold">Jelajahi Layanan Kami</h2>
       <div className="my-20 flex gap-20">
         <Card

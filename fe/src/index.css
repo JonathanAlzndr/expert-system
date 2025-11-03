@@ -8,6 +8,11 @@
   --color-biru: #f6f8f9;
 }
 
+html {
+  @apply scroll-smooth;
+}
+
 body {
   @apply bg-background;
+  @apply scroll-smooth;
 }
