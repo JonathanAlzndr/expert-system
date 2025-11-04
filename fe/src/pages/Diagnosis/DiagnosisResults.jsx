@@ -35,7 +35,7 @@ const ProgressBar = ({ title }) => {
 const Insight = () => {
   const [insight, setInsight] = useState("80%");
   return (
-    <div className="my-10 flex h-50 w-50 rounded bg-green-600 px-5 py-3">
+    <div className="my-10 flex h-50 w-50 rounded bg-green-600 px-5 py-3 shadow-xl">
       <div className="text-background h-full w-full">
         <h2 className="text-2xl">Kepastian</h2>
         <p className="text-5xl font-semibold">{insight}</p>
@@ -46,7 +46,7 @@ const Insight = () => {
 
 const Card = () => {
   return (
-    <div className="my-10 flex h-50 w-150 justify-between rounded bg-green-600 px-5 py-6">
+    <div className="my-10 flex h-50 w-150 justify-between rounded bg-green-600 px-5 py-6 shadow-xl">
       <div className="text-background h-full w-full">
         <h2 className="text-2xl font-semibold">Lorem</h2>
         <h3 className="text-xl font-semibold">Lorem ipsum dolor sit.</h3>
