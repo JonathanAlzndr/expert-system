@@ -41,7 +41,7 @@ export default function LoginPage() {
           <div className="h-10 w-full">
             <Button
               text={"Masuk"}
-              onClick={() => navigate({ pathname: "/diagnosis" })}
+              onClick={() => navigate({ pathname: "/admin" })}
               color="primary"
             />
           </div>

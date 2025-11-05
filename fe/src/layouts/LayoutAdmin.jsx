@@ -1,7 +1,7 @@
 import { Outlet } from "react-router";
-import HeaderAdmin from "./../../components/HeaderAdmin";
+import HeaderAdmin from "../components/HeaderAdmin";
 
-export default function DiagnosisLayout() {
+export default function LayoutAdmin() {
   return (
     <>
       <HeaderAdmin />

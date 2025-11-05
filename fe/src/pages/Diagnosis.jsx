@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
-import Button from "./../../components/Button";
+import Button from "../components/Button";
 import { useNavigate } from "react-router";
 
-export default function DiagnosisQuestions() {
+export default function Diagnosis() {
   const navigate = useNavigate();
   return (
     <section className="mt-10 flex h-145 w-180 flex-col overflow-hidden rounded-lg bg-white px-7 py-6 shadow-lg">

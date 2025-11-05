@@ -17,8 +17,8 @@ export default function Hero() {
           <br />
           <div className="h-10 w-30">
             <Button
-              text={"Lainnya"}
-              onClick={() => navigate({ pathname: "/questions" })}
+              text={"Diagnosis"}
+              onClick={() => navigate({ pathname: "/diagnosis" })}
               color="secondary"
             />
           </div>
