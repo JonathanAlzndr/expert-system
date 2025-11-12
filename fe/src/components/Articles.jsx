@@ -3,7 +3,10 @@ import { SecondaryCard } from "./Card";
 export default function Articles() {
   return (
     <>
-      <section className="relative flex flex-col items-center justify-center px-5 py-20">
+      <section
+        id="artikel"
+        className="relative flex flex-col items-center justify-center px-5 py-20"
+      >
         <h2 className="text-3xl font-semibold">Artikel Unggulan</h2>
         <div className="my-20 flex w-300 flex-col gap-30">
           <SecondaryCard

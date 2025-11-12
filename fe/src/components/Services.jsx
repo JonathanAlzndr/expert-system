@@ -1,12 +1,15 @@
 export default function Services() {
   const Card = ({ title, body, picture }) => {
     return (
-      <div className="flex h-50 w-full flex-col items-center justify-around px-4 py-1">
-        <img
-          className="h-full w-full transform rounded-xl object-cover object-[center_30%] shadow-xl transition-all duration-500 hover:scale-105"
-          src={`${picture}`}
-          alt={`${title}.png`}
-        />
+      <div className="flex h-70 w-full flex-col items-center justify-around px-4 py-1">
+        <div className="h-full w-full overflow-hidden rounded-xl shadow-xl">
+          <img
+            className="h-full w-full transform object-cover object-[center_30%] transition-all duration-500 hover:scale-105"
+            src={`${picture}`}
+            alt={`${title}.png`}
+          />
+        </div>
+
         <br />
         <div className="flex flex-col items-center">
           <h3 className="mb-2 text-2xl font-bold">{title}</h3>
@@ -16,7 +19,10 @@ export default function Services() {
     );
   };
   return (
-    <section className="flex flex-col items-center justify-center p-20">
+    <section
+      id="layanan"
+      className="flex flex-col items-center justify-center p-20"
+    >
       <h2 className="text-3xl font-semibold">Jelajahi Layanan Kami</h2>
       <div className="my-20 flex gap-20">
         <Card

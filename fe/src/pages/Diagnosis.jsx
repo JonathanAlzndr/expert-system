@@ -1,19 +1,19 @@
 import { useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
-import Button from "./../../components/Button";
+import Button from "../components/Button";
 import { useNavigate } from "react-router";
 
-export default function DiagnosisQuestions() {
+export default function Diagnosis() {
   const navigate = useNavigate();
   return (
-    <section className="my-10 flex h-155 w-180 flex-col rounded-lg bg-white px-7 py-6 shadow-lg">
+    <section className="mt-10 flex h-145 w-180 flex-col overflow-hidden rounded-lg bg-white px-7 py-6 shadow-lg">
       <h1 className="mb-2 text-3xl font-bold">Pengecekan Gejala</h1>
       <p className="text-sm">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, ducimus.
       </p>
       <br />
       <form action="" className="w-full" onSubmit={(e) => e.preventDefault()}>
-        <div className="flex h-90 w-full flex-col gap-4 overflow-y-auto">
+        <div className="flex h-85 w-full flex-col gap-4 overflow-y-auto">
           <Input question="Pertanyaan 1">
             <option value="A">A</option>
             <option value="B">B</option>
@@ -74,7 +74,7 @@ export default function DiagnosisQuestions() {
           <Button
             text={"kirim"}
             color={"green"}
-            onClick={() => navigate({ pathname: "/diagnosis/results" })}
+            onClick={() => navigate({ pathname: "/results" })}
           />
         </div>
       </form>

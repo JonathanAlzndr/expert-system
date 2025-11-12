@@ -9,10 +9,18 @@ export default function Header() {
       <header
         className={`border-primary sticky top-0 z-50 flex h-16 w-full items-center justify-around border-b bg-white p-3 text-black backdrop-blur-2xl sm:p-4 lg:p-5`}
       >
-        <div className="flex w-xs">
-          <img src={"/"} alt="logo.png" />
+        <div className="flex w-xs items-center">
+          <div className="h-10 w-10 overflow-hidden rounded-full">
+            <img
+              src={
+                "https://media.istockphoto.com/id/1321617070/id/vektor/logo-medis-kesehatan.jpg?s=612x612&w=0&k=20&c=zCH2ajNmvD2Z0peBNjXmY1WoR8bDhvxAgYevGH9U_XI="
+              }
+              alt="logo.png"
+              className="object-cover"
+            />
+          </div>
           <Link
-            className="mx-5 cursor-pointer text-base font-semibold hover:opacity-70 active:scale-90 lg:text-xl"
+            className="mx-5 cursor-pointer text-base font-semibold hover:opacity-70 active:scale-95 lg:text-xl"
             to={"/"}
           >
             Kesehatan Utama
@@ -21,16 +29,19 @@ export default function Header() {
 
         <ul className="flex items-center gap-7 text-sm font-semibold lg:text-base">
           <li>
-            <NavLink className="hover:text-primary">Beranda</NavLink>
+            <a href="#" className="hover:text-primary">
+              Beranda
+            </a>
           </li>
           <li>
-            <NavLink className="hover:text-primary">Layanan</NavLink>
+            <a href="#layanan" className="hover:text-primary">
+              Layanan
+            </a>
           </li>
           <li>
-            <NavLink className="hover:text-primary">Tentang Kami</NavLink>
-          </li>
-          <li>
-            <NavLink className="hover:text-primary">Kontak</NavLink>
+            <a href="#artikel" className="hover:text-primary">
+              Artikel
+            </a>
           </li>
         </ul>
         <div className="ml-10 flex w-3xs justify-center">

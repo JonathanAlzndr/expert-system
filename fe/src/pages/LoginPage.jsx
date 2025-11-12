@@ -12,31 +12,42 @@ export default function LoginPage() {
     });
   }, []);
   return (
-    <>
-      <div
-        className="box-border flex h-screen w-full items-center justify-center"
-        data-aos="zoom-out"
-      >
-        <div className="flex w-sm flex-col items-center">
-          <img src={""} alt="logo.png" />
-          <h1 className="text-3xl font-semibold">Admin Kesehatan</h1>
-          <p className="text-lg">Silahkan masuk untuk melanjutkan</p>
-          <br />
-          <form className="flex w-full flex-col">
-            <Input label={"username"} type={"text"} placeholder={"Username"} />
-            <Input label={"password"} type={"text"} placeholder={"Password"} />
-            <br />
-            <div className="h-10 w-full">
-              <Button
-                text={"Masuk"}
-                onClick={() => navigate({ pathname: "/diagnosis" })}
-                color="primary"
-              />
-            </div>
-          </form>
+    <div
+      className="box-border flex h-screen w-full items-center justify-center"
+      data-aos="zoom-out"
+    >
+      <div className="flex w-lg flex-col items-center rounded-xl p-10">
+        <div className="my-1 h-20 w-20 overflow-hidden rounded-full shadow-lg">
+          <img
+            src={
+              "https://media.istockphoto.com/id/1321617070/id/vektor/logo-medis-kesehatan.jpg?s=612x612&w=0&k=20&c=zCH2ajNmvD2Z0peBNjXmY1WoR8bDhvxAgYevGH9U_XI="
+            }
+            alt="logo.png"
+            className="object-cover"
+          />
         </div>
+
+        <h1 className="text-3xl font-semibold">Admin Kesehatan</h1>
+        <p className="text-lg">Silahkan masuk untuk melanjutkan</p>
+        <br />
+        <form className="flex w-full flex-col">
+          <Input label={"username"} type={"text"} placeholder={"Username"} />
+          <Input
+            label={"password"}
+            type={"password"}
+            placeholder={"Password"}
+          />
+          <br />
+          <div className="h-10 w-full">
+            <Button
+              text={"Masuk"}
+              onClick={() => navigate({ pathname: "/admin" })}
+              color="primary"
+            />
+          </div>
+        </form>
       </div>
-    </>
+    </div>
   );
 }
 
