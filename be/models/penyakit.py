@@ -1,15 +1,17 @@
 from utils.extensions import db
+from datetime import datetime
 
 class Penyakit(db.Model):
     __tablename__ = "penyakit"
 
-    id_penyakit = db.Column(db.Integer, primary_key=True)
-    kode_penyakit = db.Column(db.String(10), nullable=False, unique=True)
+    id_penyakit = db.Column(db.String(5), primary_key=True)
     nama_penyakit = db.Column(db.String(100), nullable=False)
-    deskripsi = db.Column(db.Text, nullable=True)
-    solusi = db.Column(db.Text, nullable=True)
-
-    rules = db.relationship("Rule", back_populates="penyakit", cascade="all, delete-orphan")
+    deskripsi = db.Column(db.Text)
+    solusi = db.Column(db.Text)
+    created_at = db.Column(db.TIMESTAMP, default=datetime.utcnow)
+    updated_at = db.Column(db.TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
+    rules = db.relationship('Rule', backref='penyakit', lazy=True, cascade="all, delete-orphan")
+    diagnoses = db.relationship('Diagnosis', backref='penyakit_hasil', lazy=True, foreign_keys='Diagnosis.hasil_penyakit')
 
     def __repr__(self):
-        return f'<Penyakit {self.nama_penyakit}>'
+        return f'<Penyakit {self.id_penyakit} - {self.nama_penyakit}>'
