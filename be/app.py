@@ -1,12 +1,18 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from config import Config
-from utils.extensions import db
-from models.admin import Admin
+from utils.extensions import db, bcrypt, jwt, migrate
 from routes.auth.auth_routes import auth_bp
-from utils.extensions import bcrypt, jwt, migrate
+from routes.diagnose_route import diagnosis_bp
+from models.admin import Admin
+from models.penyakit import Penyakit
+from models.gejala import Gejala
+from models.pertanyaan import Pertanyaan
+
+from models.rule_set import RuleSet
+from models.rule_premise import RulePremise
+
+from models.diagnosis import Diagnosis
+from models.diagnosis_detail import DiagnosisDetail
 
 def create_app():
     app = Flask(__name__)
@@ -18,6 +24,7 @@ def create_app():
     migrate.init_app(app, db)
 
     app.register_blueprint(auth_bp)
+    app.register_blueprint(diagnosis_bp)
 
     with app.app_context():
         db.create_all()
