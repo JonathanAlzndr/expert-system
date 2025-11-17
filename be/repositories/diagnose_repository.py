@@ -4,6 +4,9 @@ from models.diagnosis_detail import DiagnosisDetail
 from models.rule_set import RuleSet 
 from models.penyakit import Penyakit
 from sqlalchemy.orm import joinedload
+from models.gejala import Gejala
+from models.pertanyaan import Pertanyaan
+
 
 class DiagnosisRepository:
 
@@ -42,3 +45,6 @@ class DiagnosisRepository:
             db.session.rollback()
             print(f"Error saving diagnosis: {e}")
             raise e
+        
+    def get_all_questions(self):
+        return Pertanyaan.query.join(Gejala).all()

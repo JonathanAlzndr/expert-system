@@ -3,15 +3,11 @@ from flask_jwt_extended import jwt_required
 from utils.extensions import db
 from services.diagnose_service import DiagnosisService
 
-user_diagnose_bp = Blueprint('diagnose', __name__, url_prefix='/api/diagnosis')
-
 diagnosis_bp = Blueprint('diagnosis', __name__, url_prefix='/api/diagnosis')
 diagnosis_service = DiagnosisService()
 
 @diagnosis_bp.route('/', methods=['POST'])
-def submit_diagnosis():
-    """Endpoint POST /api/diagnosis untuk memproses diagnosis."""
-    
+def submit_diagnosis():    
     data = request.get_json()
     
     if not data or 'answers' not in data:
@@ -39,3 +35,8 @@ def submit_diagnosis():
         print(f"Error during diagnosis process: {e}")
         db.session.rollback()
         return jsonify({"msg": "Failed: Terjadi kesalahan server saat memproses diagnosis."}), 500
+
+@diagnosis_bp.route("/pertanyaan", methods=["GET"])
+def get_questions():
+    data = diagnosis_service.get_all_questions()
+    return jsonify(data), 200

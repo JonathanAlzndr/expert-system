@@ -7,12 +7,13 @@ from models.admin import Admin
 from models.penyakit import Penyakit
 from models.gejala import Gejala
 from models.pertanyaan import Pertanyaan
-
+from flask import jsonify
 from models.rule_set import RuleSet
 from models.rule_premise import RulePremise
-
+from routes.penyakit.penyakit_routes import penyakit_bp
 from models.diagnosis import Diagnosis
 from models.diagnosis_detail import DiagnosisDetail
+from routes.gejala.gejala_routes import gejala_bp
 
 def create_app():
     app = Flask(__name__)
@@ -23,8 +24,22 @@ def create_app():
     jwt.init_app(app)
     migrate.init_app(app, db)
 
+    @jwt.unauthorized_loader
+    def unauthorized_callback(error):
+        return jsonify(msg="Unauthorized: Token tidak ditemukan"), 401
+
+    @jwt.expired_token_loader
+    def expired_callback(jwt_header, jwt_payload):
+         return jsonify(msg="Token expired"), 401
+    
+    @jwt.invalid_token_loader
+    def invalid_token_callback(error):
+        return jsonify(msg="Unauthorized: Token invalid"), 422
+
     app.register_blueprint(auth_bp)
+    app.register_blueprint(penyakit_bp)
     app.register_blueprint(diagnosis_bp)
+    app.register_blueprint(gejala_bp)
 
     with app.app_context():
         db.create_all()
