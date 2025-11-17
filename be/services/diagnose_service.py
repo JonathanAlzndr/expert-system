@@ -112,5 +112,20 @@ class DiagnosisService:
         }
 
         return output
+    
+    def get_all_questions(self):
+        questions = self.repo.get_all_questions()
+
+        result = []
+        for q in questions:
+            result.append({
+                "id_pertanyaan": q.id_pertanyaan,
+                "id_gejala": q.id_gejala,
+                "teks_pertanyaan": q.teks_pertanyaan
+            })
+        return {
+            "msg": "Success",
+            "pertanyaanList": result
+        }
 
         
