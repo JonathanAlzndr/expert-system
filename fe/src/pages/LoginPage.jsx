@@ -8,39 +8,36 @@ export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  /*  const handleLogin = async (e) => {
-    e.preventDefault();
-    axios
-      .post("http://127.0.0.1:5000/api/auth/login", {
-        username: username,
-        password: password,
-      })
-      .then((res) => alert(res.data))
-      .catch((err) => console.error(`error guys: ${err}`));
-  }; */
-
   const handleLogin = async (e) => {
     e.preventDefault(); // Pastikan untuk mencegah form default submission
     try {
-      const res = await fetch("http://127.0.0.1:5000/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      const response = await axios.post(
+        "http://127.0.0.1:5000/api/auth/login",
+        {
           username: username,
           password: password,
-        }),
-      });
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
-      if (res.ok) {
-        const data = await res.json();
-        window.alert("Berhasil: " + JSON.stringify(data)); // Perlihatkan data yang diterima dari server
-      } else {
-        const errorData = await res.json();
-        window.alert("Error: " + errorData.message || "Login gagal"); // Menangani error jika ada
+      if (response.data) {
+        // Misalnya, menyimpan token atau data pengguna ke localStorage
+        localStorage.setItem("authToken", response.data.token); // Menyimpan token
+        localStorage.setItem("userData", JSON.stringify(response.data)); // Menyimpan seluruh data pengguna jika diperlukan
+
+        navigate("/admin");
       }
     } catch (err) {
+      if (err.response) {
+        // Jika server memberikan respons error
+        window.alert("Error: " + (err.response.data.message || "Login gagal"));
+      } else {
+        // Jika tidak ada respons dari server
+        window.alert("Terjadi kesalahan: " + err.message);
+      }
       console.error(err);
-      window.alert("Terjadi kesalahan: " + err.message); // Menampilkan pesan error jika ada masalah saat request
     }
   };
 
