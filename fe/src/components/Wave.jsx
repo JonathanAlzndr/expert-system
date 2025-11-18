@@ -31,15 +31,13 @@ const WaveDown = () => {
         id="svg"
         viewBox="0 0 1440 690"
         xmlns="http://www.w3.org/2000/svg"
-        class="transition delay-150 duration-300 ease-in-out"
+        className="transition delay-150 duration-300 ease-in-out"
       >
         <path
           d="M 0,700 L 0,262 C 175.46666666666664,319.6 350.9333333333333,377.2 517,357 C 683.0666666666667,336.8 839.7333333333333,238.8 992,210 C 1144.2666666666667,181.2 1292.1333333333332,221.6 1440,262 L 1440,700 L 0,700 Z"
           stroke="none"
-          stroke-width="0"
           fill="#071C23"
-          fill-opacity="1"
-          class="path-0 transition-all delay-150 duration-300 ease-in-out"
+          className="path-0 transition-all delay-150 duration-300 ease-in-out"
           transform="rotate(-180 720 350)"
         ></path>
       </svg>

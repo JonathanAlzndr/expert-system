@@ -1,4 +1,4 @@
-export default function Button({ text, onClick, color }) {
+export default function Button({ text, color, type }) {
   let variant = "";
   switch (color) {
     case "blue":
@@ -13,10 +13,11 @@ export default function Button({ text, onClick, color }) {
     default:
       variant = "bg-primary hover:bg-primary/80 active:bg-primary text-white";
   }
+
   return (
     <button
       className={`${variant} h-full w-full cursor-pointer rounded-sm text-xs shadow-lg active:scale-98 lg:text-sm`}
-      onClick={onClick}
+      type={type}
     >
       <b>{text}</b>
     </button>

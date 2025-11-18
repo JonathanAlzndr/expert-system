@@ -23,7 +23,7 @@ function App() {
       <Route path="/admin" element={<LayoutAdmin />}>
         <Route index element={<DashboardAdmin />} />
       </Route>
-      <Route path={"login"} element={<LoginPage />} />
+      <Route path="/login" element={<LoginPage />} />
     </Routes>
   );
 }

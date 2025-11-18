@@ -14,10 +14,13 @@ from routes.penyakit.penyakit_routes import penyakit_bp
 from models.diagnosis import Diagnosis
 from models.diagnosis_detail import DiagnosisDetail
 from routes.gejala.gejala_routes import gejala_bp
+from flask_cors import CORS
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+
+    CORS(app)
 
     bcrypt.init_app(app)
     db.init_app(app)
