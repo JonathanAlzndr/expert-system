@@ -1,31 +1,29 @@
-//pages
+// src/App.jsx
+import { Routes, Route } from "react-router-dom";
+import Layout from "./layouts/Layout"; // Layout untuk halaman umum
+import LayoutAdmin from "./layouts/LayoutAdmin"; // Layout khusus admin
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
-import Results from "./pages/Results";
-import Diagnosis from "./pages/Diagnosis";
-import DashboardAdmin from "./pages/DashboardAdmin";
-import DeasesAdmin from "./pages/DeasesAdmin";
-
-//layouts
-import Layout from "./layouts/Layout";
-import LayoutAdmin from "./layouts/LayoutAdmin";
-
-//Hooks
-import { Routes, Route } from "react-router";
+import DashboardAdmin from "./pages/DashboardAdmin"; // Halaman admin
+import PrivateRoute from "./components/PrivateRoute"; // Import PrivateRoute
 
 function App() {
   return (
     <Routes>
+      {/* Layout umum untuk halaman public */}
       <Route path="/" element={<Layout />}>
-        <Route index element={<LandingPage />} />
-        <Route path="diagnosis" element={<Diagnosis />} />
-        <Route path="results" element={<Results />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
       </Route>
-      <Route path="/admin" element={<LayoutAdmin />}>
-        <Route index element={<DashboardAdmin />} />
-        <Route path="admin/deases" element={<DeasesAdmin />} />
+
+      {/* LayoutAdmin untuk halaman admin, dengan pengecekan token */}
+      <Route path="/" element={<LayoutAdmin />}>
+        {/* Gunakan PrivateRoute untuk memastikan hanya admin yang login yang bisa mengakses /admin */}
+        <Route
+          path="/admin"
+          element={<PrivateRoute element={<DashboardAdmin />} />} // Berikan komponen dengan element
+        />
       </Route>
-      <Route path="/login" element={<LoginPage />} />
     </Routes>
   );
 }

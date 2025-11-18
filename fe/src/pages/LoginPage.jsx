@@ -1,68 +1,52 @@
-import Button from "../components/Button";
-import { useNavigate } from "react-router";
+// src/pages/LoginPage.jsx
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode"; // Untuk mendecode token
+import Button from "../components/Button";
 
 export default function LoginPage() {
-  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false); // State loading untuk tombol
-  const [error, setError] = useState(""); // Untuk menyimpan error message
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   // Cek token admin saat pertama kali halaman dimuat
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (token) {
-      try {
-        const decoded = jwt_decode(token);
-        if (decoded.exp * 1000 > Date.now()) {
-          navigate("/admin"); // Token valid, arahkan ke /admin
-        } else {
-          localStorage.removeItem("authToken"); // Token kadaluarsa
-        }
-      } catch (e) {
-        localStorage.removeItem("authToken"); // Hapus token jika error
+      const decoded = jwt_decode(token);
+      if (decoded.exp * 1000 > Date.now()) {
+        navigate("/admin"); // Token valid, arahkan ke /admin
+      } else {
+        localStorage.removeItem("authToken"); // Token kadaluarsa
       }
     }
   }, [navigate]);
 
   const handleLogin = async (e) => {
-    e.preventDefault(); // Mencegah form submission default
+    e.preventDefault();
     setLoading(true);
-    setError(""); // Reset error sebelum mencoba login
+    setError("");
 
     try {
       const response = await axios.post(
         "http://127.0.0.1:5000/api/auth/login",
-        {
-          username,
-          password,
-        },
-        {
-          headers: { "Content-Type": "application/json" },
-        }
+        { username, password },
+        { headers: { "Content-Type": "application/json" } }
       );
 
-      if (response.data) {
-        // Menyimpan token di localStorage setelah login berhasil
-        localStorage.setItem("authToken", response.data.token);
-        localStorage.setItem("userData", JSON.stringify(response.data)); // Menyimpan seluruh data pengguna jika diperlukan
-
+      if (response.data.token) {
+        localStorage.setItem("authToken", response.data.token); // Simpan token
+        localStorage.setItem("userData", JSON.stringify(response.data)); // Simpan data pengguna
         navigate("/admin"); // Arahkan ke halaman admin setelah login sukses
       }
     } catch (err) {
-      if (err.response) {
-        // Jika server memberikan respons error
-        setError("Error: " + (err.response.data.message || "Login gagal"));
-      } else {
-        // Jika tidak ada respons dari server
-        setError("Terjadi kesalahan: " + err.message);
-      }
+      setError("Login gagal: " + (err.response?.data?.message || err.message));
       console.error(err);
     } finally {
-      setLoading(false); // Reset loading setelah proses selesai
+      setLoading(false);
     }
   };
 
@@ -71,9 +55,7 @@ export default function LoginPage() {
       <div className="flex w-lg flex-col items-center rounded-xl p-10">
         <div className="my-1 h-20 w-20 overflow-hidden rounded-full shadow-lg">
           <img
-            src={
-              "https://media.istockphoto.com/id/1321617070/id/vektor/logo-medis-kesehatan.jpg?s=612x612&w=0&k=20&c=zCH2ajNmvD2Z0peBNjXmY1WoR8bDhvxAgYevGH9U_XI="
-            }
+            src="https://media.istockphoto.com/id/1321617070/id/vektor/logo-medis-kesehatan.jpg?s=612x612&w=0&k=20&c=zCH2ajNmvD2Z0peBNjXmY1WoR8bDhvxAgYevGH9U_XI="
             alt="logo.png"
             className="object-cover"
           />
