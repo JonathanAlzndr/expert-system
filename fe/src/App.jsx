@@ -4,6 +4,7 @@ import LoginPage from "./pages/LoginPage";
 import Results from "./pages/Results";
 import Diagnosis from "./pages/Diagnosis";
 import DashboardAdmin from "./pages/DashboardAdmin";
+import DeasesAdmin from "./pages/DeasesAdmin";
 
 //layouts
 import Layout from "./layouts/Layout";
@@ -22,6 +23,7 @@ function App() {
       </Route>
       <Route path="/admin" element={<LayoutAdmin />}>
         <Route index element={<DashboardAdmin />} />
+        <Route path="admin/deases" element={<DeasesAdmin />} />
       </Route>
       <Route path="/login" element={<LoginPage />} />
     </Routes>

@@ -1,21 +1,44 @@
 import Button from "../components/Button";
 import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
+import jwt_decode from "jwt-decode"; // Untuk mendecode token
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false); // State loading untuk tombol
+  const [error, setError] = useState(""); // Untuk menyimpan error message
+
+  // Cek token admin saat pertama kali halaman dimuat
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      try {
+        const decoded = jwt_decode(token);
+        if (decoded.exp * 1000 > Date.now()) {
+          navigate("/admin"); // Token valid, arahkan ke /admin
+        } else {
+          localStorage.removeItem("authToken"); // Token kadaluarsa
+        }
+      } catch (e) {
+        localStorage.removeItem("authToken"); // Hapus token jika error
+      }
+    }
+  }, [navigate]);
 
   const handleLogin = async (e) => {
-    e.preventDefault(); // Pastikan untuk mencegah form default submission
+    e.preventDefault(); // Mencegah form submission default
+    setLoading(true);
+    setError(""); // Reset error sebelum mencoba login
+
     try {
       const response = await axios.post(
         "http://127.0.0.1:5000/api/auth/login",
         {
-          username: username,
-          password: password,
+          username,
+          password,
         },
         {
           headers: { "Content-Type": "application/json" },
@@ -23,21 +46,23 @@ export default function LoginPage() {
       );
 
       if (response.data) {
-        // Misalnya, menyimpan token atau data pengguna ke localStorage
-        localStorage.setItem("authToken", response.data.token); // Menyimpan token
+        // Menyimpan token di localStorage setelah login berhasil
+        localStorage.setItem("authToken", response.data.token);
         localStorage.setItem("userData", JSON.stringify(response.data)); // Menyimpan seluruh data pengguna jika diperlukan
 
-        navigate("/admin");
+        navigate("/admin"); // Arahkan ke halaman admin setelah login sukses
       }
     } catch (err) {
       if (err.response) {
         // Jika server memberikan respons error
-        window.alert("Error: " + (err.response.data.message || "Login gagal"));
+        setError("Error: " + (err.response.data.message || "Login gagal"));
       } else {
         // Jika tidak ada respons dari server
-        window.alert("Terjadi kesalahan: " + err.message);
+        setError("Terjadi kesalahan: " + err.message);
       }
       console.error(err);
+    } finally {
+      setLoading(false); // Reset loading setelah proses selesai
     }
   };
 
@@ -66,7 +91,6 @@ export default function LoginPage() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-
           <Input
             label={"password"}
             type={"password"}
@@ -74,11 +98,13 @@ export default function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-
           <br />
           <div className="h-10 w-full">
             <Button text={"Masuk"} color="primary" type="submit" />
           </div>
+          {loading && <p>Loading...</p>}
+          {error && <p className="text-red-500">{error}</p>}{" "}
+          {/* Tampilkan error */}
         </form>
       </div>
     </div>

@@ -32,8 +32,8 @@ export default function HeaderAdmin() {
               </NavLink>
             </li>
             <li>
-              <NavLink className={"hover:text-primary"} to={"/"}>
-                Pengecekan
+              <NavLink className={"hover:text-primary"} to={"/deases"}>
+                Penyakit
               </NavLink>
             </li>
             <li>
