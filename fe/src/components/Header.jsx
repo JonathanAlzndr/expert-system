@@ -1,4 +1,4 @@
-import { Link, NavLink, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import Button from "./Button";
 
 export default function Header() {
@@ -49,7 +49,9 @@ export default function Header() {
             <Button
               color="primary"
               text={"Masuk"}
-              onClick={() => navigate({ pathname: "/login" })}
+              onClick={() => {
+                navigate("/login");
+              }}
             />
           </div>
         </div>
