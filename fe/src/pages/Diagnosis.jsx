@@ -19,56 +19,6 @@ export default function Diagnosis() {
             <option value="B">B</option>
             <option value="C">C</option>
           </Input>
-          <Input question="Pertanyaan 2">
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-          </Input>
-          <Input question="Pertanyaan 2">
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-          </Input>
-          <Input question="Pertanyaan 2">
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-          </Input>
-          <Input question="Pertanyaan 2">
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-          </Input>
-          <Input question="Pertanyaan 2">
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-          </Input>
-          <Input question="Pertanyaan 2">
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-          </Input>
-          <Input question="Pertanyaan 2">
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-          </Input>
-          <Input question="Pertanyaan 2">
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-          </Input>
-          <Input question="Pertanyaan 2">
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-          </Input>
-          <Input question="Pertanyaan 2">
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-          </Input>
         </div>
         <div className="mt-10 h-11 w-full">
           <Button
