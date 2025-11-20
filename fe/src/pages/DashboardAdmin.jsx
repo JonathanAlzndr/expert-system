@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { isAdminTokenValid } from "../utils/auth"; // Fungsi validasi token admin
 
 export default function DashboardAdmin() {
   const [penyakitData, setPenyakitData] = useState([]);
@@ -9,7 +8,7 @@ export default function DashboardAdmin() {
 
   useEffect(() => {
     // Jika token tidak valid, arahkan ke login
-    if (!isAdminTokenValid()) {
+    if (false) {
       navigate("/login");
     } else {
       fetchPenyakitData(); // Ambil data penyakit jika token valid

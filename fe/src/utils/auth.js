@@ -1,22 +1,32 @@
-// src/utils/auth.js
 import jwt_decode from "jwt-decode";
 
-export function isAdminTokenValid() {
-  const token = localStorage.getItem("authToken");
-  if (!token) return false; // Token nggak ada, berarti belum login
+export function setToken(token) {
+  localStorage.setItem("token", token);
+}
+
+export function getToken() {
+  return localStorage.getItem("token");
+}
+
+export function removeToken() {
+  localStorage.removeItem("token");
+}
+
+export function isAuthenticated() {
+  const token = getToken();
+  if (!token) return false;
 
   try {
     const decoded = jwt_decode(token);
+    const now = Date.now() / 1000;
 
-    // Cek apakah token sudah kadaluarsa
-    if (decoded.exp && decoded.exp * 1000 < Date.now()) {
-      localStorage.removeItem("authToken"); // Hapus token jika kadaluarsa
+    if (decoded.exp && decoded.exp < now) {
+      removeToken();
       return false;
     }
 
-    return true; // Token valid
-  } catch (e) {
-    localStorage.removeItem("authToken"); // Hapus token jika error
-    return false; // Token invalid atau error
+    return true;
+  } catch (err) {
+    return false;
   }
 }

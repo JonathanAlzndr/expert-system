@@ -2,7 +2,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import jwt_decode from "jwt-decode"; // Untuk mendecode token
+
+import { setToken, isAuthenticated } from "../utils/auth";
 import Button from "../components/Button";
 
 export default function LoginPage() {
@@ -10,18 +11,13 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
   const navigate = useNavigate();
 
-  // Cek token admin saat pertama kali halaman dimuat
+  // Jika user sudah login, lempar ke /admin
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      const decoded = jwt_decode(token);
-      if (decoded.exp * 1000 > Date.now()) {
-        navigate("/admin"); // Token valid, arahkan ke /admin
-      } else {
-        localStorage.removeItem("authToken"); // Token kadaluarsa
-      }
+    if (isAuthenticated()) {
+      navigate("/admin", { replace: true });
     }
   }, [navigate]);
 
@@ -31,20 +27,32 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const response = await axios.post(
+      const res = await axios.post(
         "http://127.0.0.1:5000/api/auth/login",
         { username, password },
         { headers: { "Content-Type": "application/json" } }
       );
 
-      if (response.data.token) {
-        localStorage.setItem("authToken", response.data.token); // Simpan token
-        localStorage.setItem("userData", JSON.stringify(response.data)); // Simpan data pengguna
-        navigate("/admin"); // Arahkan ke halaman admin setelah login sukses
+      // Ambil token dari backend
+      const token = res.data?.token;
+
+      if (!token) {
+        setError("Token tidak ditemukan pada response backend.");
+        return;
       }
+
+      // Simpan token (menggunakan auth.js)
+      setToken(token);
+
+      // Jika ingin menyimpan data user
+      localStorage.setItem("userData", JSON.stringify(res.data));
+
+      // Arahkan ke admin
+      navigate("/admin", { replace: true });
     } catch (err) {
-      setError("Login gagal: " + (err.response?.data?.message || err.message));
-      console.error(err);
+      setError(
+        err.response?.data?.message || "Login gagal. Periksa username/password."
+      );
     } finally {
       setLoading(false);
     }
@@ -56,7 +64,7 @@ export default function LoginPage() {
         <div className="my-1 h-20 w-20 overflow-hidden rounded-full shadow-lg">
           <img
             src="https://media.istockphoto.com/id/1321617070/id/vektor/logo-medis-kesehatan.jpg?s=612x612&w=0&k=20&c=zCH2ajNmvD2Z0peBNjXmY1WoR8bDhvxAgYevGH9U_XI="
-            alt="logo.png"
+            alt="logo"
             className="object-cover"
           />
         </div>
@@ -67,26 +75,32 @@ export default function LoginPage() {
 
         <form className="flex w-full flex-col" onSubmit={handleLogin}>
           <Input
-            label={"username"}
-            type={"text"}
-            placeholder={"Username"}
+            label="username"
+            type="text"
+            placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
+
           <Input
-            label={"password"}
-            type={"password"}
-            placeholder={"Password"}
+            label="password"
+            type="password"
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+
           <br />
+
           <div className="h-10 w-full">
-            <Button text={"Masuk"} color="primary" type="submit" />
+            <Button
+              text={loading ? "Loading..." : "Masuk"}
+              color="primary"
+              type="submit"
+            />
           </div>
-          {loading && <p>Loading...</p>}
-          {error && <p className="text-red-500">{error}</p>}{" "}
-          {/* Tampilkan error */}
+
+          {error && <p className="text-red-500">{error}</p>}
         </form>
       </div>
     </div>
