@@ -1,12 +1,17 @@
 import { Outlet } from "react-router";
 import HeaderAdmin from "../components/HeaderAdmin";
+import SideBar from "../components/Sidebar";
 
 export default function LayoutAdmin() {
   return (
     <>
-      <HeaderAdmin />
-      <main className="mx-auto flex flex-col justify-center">
-        <Outlet />
+      <main className="flex">
+        <div className="w-100">
+          <SideBar />
+        </div>
+        <div className="min-w-full">
+          <Outlet />
+        </div>
       </main>
     </>
   );
