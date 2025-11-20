@@ -1,10 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import Button from "../components/Button";
 import { useNavigate } from "react-router";
+import { isAuthenticated } from "../utils/auth";
 
 export default function Diagnosis() {
   const navigate = useNavigate();
+  const [questions, setQuestions] = useState([]);
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        const res = await fetch(
+          "http://127.0.0.1:5000/api/diagnosis/pertanyaan",
+          { method: "GET" }
+        );
+
+        const data = await res.json();
+        setQuestions(data.pertanyaanList); // <--- SIMPAN KE STATE
+      } catch (err) {
+        alert(err);
+      }
+    };
+
+    if (isAuthenticated()) {
+      navigate("/admin", { replace: true });
+      return;
+    }
+
+    fetchQuestions();
+  }, []);
+
   return (
     <section className="mt-10 flex h-145 w-180 flex-col overflow-hidden rounded-lg bg-white px-7 py-6 shadow-lg">
       <h1 className="mb-2 text-3xl font-bold">Pengecekan Gejala</h1>
@@ -12,14 +38,24 @@ export default function Diagnosis() {
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, ducimus.
       </p>
       <br />
+
       <form action="" className="w-full" onSubmit={(e) => e.preventDefault()}>
         <div className="flex h-85 w-full flex-col gap-4 overflow-y-auto">
-          <Input question="Pertanyaan 1">
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-          </Input>
+          {/* RENDER DINAMIS */}
+          {questions.map((q) => (
+            <Input
+              key={q.id_gejala}
+              id={q.id_gejala}
+              question={q.teks_pertanyaan}
+            >
+              <Option value={"Tidak"} />
+              <Option value={"Kurang Yakin"} />
+              <Option value={"Yakin"} />
+              <Option value={"Sangat Yakin"} />
+            </Input>
+          ))}
         </div>
+
         <div className="mt-10 h-11 w-full">
           <Button
             text={"kirim"}
@@ -32,7 +68,7 @@ export default function Diagnosis() {
   );
 }
 
-function Input({ id, question = "Pertanyaan?", children }) {
+function Input({ id, question, children }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -53,11 +89,17 @@ function Input({ id, question = "Pertanyaan?", children }) {
         </select>
 
         <span
-          className={`pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 transition-transform duration-200 ${isOpen ? "rotate-180" : "rotate-0"}`}
+          className={`pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 transition-transform duration-200 ${
+            isOpen ? "rotate-180" : "rotate-0"
+          }`}
         >
           <FaChevronDown size={14} />
         </span>
       </div>
     </div>
   );
+}
+
+function Option({ value }) {
+  return <option value="value">{value}</option>;
 }
