@@ -35,12 +35,7 @@ export default function Header() {
           </li>
           <li>
             <a href="#layanan" className="hover:text-primary">
-              Layanan
-            </a>
-          </li>
-          <li>
-            <a href="#artikel" className="hover:text-primary">
-              Artikel
+              Informasi Penyakit
             </a>
           </li>
         </ul>

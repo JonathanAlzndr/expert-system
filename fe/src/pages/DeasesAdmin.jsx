@@ -2,6 +2,42 @@ import ButtonGroup from "../components/ButtonGroup";
 import Button from "./../components/Button";
 
 export default function DeasesAdmin() {
+  function Table() {
+    function RowHead({ text }) {
+      return <th className="px-6 py-3">{text}</th>;
+    }
+    function Row({ name, skor }) {
+      return (
+        <tr className="border-b bg-white font-semibold hover:bg-slate-100 sm:text-sm">
+          <td className="px-6 py-3">1</td>
+          <td className="px-6 py-3 font-medium text-gray-900">{name}</td>
+          <td className="px-6 py-3">{skor}</td>
+          <td className="px-6 py-3 text-center">
+            <ButtonGroup />
+          </td>
+        </tr>
+      );
+    }
+    return (
+      <>
+        <table className="w-full text-left text-sm text-gray-500">
+          <thead className="bg-gray-200 text-xs text-gray-700 uppercase">
+            <tr>
+              <RowHead text="Gejala" />
+              <RowHead text="Deskripsi" />
+              <RowHead text="Skor" />
+              <RowHead text="Aksi" />
+            </tr>
+          </thead>
+          <tbody>
+            <Row name={"example"} skor={"8"} />
+            <Row name={"example"} skor={"8"} />
+            <Row name={"example"} skor={"8"} />
+          </tbody>
+        </table>
+      </>
+    );
+  }
   return (
     <div className="my-auto mt-20 w-4xl rounded-lg p-6">
       <h1 className="mb-4 text-start text-3xl font-bold">
@@ -23,33 +59,7 @@ export default function DeasesAdmin() {
         </div>
       </div>
 
-      <table className="w-full text-left text-sm text-gray-500">
-        <thead className="bg-gray-200 text-xs text-gray-700 uppercase">
-          <tr>
-            <th className="px-6 py-3">{"Gejala"}</th>
-            <th className="px-6 py-3">{"Deksripsi"}</th>
-            <th className="px-6 py-3">{"Skor"}</th>
-            <th className="px-6 py-3 text-center">Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          <Row name={"example"} job={"chef"} />
-          <Row name={"example"} job={"chef"} />
-          <Row name={"example"} job={"chef"} />
-        </tbody>
-      </table>
+      <Table />
     </div>
-  );
-}
-function Row({ name, job }) {
-  return (
-    <tr className="border-b bg-white hover:bg-slate-100 sm:text-sm">
-      <td className="px-6 py-3">1</td>
-      <td className="px-6 py-3 font-medium text-gray-900">{name}</td>
-      <td className="px-6 py-3">{job}</td>
-      <td className="px-6 py-3 text-center">
-        <ButtonGroup />
-      </td>
-    </tr>
   );
 }

@@ -69,8 +69,8 @@ export default function LoginPage() {
           />
         </div>
 
-        <h1 className="text-3xl font-semibold">Admin Kesehatan</h1>
-        <p className="text-lg">Silahkan masuk untuk melanjutkan</p>
+        <br />
+        <h1 className="text-4xl font-bold">Masuk TanyaPakar</h1>
         <br />
 
         <form className="flex w-full flex-col" onSubmit={handleLogin}>
@@ -110,16 +110,13 @@ export default function LoginPage() {
 function Input({ label, type, placeholder, value, onChange }) {
   return (
     <div className="my-2 flex flex-col">
-      <label className="self-start" htmlFor={label}>
-        {placeholder}
-      </label>
       <input
         id={label}
         type={type}
         value={value}
         onChange={onChange}
         placeholder={`Masukan ${placeholder}`}
-        className="my-1 transform rounded-sm px-3 py-1 text-lg outline-1 outline-gray-400 transition-all focus:outline-2"
+        className="my-2 transform rounded-sm px-3 py-3 text-lg outline-2 outline-gray-500 transition-all focus:outline-3"
       />
     </div>
   );
