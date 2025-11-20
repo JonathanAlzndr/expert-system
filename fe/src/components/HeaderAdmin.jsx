@@ -27,18 +27,13 @@ export default function HeaderAdmin() {
         <div className="flex w-full items-center justify-center gap-6 font-semibold">
           <ul className="flex items-center gap-7 text-sm lg:text-sm">
             <li>
-              <NavLink className={"hover:text-primary"} to={"/diagnosis"}>
+              <NavLink className={"hover:text-primary"} to={"/admin"}>
                 Beranda
               </NavLink>
             </li>
             <li>
-              <NavLink className={"hover:text-primary"} to={"/deases"}>
+              <NavLink className={"hover:text-primary"} to={"/admin/deases"}>
                 Penyakit
-              </NavLink>
-            </li>
-            <li>
-              <NavLink className={"hover:text-primary"} to={"/"}>
-                Hasil
               </NavLink>
             </li>
           </ul>

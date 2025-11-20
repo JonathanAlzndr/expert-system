@@ -13,6 +13,7 @@ import LoginPage from "./pages/LoginPage";
 import Diagnosis from "./pages/Diagnosis";
 import DiagnosisResults from "./pages/DiagnosisResults";
 import DashboardAdmin from "./pages/DashboardAdmin";
+import DeasesAdmin from "./pages/DeasesAdmin";
 
 function App() {
   return (
@@ -36,7 +37,7 @@ function App() {
         }
       >
         <Route index element={<DashboardAdmin />} />
-        <Route path="dashboard" element={<DashboardAdmin />} />
+        <Route path="deases" element={<DeasesAdmin />} />
       </Route>
     </Routes>
   );

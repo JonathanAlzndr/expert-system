@@ -24,7 +24,7 @@ export default function Diagnosis() {
           <Button
             text={"kirim"}
             color={"green"}
-            onClick={() => navigate({ pathname: "/results" })}
+            onClick={() => navigate({ pathname: "/diagnosis/results" })}
           />
         </div>
       </form>
