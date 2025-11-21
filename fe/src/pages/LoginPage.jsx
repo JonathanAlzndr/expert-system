@@ -88,7 +88,7 @@ export default function LoginPage() {
 
           <br />
 
-          <div className="h-10 w-full">
+          <div className="mb-2 h-10 w-full">
             <Button
               text={loading ? "Loading..." : "Masuk"}
               color="primary"
@@ -96,7 +96,7 @@ export default function LoginPage() {
             />
           </div>
 
-          {error && <p className="text-red-500">{error}</p>}
+          {error && <p className="text-center text-red-500">{error}</p>}
         </form>
       </div>
     </div>
@@ -112,7 +112,7 @@ function Input({ label, type, placeholder, value, onChange }) {
         value={value}
         onChange={onChange}
         placeholder={`Masukan ${placeholder}`}
-        className="my-2 transform rounded-sm px-2 py-3 text-lg outline-2 outline-gray-500 transition-all focus:outline-3"
+        className="my-2 transform rounded-sm px-2 py-3 text-lg outline-2 outline-gray-500 transition-all focus:bg-slate-200/20 focus:outline-3"
       />
     </div>
   );

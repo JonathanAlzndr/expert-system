@@ -35,13 +35,13 @@ export default function DashboardAdmin() {
 
   return (
     <main className="flex gap-10 p-10">
-      <Card text={"Jumlah Penyakit"} color={`bg-red-600`}>
+      <Card text={"Jumlah Penyakit"} color={`bg-red-600/80`}>
         <MdOutlineSick size={40} className="text-white" />
       </Card>
       <Card text={"Jumlah Gejala"} color={`bg-green-600`}>
         <FaCapsules size={40} className="text-white" />
       </Card>
-      <Card text={"Jumlah Aturan"} color={`bg-yellow-500`}>
+      <Card text={"Jumlah Aturan"} color={`bg-yellow-500/80`}>
         <IoSettings size={40} className="text-white" />
       </Card>
     </main>
