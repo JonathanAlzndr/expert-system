@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 
 import { setToken, isAuthenticated } from "../utils/auth";
 import Button from "../components/Button";
+import { H1 } from "./../components/Text";
+import Logo from "./../components/Logo";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -61,16 +63,10 @@ export default function LoginPage() {
   return (
     <div className="box-border flex h-screen w-full items-center justify-center">
       <div className="flex w-lg flex-col items-center rounded-xl p-10">
-        <div className="my-1 h-20 w-20 overflow-hidden rounded-full shadow-lg">
-          <img
-            src="https://media.istockphoto.com/id/1321617070/id/vektor/logo-medis-kesehatan.jpg?s=612x612&w=0&k=20&c=zCH2ajNmvD2Z0peBNjXmY1WoR8bDhvxAgYevGH9U_XI="
-            alt="logo"
-            className="object-cover"
-          />
-        </div>
+        <Logo size={20} />
 
         <br />
-        <h1 className="text-4xl font-bold">Masuk TanyaPakar</h1>
+        <H1 variant="black">Masuk TanyaPakar</H1>
         <br />
 
         <form className="flex w-full flex-col" onSubmit={handleLogin}>

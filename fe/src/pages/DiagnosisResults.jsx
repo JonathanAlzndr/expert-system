@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { H1, H2, P } from "../components/text";
 
 export default function DiagnosisResults() {
   return (
@@ -7,7 +8,7 @@ export default function DiagnosisResults() {
         <h1 className="text-3xl font-semibold">Hasil Pengecekan Gejala</h1>
         <br />
         <div className="h-100 w-full rounded-xl bg-white p-10 shadow-xl">
-          <ProgressBar title={"Proses Diagnosis"} />
+          <ProgressBar title={"Nama Penyakit"} />
           <div className="flex justify-between">
             <Insight />
             <Card />
@@ -22,7 +23,7 @@ const ProgressBar = ({ title }) => {
   return (
     <>
       <div className="mx-2 flex items-center justify-between">
-        <h2 className="text-2xl">{title}</h2>
+        <h2 className="text-3xl font-semibold">{title}</h2>
         <p>{progress}</p>
       </div>
       <div class="relative my-2 h-5 overflow-hidden rounded-full bg-gray-300">
@@ -44,26 +45,14 @@ const Insight = () => {
   );
 };
 
-const Card = () => {
+const Card = ({
+  judul = "judul",
+  p = "Lorem ipsum dolor sit amet consectetur adipiscing elit quisque faucibus.",
+}) => {
   return (
-    <div className="my-10 flex h-50 w-150 justify-between rounded bg-green-600 px-5 py-6 shadow-xl">
-      <div className="text-background h-full w-full">
-        <h2 className="text-2xl font-semibold">Lorem</h2>
-        <h3 className="text-xl font-semibold">Lorem ipsum dolor sit.</h3>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse,
-          similique. Lorem ipsum dolor sit amet.
-        </p>
-      </div>
-      <div className="mx-2 h-30 w-100 self-end overflow-hidden rounded-lg border-2 border-green-900">
-        <img
-          src={
-            "https://media.istockphoto.com/id/1421878861/id/vektor/batuk-pria-muda-yang-sakit-terisolasi-ilustrasi-kartun-gaya-datar-vektor.jpg?s=612x612&w=0&k=20&c=Rzpcjk_dR3TsnSzKiLB5xyqQYA8jr_B4emkwt1Y6dNo="
-          }
-          alt=""
-          className="h-full w-full object-cover transition-transform duration-500 hover:scale-110"
-        />
-      </div>
+    <div className="my-10 flex h-50 w-150 flex-col justify-between rounded bg-green-600 px-5 py-6 shadow-xl">
+      <H2>{judul}</H2>
+      <P>{p}</P>
     </div>
   );
 };

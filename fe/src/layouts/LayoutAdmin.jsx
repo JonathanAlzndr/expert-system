@@ -1,5 +1,4 @@
 import { Outlet } from "react-router";
-import HeaderAdmin from "../components/HeaderAdmin";
 import SideBar from "../components/Sidebar";
 
 export default function LayoutAdmin() {

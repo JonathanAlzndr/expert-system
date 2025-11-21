@@ -3,6 +3,7 @@ import { FaChevronDown } from "react-icons/fa";
 import Button from "../components/Button";
 import { useNavigate } from "react-router";
 import { isAuthenticated } from "../utils/auth";
+import { H1, H2, H3, P } from "../components/Text";
 
 export default function Diagnosis() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export default function Diagnosis() {
         );
 
         const data = await res.json();
-        setQuestions(data.pertanyaanList); // <--- SIMPAN KE STATE
+        setQuestions(data.pertanyaanList);
       } catch (err) {
         alert(err);
       }
@@ -32,11 +33,12 @@ export default function Diagnosis() {
   }, []);
 
   return (
-    <section className="mt-10 flex h-145 w-180 flex-col overflow-hidden rounded-lg bg-white px-7 py-6 shadow-lg">
-      <h1 className="mb-2 text-3xl font-bold">Pengecekan Gejala</h1>
-      <p className="text-sm">
+    <section className="mt-10 flex h-145 w-200 flex-col overflow-hidden rounded-lg bg-white px-7 py-6 shadow-lg">
+      <H1 variant="black">Pengecekan Gejala</H1>
+      <br />
+      <P>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, ducimus.
-      </p>
+      </P>
       <br />
 
       <form action="" className="w-full" onSubmit={(e) => e.preventDefault()}>
@@ -56,7 +58,8 @@ export default function Diagnosis() {
           ))}
         </div>
 
-        <div className="mt-10 h-11 w-full">
+        <div className="mt-8 h-11 w-full">
+          {/* to do */}
           <Button
             text={"kirim"}
             color={"green"}
@@ -73,7 +76,7 @@ function Input({ id, question, children }) {
 
   return (
     <div className="relative w-full">
-      <label htmlFor={id} className="font-medium">
+      <label htmlFor={id} className="text-lg font-semibold">
         {question}
       </label>
 

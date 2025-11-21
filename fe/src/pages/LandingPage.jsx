@@ -9,7 +9,6 @@ export default function LandingPage() {
     <>
       <section className="">
         <Hero />
-        <Services />
         <Articles />
       </section>
       <WaveDown />

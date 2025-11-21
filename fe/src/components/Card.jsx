@@ -1,4 +1,5 @@
 import Button from "./Button";
+import { H1, H2, H3, P } from "./Text";
 
 function SecondaryCard({ title, body, layout = true, picture }) {
   const Image = ({ alt, picture }) => (
@@ -11,8 +12,9 @@ function SecondaryCard({ title, body, layout = true, picture }) {
 
   const Caption = ({ title, body, picture }) => (
     <div className="flex flex-col items-start">
-      <h3 className="mb-2 text-2xl font-semibold">{title}</h3>
-      <p className="text-base">{body}</p>
+      <H2>{title}</H2>
+      <br />
+      <P>{body}</P>
       <br />
       <div className="h-10 w-50">
         <Button text={"Baca selengkapnya"} color="" />

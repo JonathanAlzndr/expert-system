@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router";
 import Button from "./Button";
+import { H2 } from "./text";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ export default function Header() {
             className="mx-5 cursor-pointer text-base font-semibold hover:opacity-70 active:scale-95 lg:text-xl"
             to={"/"}
           >
-            Kesehatan Utama
+            <H2>TanyaPakar</H2>
           </Link>
         </div>
 
@@ -34,7 +35,7 @@ export default function Header() {
             </a>
           </li>
           <li>
-            <a href="#layanan" className="hover:text-primary">
+            <a href="#information" className="hover:text-primary">
               Informasi Penyakit
             </a>
           </li>
