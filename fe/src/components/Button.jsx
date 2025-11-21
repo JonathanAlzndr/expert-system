@@ -1,8 +1,9 @@
 export default function Button({ text, color, onClick, type = "button" }) {
   let variant = "";
   switch (color) {
-    case "blue":
-      variant = "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white";
+    case "black":
+      variant =
+        "bg-black hover:bg-black/70 active:bg-black text-white text-shadow-sm";
       break;
     case "primary":
       variant = "bg-primary hover:bg-primary/90 active:bg-primary text-white";
@@ -16,7 +17,7 @@ export default function Button({ text, color, onClick, type = "button" }) {
 
   return (
     <button
-      className={`${variant} h-full w-full cursor-pointer rounded-sm text-xs shadow-lg active:scale-98 lg:text-sm`}
+      className={`${variant} h-full w-full cursor-pointer rounded text-xs shadow-lg active:scale-98 lg:text-sm`}
       type={type}
       onClick={onClick}
     >

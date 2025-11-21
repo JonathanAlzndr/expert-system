@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+/* components */
 import { Card } from "../components/Card";
 import { H1, H2, H3 } from "../components/Text";
 /* icons */

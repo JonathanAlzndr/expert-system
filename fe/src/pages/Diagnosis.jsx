@@ -4,10 +4,12 @@ import Button from "../components/Button";
 import { useNavigate } from "react-router";
 import { isAuthenticated } from "../utils/auth";
 import { H1, H2, H3, P } from "../components/Text";
+import Alert from "../components/Alert";
 
 export default function Diagnosis() {
   const navigate = useNavigate();
   const [questions, setQuestions] = useState([]);
+  const [alert, setAlert] = useState(true);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -31,44 +33,47 @@ export default function Diagnosis() {
 
     fetchQuestions();
   }, []);
+  if (alert) {
+    return <Alert onClick={() => setAlert((a) => !a)} />;
+  } else {
+    return (
+      <section className="mt-10 flex h-145 w-200 flex-col overflow-hidden rounded-lg bg-white px-7 py-6 shadow-lg">
+        <H1 variant="black">Pengecekan Gejala</H1>
+        <br />
+        <P>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, ducimus.
+        </P>
+        <br />
 
-  return (
-    <section className="mt-10 flex h-145 w-200 flex-col overflow-hidden rounded-lg bg-white px-7 py-6 shadow-lg">
-      <H1 variant="black">Pengecekan Gejala</H1>
-      <br />
-      <P>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, ducimus.
-      </P>
-      <br />
+        <form action="" className="w-full" onSubmit={(e) => e.preventDefault()}>
+          <div className="flex h-85 w-full flex-col gap-4 overflow-y-auto">
+            {/* RENDER DINAMIS */}
+            {questions.map((q) => (
+              <Input
+                key={q.id_gejala}
+                id={q.id_gejala}
+                question={q.teks_pertanyaan}
+              >
+                <Option value={"Tidak"} />
+                <Option value={"Kurang Yakin"} />
+                <Option value={"Yakin"} />
+                <Option value={"Sangat Yakin"} />
+              </Input>
+            ))}
+          </div>
 
-      <form action="" className="w-full" onSubmit={(e) => e.preventDefault()}>
-        <div className="flex h-85 w-full flex-col gap-4 overflow-y-auto">
-          {/* RENDER DINAMIS */}
-          {questions.map((q) => (
-            <Input
-              key={q.id_gejala}
-              id={q.id_gejala}
-              question={q.teks_pertanyaan}
-            >
-              <Option value={"Tidak"} />
-              <Option value={"Kurang Yakin"} />
-              <Option value={"Yakin"} />
-              <Option value={"Sangat Yakin"} />
-            </Input>
-          ))}
-        </div>
-
-        <div className="mt-8 h-11 w-full">
-          {/* to do */}
-          <Button
-            text={"kirim"}
-            color={"green"}
-            onClick={() => navigate({ pathname: "/diagnosis/results" })}
-          />
-        </div>
-      </form>
-    </section>
-  );
+          <div className="mt-8 h-11 w-full">
+            {/* to do */}
+            <Button
+              text={"kirim"}
+              color={"green"}
+              onClick={() => navigate({ pathname: "/diagnosis/results" })}
+            />
+          </div>
+        </form>
+      </section>
+    );
+  }
 }
 
 function Input({ id, question, children }) {
