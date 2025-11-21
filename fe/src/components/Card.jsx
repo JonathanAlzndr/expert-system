@@ -46,11 +46,9 @@ function SecondaryCard({ title, body, layout = true, picture }) {
 function Card({ children, text, number = "0", color }) {
   return (
     <div
-      className={`flex w-70 transform flex-col items-center rounded p-4 duration-500 ${color} hover:scale-105`}
+      className={`flex w-70 transform items-center gap-5 rounded p-4 shadow-lg/20 duration-500 ${color} hover:scale-105`}
     >
       {children}
-      <H1 variant="white text-shadow-lg">{number}</H1>
-      <H2>{text}</H2>
     </div>
   );
 }

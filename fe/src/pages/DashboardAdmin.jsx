@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Card } from "../components/Card";
+import { H1, H2, H3 } from "../components/Text";
 /* icons */
 import { MdOutlineSick } from "react-icons/md";
 import { IoSettings } from "react-icons/io5";
@@ -35,14 +36,12 @@ export default function DashboardAdmin() {
 
   return (
     <main className="flex gap-10 p-10">
-      <Card text={"Jumlah Penyakit"} color={`bg-red-600/80`}>
-        <MdOutlineSick size={40} className="text-white" />
-      </Card>
-      <Card text={"Jumlah Gejala"} color={`bg-green-600`}>
-        <FaCapsules size={40} className="text-white" />
-      </Card>
-      <Card text={"Jumlah Aturan"} color={`bg-yellow-500/80`}>
-        <IoSettings size={40} className="text-white" />
+      <Card text={"Jumlah Penyakit"} color={`bg-red-100`}>
+        <div className="flex flex-col">
+          <H3 variant="text-red-700">{"Jumlah Penyakit"}</H3>
+          <H1 variant="text-background">{"0"}</H1>
+        </div>
+        <MdOutlineSick size={50} className="text-red-700" />
       </Card>
     </main>
   );
