@@ -3,7 +3,7 @@ import { FaChevronDown } from "react-icons/fa";
 import Button from "../components/Button";
 import { useNavigate } from "react-router";
 import { isAuthenticated } from "../utils/auth";
-import { H1, H2, H3, P } from "../components/Text";
+import { H1, H2, H3, H4, P } from "../components/Text";
 import Alert from "../components/Alert";
 
 export default function Diagnosis() {
@@ -37,41 +37,46 @@ export default function Diagnosis() {
     return <Alert onClick={() => setAlert((a) => !a)} />;
   } else {
     return (
-      <section className="mt-10 flex h-145 w-200 flex-col overflow-hidden rounded-lg bg-white px-7 py-6 shadow-lg">
-        <H1 variant="black">Pengecekan Gejala</H1>
-        <br />
-        <P>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, ducimus.
-        </P>
-        <br />
+      <>
+        <section className="mt-10 flex h-145 w-200 flex-col overflow-hidden rounded-lg bg-white px-14 py-7 shadow-lg">
+          <H1 variant="black">Pengecekan Gejala</H1>
+          <H4>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex,
+            ducimus.
+          </H4>
+          <br />
+          <form
+            action=""
+            className="w-full"
+            onSubmit={(e) => e.preventDefault()}
+          >
+            <div className="flex h-85 w-full flex-col gap-8 overflow-y-auto">
+              {/* RENDER DINAMIS */}
+              {questions.map((q) => (
+                <Input
+                  key={q.id_gejala}
+                  id={q.id_gejala}
+                  question={q.teks_pertanyaan}
+                >
+                  <Option value={"Tidak"} />
+                  <Option value={"Kurang Yakin"} />
+                  <Option value={"Yakin"} />
+                  <Option value={"Sangat Yakin"} />
+                </Input>
+              ))}
+            </div>
 
-        <form action="" className="w-full" onSubmit={(e) => e.preventDefault()}>
-          <div className="flex h-85 w-full flex-col gap-4 overflow-y-auto">
-            {/* RENDER DINAMIS */}
-            {questions.map((q) => (
-              <Input
-                key={q.id_gejala}
-                id={q.id_gejala}
-                question={q.teks_pertanyaan}
-              >
-                <Option value={"Tidak"} />
-                <Option value={"Kurang Yakin"} />
-                <Option value={"Yakin"} />
-                <Option value={"Sangat Yakin"} />
-              </Input>
-            ))}
-          </div>
-
-          <div className="mt-8 h-11 w-full">
-            {/* to do */}
-            <Button
-              text={"kirim"}
-              color={"green"}
-              onClick={() => navigate({ pathname: "/diagnosis/results" })}
-            />
-          </div>
-        </form>
-      </section>
+            <div className="mt-8 h-11 w-full">
+              {/* to do */}
+              <Button
+                text={"kirim"}
+                color={"green"}
+                onClick={() => navigate({ pathname: "/diagnosis/results" })}
+              />
+            </div>
+          </form>
+        </section>
+      </>
     );
   }
 }
@@ -81,8 +86,8 @@ function Input({ id, question, children }) {
 
   return (
     <div className="relative w-full">
-      <label htmlFor={id} className="text-lg font-semibold">
-        {question}
+      <label htmlFor={id}>
+        <P variant="text-text "> {question}</P>
       </label>
 
       <div className="relative">
@@ -90,7 +95,7 @@ function Input({ id, question, children }) {
           id={id}
           onClick={() => setIsOpen((prev) => !prev)}
           onBlur={() => setIsOpen(false)}
-          className="border-primary/20 bg-background-light dark:bg-background-dark dark:border-primary/30 focus:ring-primary focus:border-primary mt-1 w-full cursor-pointer appearance-none rounded border px-3 py-2 transition-all"
+          className="border-primary/20 dark:bg-background-dark dark:border-primary/30 focus:ring-primary focus:border-primary mt-1 w-full cursor-pointer appearance-none rounded-lg border bg-slate-100/50 px-4 py-3 transition-all"
         >
           <option value="">Pilih opsi</option>
           {children}
