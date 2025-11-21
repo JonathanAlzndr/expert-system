@@ -3,13 +3,15 @@ export const H1 = ({ children, variant = "white" }) => (
     {children}
   </h1>
 );
-export const H2 = ({ children }) => (
-  <h2 className="text-2xl font-semibold text-black">{children}</h2>
+export const H2 = ({ children, variant = "white" }) => (
+  <h2 className={`text-${variant} text-2xl font-semibold`}>{children}</h2>
 );
-export const H3 = ({ children }) => (
-  <h3 className="text-xl font-semibold text-black">{children}</h3>
+export const H3 = ({ children, variant = "white" }) => (
+  <h3 className={`text-xl font-semibold text-${variant}`}>{children}</h3>
 );
-export const H4 = ({ children }) => (
-  <h4 className="font text-lg text-black opacity-80">{children}</h4>
+export const H4 = ({ children, variant = "white" }) => (
+  <h4 className={`font text-lg text-${variant} opacity-80`}>{children}</h4>
 );
-export const P = ({ children }) => <p className="text-lg">{children}</p>;
+export const P = ({ children, variant = "white" }) => (
+  <p className={`text-lg text-${variant}`}>{children}</p>
+);

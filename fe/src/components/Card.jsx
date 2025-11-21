@@ -12,9 +12,9 @@ function SecondaryCard({ title, body, layout = true, picture }) {
 
   const Caption = ({ title, body, picture }) => (
     <div className="flex flex-col items-start">
-      <H2>{title}</H2>
+      <H2 variant="text">{title}</H2>
       <br />
-      <P>{body}</P>
+      <P variant="text">{body}</P>
       <br />
       <div className="h-10 w-50">
         <Button text={"Baca selengkapnya"} color="" />
@@ -43,4 +43,14 @@ function SecondaryCard({ title, body, layout = true, picture }) {
   );
 }
 
-export { SecondaryCard };
+function Card({ children, text, number = "0" }) {
+  return (
+    <div className="flex w-70 flex-col items-center rounded bg-red-600 p-4">
+      {children}
+      <H1>{number}</H1>
+      <H2>{text}</H2>
+    </div>
+  );
+}
+
+export { SecondaryCard, Card };

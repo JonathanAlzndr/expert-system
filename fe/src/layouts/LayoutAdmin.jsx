@@ -8,7 +8,7 @@ export default function LayoutAdmin() {
         <div className="w-100">
           <SideBar />
         </div>
-        <div className="min-w-full">
+        <div className="">
           <Outlet />
         </div>
       </main>

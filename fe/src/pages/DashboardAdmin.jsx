@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Card } from "../components/Card";
+import { MdOutlineSick } from "react-icons/md";
 
 export default function DashboardAdmin() {
   const [penyakitData, setPenyakitData] = useState([]);
@@ -29,13 +31,10 @@ export default function DashboardAdmin() {
   };
 
   return (
-    <div>
-      <h1>Dashboard Admin - Data Penyakit</h1>
-      <ul>
-        {penyakitData.map((penyakit) => (
-          <li key={penyakit.id_penyakit}>{penyakit.nama_penyakit}</li>
-        ))}
-      </ul>
-    </div>
+    <main>
+      <Card text={"Jumlah Penyakit"}>
+        <MdOutlineSick size={40} className="text-white" />
+      </Card>
+    </main>
   );
 }

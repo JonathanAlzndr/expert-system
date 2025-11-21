@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router";
 import Button from "./Button";
-import { H2 } from "./text";
+import { H2 } from "../components/Text";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ export default function Header() {
             className="mx-5 cursor-pointer text-base font-semibold hover:opacity-70 active:scale-95 lg:text-xl"
             to={"/"}
           >
-            <H2>TanyaPakar</H2>
+            <H2 variant="text">TanyaPakar</H2>
           </Link>
         </div>
 

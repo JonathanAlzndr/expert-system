@@ -19,7 +19,7 @@ export default function SideBar() {
     <>
       <aside className="flex h-screen w-65 flex-col items-start gap-10 p-4">
         <div className="flex flex-col items-center self-center">
-          <Logo size={"13"} />
+          <Logo size={10} />
           <h1 className="text-2xl font-semibold">TanyaPakar</h1>
         </div>
         <ul className="my-2 flex flex-col gap-3">
