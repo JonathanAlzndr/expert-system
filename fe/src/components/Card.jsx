@@ -43,9 +43,9 @@ function SecondaryCard({ title, body, layout = true, picture }) {
   );
 }
 
-function Card({ children, text, number = "0" }) {
+function Card({ children, text, number = "0", color }) {
   return (
-    <div className="flex w-70 flex-col items-center rounded bg-red-600 p-4">
+    <div className={`flex w-70 flex-col items-center rounded p-4 ${color}`}>
       {children}
       <H1>{number}</H1>
       <H2>{text}</H2>

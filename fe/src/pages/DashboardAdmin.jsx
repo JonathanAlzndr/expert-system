@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Card } from "../components/Card";
+/* icons */
 import { MdOutlineSick } from "react-icons/md";
+import { IoSettings } from "react-icons/io5";
+import { FaCapsules } from "react-icons/fa";
 
 export default function DashboardAdmin() {
   const [penyakitData, setPenyakitData] = useState([]);
@@ -31,9 +34,15 @@ export default function DashboardAdmin() {
   };
 
   return (
-    <main>
-      <Card text={"Jumlah Penyakit"}>
+    <main className="flex gap-10 p-10">
+      <Card text={"Jumlah Penyakit"} color={`bg-red-600`}>
         <MdOutlineSick size={40} className="text-white" />
+      </Card>
+      <Card text={"Jumlah Gejala"} color={`bg-green-600`}>
+        <FaCapsules size={40} className="text-white" />
+      </Card>
+      <Card text={"Jumlah Aturan"} color={`bg-yellow-500`}>
+        <IoSettings size={40} className="text-white" />
       </Card>
     </main>
   );
