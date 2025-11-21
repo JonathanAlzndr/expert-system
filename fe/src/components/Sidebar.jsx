@@ -1,10 +1,10 @@
 /* icons */
 import { MdDashboard } from "react-icons/md";
-import { RiProfileLine } from "react-icons/ri";
-import { GoProjectSymlink } from "react-icons/go";
-import { TbTableShare } from "react-icons/tb";
-import { CgProfile } from "react-icons/cg";
+import { MdOutlineSick } from "react-icons/md";
 import { CiLogout } from "react-icons/ci";
+import { FaStethoscope } from "react-icons/fa";
+import { MdMonitorHeart } from "react-icons/md";
+
 /* components */
 import Logo from "./Logo";
 import { H1, H2, H4, H3, P } from "./Text";
@@ -29,16 +29,16 @@ export default function SideBar() {
         </div>
         <ul className="mx-2 flex w-full flex-col gap-2">
           <Li text={"Beranda"}>
-            <MdDashboard size={23} className="text-green-700" />
+            <MdDashboard size={23} className="text-dark" />
           </Li>
           <Li text={"Data Penyakit"}>
-            <RiProfileLine size={23} className="text-yellow-700" />
+            <MdOutlineSick size={23} className="text-dark" />
           </Li>
           <Li text={"Data Gejala"}>
-            <GoProjectSymlink size={23} className="text-red-700" />
+            <MdMonitorHeart size={23} className="text-dark" />
           </Li>
           <Li text={"Data Aturan"}>
-            <TbTableShare size={23} className="text-blue-700" />
+            <FaStethoscope size={23} className="text-dark" />
           </Li>
           <Li text={"Keluar"} onClick={handleLogout}>
             <CiLogout size={23} className="text-red-600" />
@@ -53,10 +53,10 @@ function Li({ children, text, onClick }) {
   return (
     <li
       onClick={onClick}
-      className="flex w-full cursor-pointer items-center gap-3 rounded px-2 py-2 hover:bg-gray-200/60 active:bg-gray-200/90"
+      className="flex w-full cursor-pointer items-center gap-3 rounded px-2 py-2 hover:bg-gray-300/30 active:bg-gray-300/80"
     >
       {children}
-      <H4 variant={"black select-none"}>{text}</H4>
+      <H4 variant={"text-dark font-semibold select-none"}>{text}</H4>
     </li>
   );
 }

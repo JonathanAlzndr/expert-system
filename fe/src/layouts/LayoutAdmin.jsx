@@ -5,10 +5,10 @@ export default function LayoutAdmin() {
   return (
     <>
       <main className="flex">
-        <div className="w-100">
+        <div className="">
           <SideBar />
         </div>
-        <div className="">
+        <div className="flex w-full flex-col items-center">
           <Outlet />
         </div>
       </main>

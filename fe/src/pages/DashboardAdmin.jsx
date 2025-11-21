@@ -5,8 +5,8 @@ import { Card } from "../components/Card";
 import { H1, H2, H3 } from "../components/Text";
 /* icons */
 import { MdOutlineSick } from "react-icons/md";
-import { IoSettings } from "react-icons/io5";
-import { FaCapsules } from "react-icons/fa";
+import { MdWarningAmber } from "react-icons/md";
+import { MdMonitorHeart } from "react-icons/md";
 
 export default function DashboardAdmin() {
   const [penyakitData, setPenyakitData] = useState([]);
@@ -36,12 +36,26 @@ export default function DashboardAdmin() {
 
   return (
     <main className="flex gap-10 p-10">
-      <Card text={"Jumlah Penyakit"} color={`bg-red-100`}>
+      <Card color={`bg-red-100`}>
         <div className="flex flex-col">
-          <H3 variant="text-red-700">{"Jumlah Penyakit"}</H3>
-          <H1 variant="text-background">{"0"}</H1>
+          <H3 variant="text-red-800">{"Jumlah Penyakit"}</H3>
+          <H1 variant="text-red-800">{"0"}</H1>
         </div>
-        <MdOutlineSick size={50} className="text-red-700" />
+        <MdOutlineSick size={50} className="text-red-800" />
+      </Card>
+      <Card color={`bg-green-100`}>
+        <div className="flex flex-col">
+          <H3 variant="text-green-800">{"Jumlah Gejala"}</H3>
+          <H1 variant="text-green-800">{"0"}</H1>
+        </div>
+        <MdMonitorHeart size={50} className="text-green-800" />
+      </Card>
+      <Card color={`bg-yellow-100`}>
+        <div className="flex flex-col">
+          <H3 variant="text-yellow-800">{"Jumlah Aturan"}</H3>
+          <H1 variant="text-yellow-800">{"0"}</H1>
+        </div>
+        <MdWarningAmber size={50} className="text-yellow-800" />
       </Card>
     </main>
   );
