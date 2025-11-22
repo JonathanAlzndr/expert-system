@@ -1,48 +1,48 @@
-import { Routes, Route } from "react-router-dom";
-
-/* layouts */
-import Layout from "./layouts/Layout";
-import LayoutAdmin from "./layouts/LayoutAdmin";
-
-/* components */
-import PrivateRoute from "./components/PrivateRoute";
-
-/* pages */
-import LandingPage from "./pages/LandingPage";
-import LoginPage from "./pages/LoginPage";
-import Diagnosis from "./pages/Diagnosis";
-import DiagnosisResults from "./pages/DiagnosisResults";
-import DashboardAdmin from "./pages/DashboardAdmin";
-import DeasesAdmin from "./pages/DeasesAdmin";
+import React from 'react';
+import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
+import LandingPage from './pages/public/LandingPage';
+import DiagnosisPage from './pages/public/DiagnosisPage';
+import ResultPage from './pages/public/ResultPage';
+import DiseasesPage from './pages/public/DiseasesPage';
+import LoginPage from './pages/public/LoginPage';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminDiseases from './pages/admin/AdminDiseases';
+import AdminSymptoms from './pages/admin/AdminSymptoms';
+import AdminRules from './pages/admin/AdminRules';
+import AdminLayout from './components/layouts/AdminLayout';
+import ProtectedRoute from './components/common/ProtectedRoute';
+import './index.css';
 
 function App() {
-  return (
-    <Routes>
-      {/* public */}
-      <Route path="/" element={<Layout />}>
-        <Route index element={<LandingPage />} />
-        <Route path="diagnosis" element={<Diagnosis />} />
-        <Route path="diagnosis/results" element={<DiagnosisResults />} />
-      </Route>
+    return (
+        <Router>
+            <div className="App">
+                <Routes>
+                    {/* Public Routes */}
+                    <Route path="/" element={<LandingPage/>}/>
+                    <Route path="/diagnosis" element={<DiagnosisPage/>}/>
+                    <Route path="/result" element={<ResultPage/>}/>
+                    <Route path="/diseases" element={<DiseasesPage/>}/>
+                    <Route path="/login" element={<LoginPage/>}/>
 
-      <Route path="/login" element={<LoginPage />} />
+                    {/* Protected Admin Routes dengan Layout */}
+                    <Route path="/admin" element={
+                        <ProtectedRoute>
+                            <AdminLayout/>
+                        </ProtectedRoute>
+                    }>
+                        <Route index element={<AdminDashboard/>}/>
+                        <Route path="diseases" element={<AdminDiseases/>}/>
+                        <Route path="symptoms" element={<AdminSymptoms/>}/>
+                        <Route path="rules" element={<AdminRules/>}/>
+                    </Route>
 
-      {/* admin (private) */}
-      <Route
-        path="/admin"
-        element={
-          <PrivateRoute>
-            <LayoutAdmin />
-          </PrivateRoute>
-        }
-      >
-        <Route index element={<DashboardAdmin />} />
-        <Route path="deases" element={<DeasesAdmin />} />
-        <Route path="symptom" element={<DeasesAdmin />} />
-        <Route path="rules" element={<DeasesAdmin />} />
-      </Route>
-    </Routes>
-  );
+                    {/* Redirect unknown routes to home */}
+                    <Route path="*" element={<Navigate to="/" replace/>}/>
+                </Routes>
+            </div>
+        </Router>
+    );
 }
 
 export default App;
