@@ -11,6 +11,10 @@ export default function Button({ text, color, onClick, type = "button" }) {
     case "secondary":
       variant = "bg-white hover:bg-white/90 active:bg-white text-primary";
       break;
+    case "red":
+      variant =
+        "bg-red-500 hover:bg-red-500/90 active:bg-bg-red-500 text-background";
+      break;
     default:
       variant = "bg-primary hover:bg-primary/90 active:bg-primary text-white";
   }

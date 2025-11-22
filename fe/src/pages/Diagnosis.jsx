@@ -66,10 +66,16 @@ export default function Diagnosis() {
               ))}
             </div>
 
-            <div className="mt-8 h-11 w-full">
+            <div className="mt-8 flex h-11 w-full gap-4">
               {/* to do */}
+
               <Button
-                text={"kirim"}
+                text={"Batal"}
+                color={"red"}
+                onClick={() => navigate({ pathname: "/" })}
+              />
+              <Button
+                text={"Kirim"}
                 color={"green"}
                 onClick={() => navigate({ pathname: "/diagnosis/results" })}
               />
