@@ -38,6 +38,8 @@ function App() {
       >
         <Route index element={<DashboardAdmin />} />
         <Route path="deases" element={<DeasesAdmin />} />
+        <Route path="symptom" element={<DeasesAdmin />} />
+        <Route path="rules" element={<DeasesAdmin />} />
       </Route>
     </Routes>
   );

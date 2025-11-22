@@ -28,16 +28,16 @@ export default function SideBar() {
           <H2 variant="black">TanyaPakar</H2>
         </div>
         <ul className="mx-2 flex w-full flex-col gap-2">
-          <Li text={"Beranda"}>
+          <Li text={"Beranda"} onClick={() => navigate("/admin")}>
             <MdDashboard size={23} className="text-dark" />
           </Li>
-          <Li text={"Data Penyakit"}>
+          <Li text={"Data Penyakit"} onClick={() => navigate("/admin/deases")}>
             <MdOutlineSick size={23} className="text-dark" />
           </Li>
-          <Li text={"Data Gejala"}>
+          <Li text={"Data Gejala"} onClick={() => navigate("/admin/symptom")}>
             <MdMonitorHeart size={23} className="text-dark" />
           </Li>
-          <Li text={"Data Aturan"}>
+          <Li text={"Data Aturan"} onClick={() => navigate("/admin/symptom")}>
             <FaStethoscope size={23} className="text-dark" />
           </Li>
           <Li text={"Keluar"} onClick={handleLogout}>
