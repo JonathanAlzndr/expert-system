@@ -42,7 +42,6 @@ class DiagnosisService:
         
         # 3. Forward Chaining (Evaluasi Rule)
         for rule_set in all_rule_sets:
-            premis_terpenuhi = True
             cf_premis_list = []
             
             for premise in rule_set.premises:
@@ -77,7 +76,6 @@ class DiagnosisService:
             cf_negatif = [x for x in cf_list if x < 0]
             
             # A. Hitung Total Positif (CF Combine Standard)
-            # Rumus: CF_old + CF_new * (1 - CF_old)
             cf_gabungan_pos = 0
             if cf_positif:
                 cf_gabungan_pos = cf_positif[0]
@@ -85,7 +83,6 @@ class DiagnosisService:
                     cf_gabungan_pos = cf_gabungan_pos + cf_positif[i] * (1 - cf_gabungan_pos)
             
             # B. Hitung Total Negatif (CF Combine Negatif)
-            # Rumus: CF_old + CF_new * (1 + CF_old)
             cf_gabungan_neg = 0
             if cf_negatif:
                 cf_gabungan_neg = cf_negatif[0]
@@ -93,7 +90,6 @@ class DiagnosisService:
                     cf_gabungan_neg = cf_gabungan_neg + cf_negatif[i] * (1 + cf_gabungan_neg)
             
             # C. Hitung Konflik (Jika ada Positif DAN Negatif)
-            # Rumus: (Pos + Neg) / (1 - min(|Pos|, |Neg|))
             if cf_gabungan_pos > 0 and cf_gabungan_neg < 0:
                 min_abs = min(abs(cf_gabungan_pos), abs(cf_gabungan_neg))
                 
@@ -126,18 +122,24 @@ class DiagnosisService:
         id_diagnosis = self.repo.save_diagnosis(hasil_utama_id, cf_tertinggi, user_answers_for_save)
         hasil_utama_detail = self.repo.get_penyakit_details(hasil_utama_id)
         
+        # 7. Return Logic (FIXED)
+        
+        # KASUS A: Hasil Negatif / Tidak Terindikasi
         if cf_tertinggi <= 0:
-            # Jika nilai tertinggi pun negatif, berarti tidak ada penyakit yang cocok
-            output = {
+            return {
+                "id_diagnosis": id_diagnosis,
                 "msg": "Diagnosis Selesai",
                 "hasil_utama": {
                     "nama_penyakit": "Tidak Terindikasi Penyakit",
                     "cf_tertinggi": 0,
                     "deskripsi": "Berdasarkan gejala yang Anda masukkan, sistem tidak menemukan indikasi kuat terhadap penyakit menular seksual yang ada dalam database kami.",
                     "solusi": "Tetap jaga kesehatan. Jika keluhan berlanjut, hubungi dokter."
-                }
+                },
+                "analisis_tambahan": []
             }
 
+        # KASUS B: Hasil Positif (Penyakit Ditemukan)
+        # Kode ini hanya berjalan jika cf_tertinggi > 0
         output = {
             "id_diagnosis": id_diagnosis,
             "hasil_utama": {
@@ -153,4 +155,20 @@ class DiagnosisService:
             ]
         }
         
+        return output
+
+    def get_all_questions(self):
+        # 1. Get raw objects from Repo
+        questions = self.repo.get_all_questions()
+        
+        # 2. Convert to List of Dictionaries
+        output = []
+        for q in questions:
+            output.append({
+                # IMPORTANT: Check your Pertanyaan model for exact column names!
+                'id_pertanyaan': q.id_pertanyaan,                # or q.id_pertanyaan
+                'id_gejala': q.id_gejala,
+                'teks_pertanyaan': q.teks_pertanyaan  # if you need the symptom ID
+            })
+            
         return output
