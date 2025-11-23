@@ -136,9 +136,9 @@ const AdminRules = () => {
 	return (
 		<>
 			<div className="flex justify-between items-center mb-8">
-				<h1 className="text-3xl font-bold text-primary">Kelola Data Rules</h1>
+				<h1 className="text-3xl font-bold text-primary">Kelola Data Aturan</h1>
 				<Button onClick={() => setShowForm(true)}>
-					<i className="fas fa-plus mr-2"></i> Tambah Rule
+					<i className="fas fa-plus mr-2"></i> Tambah Aturan
 				</Button>
 			</div>
 
@@ -154,7 +154,7 @@ const AdminRules = () => {
 				</div>
 			) : (
 				<Card>
-					<Table headers={["ID Rule", "Penyakit", "Gejala", "CF Rule", "Aksi"]}>
+					<Table headers={["ID Aturan", "Penyakit", "Gejala", "CF Aturan", "Aksi"]}>
 						{rules.map((item) => (
 							<tr key={item.id_rule}>
 								<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -187,7 +187,7 @@ const AdminRules = () => {
 			)}
 
 			{/* Modal Form Tambah Rule */}
-			<Modal isOpen={showForm} onClose={() => setShowForm(false)} title="Tambah Rule Baru">
+			<Modal isOpen={showForm} onClose={() => setShowForm(false)} title="Tambah Aturan Baru">
 				{formError && (
 					<div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
 						{formError}
@@ -196,7 +196,7 @@ const AdminRules = () => {
 
 				<form onSubmit={handleSubmit}>
 					<FormInput
-						label="ID Rule"
+						label="ID Aturan"
 						name="id_rule"
 						value={formData.id_rule}
 						onChange={handleInputChange}

@@ -27,7 +27,7 @@ const AdminSidebar = () => {
                             className={`w-full text-left px-4 py-3 rounded-lg flex items-center ${location.pathname === '/admin' ? 'bg-primary' : 'hover:bg-gray-700'}`}
                         >
                             <i className="fas fa-tachometer-alt mr-3"></i>
-                            Dashboard
+                            Beranda
                         </Link>
                     </li>
                     <li>
@@ -54,7 +54,7 @@ const AdminSidebar = () => {
                             className={`w-full text-left px-4 py-3 rounded-lg flex items-center ${location.pathname === '/admin/rules' ? 'bg-primary' : 'hover:bg-gray-700'}`}
                         >
                             <i className="fas fa-project-diagram mr-3"></i>
-                            Data Rules
+                            Data Aturan
                         </Link>
                     </li>
                     <li>
@@ -63,7 +63,7 @@ const AdminSidebar = () => {
                             onClick={handleLogout}
                         >
                             <i className="fas fa-sign-out-alt mr-3"></i>
-                            Logout
+                            Keluar
                         </button>
                     </li>
                 </ul>
