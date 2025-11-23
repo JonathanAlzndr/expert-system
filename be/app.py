@@ -14,6 +14,7 @@ from routes.penyakit.penyakit_routes import penyakit_bp
 from models.diagnosis import Diagnosis
 from models.diagnosis_detail import DiagnosisDetail
 from routes.gejala.gejala_routes import gejala_bp
+from routes.rule.rule_routes import rule_bp
 
 def create_app():
     app = Flask(__name__)
@@ -37,6 +38,7 @@ def create_app():
         return jsonify(msg="Unauthorized: Token invalid"), 422
 
     app.register_blueprint(auth_bp)
+    app.register_blueprint(rule_bp)
     app.register_blueprint(penyakit_bp)
     app.register_blueprint(diagnosis_bp)
     app.register_blueprint(gejala_bp)
