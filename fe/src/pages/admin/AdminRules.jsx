@@ -17,15 +17,14 @@ const AdminRules = () => {
 	const [error, setError] = useState("");
 	const [showForm, setShowForm] = useState(false);
 	const [formData, setFormData] = useState({
-		id_rule: "",
+		id_ruleset: "",
 		id_penyakit: "",
 		id_gejala: "",
-		cf_rule: "",
+		cf_ruleset: "",
 	});
 	const [submitLoading, setSubmitLoading] = useState(false);
 	const [formError, setFormError] = useState("");
 
-	// Fetch rules dari API
 	const fetchRules = async () => {
 		setLoading(true);
 		setError("");
@@ -42,7 +41,7 @@ const AdminRules = () => {
 	const createRule = async (data) => {
 		try {
 			const response = await api.post("/admin/rules", data);
-			await fetchRules(); // Refresh list
+			await fetchRules();
 			return { success: true, data: response.data };
 		} catch (err) {
 			return {
@@ -52,11 +51,10 @@ const AdminRules = () => {
 		}
 	};
 
-	// Delete rule
-	const deleteRule = async (idRule) => {
+	const deleteRule = async (idRuleset) => {
 		try {
-			await api.delete(`/admin/rules/${idRule}`);
-			await fetchRules(); // Refresh list
+			await api.delete(`/admin/rules/${idRuleset}`);
+			await fetchRules();
 			return { success: true };
 		} catch (err) {
 			return {
@@ -71,21 +69,30 @@ const AdminRules = () => {
 	}, []);
 
 	useEffect(() => {
-		if (!formData.id_rule && penyakit.length > 0 && gejala.length > 0) {
+		if (!formData.id_ruleset && rules.length > 0) {
 			const nextId = rules.length + 1;
 			setFormData((prev) => ({
 				...prev,
-				id_rule: `R${nextId.toString().padStart(2, "0")}`,
+				id_ruleset: `R${nextId.toString().padStart(2, "0")}`,
 			}));
 		}
-	}, [penyakit, gejala, rules.length]);
+	}, [rules.length]);
 
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
-		setFormData((prev) => ({
-			...prev,
-			[name]: value,
-		}));
+
+		if (name === "cf_ruleset") {
+			const normalizedValue = value.replace(/,/g, ".").replace(/[^0-9.]/g, "");
+			setFormData((prev) => ({
+				...prev,
+				[name]: normalizedValue,
+			}));
+		} else {
+			setFormData((prev) => ({
+				...prev,
+				[name]: value,
+			}));
+		}
 	};
 
 	const handleSubmit = async (e) => {
@@ -93,9 +100,18 @@ const AdminRules = () => {
 		setSubmitLoading(true);
 		setFormError("");
 
+		const cfValue = parseFloat(formData.cf_ruleset);
+		if (isNaN(cfValue) || cfValue < 0 || cfValue > 1) {
+			setFormError("CF Ruleset harus berupa angka antara 0.0 dan 1.0");
+			setSubmitLoading(false);
+			return;
+		}
+
 		const submitData = {
-			...formData,
-			cf_rule: parseFloat(formData.cf_rule),
+			id_ruleset: formData.id_ruleset,
+			id_penyakit: formData.id_penyakit,
+			cf_ruleset: cfValue,
+			premises: [formData.id_gejala],
 		};
 
 		const result = await createRule(submitData);
@@ -103,10 +119,10 @@ const AdminRules = () => {
 		if (result.success) {
 			setShowForm(false);
 			setFormData({
-				id_rule: "",
+				id_ruleset: "",
 				id_penyakit: "",
 				id_gejala: "",
-				cf_rule: "",
+				cf_ruleset: "",
 			});
 		} else {
 			setFormError(result.error);
@@ -114,9 +130,9 @@ const AdminRules = () => {
 		setSubmitLoading(false);
 	};
 
-	const handleDelete = async (idRule) => {
+	const handleDelete = async (idRuleset) => {
 		if (window.confirm("Apakah Anda yakin ingin menghapus rule ini?")) {
-			const result = await deleteRule(idRule);
+			const result = await deleteRule(idRuleset);
 			if (!result.success) {
 				setError(result.error);
 			}
@@ -128,9 +144,13 @@ const AdminRules = () => {
 		return penyakitItem ? penyakitItem.nama_penyakit : idPenyakit;
 	};
 
-	const getGejalaName = (idGejala) => {
-		const gejalaItem = gejala.find((g) => g.id_gejala === idGejala);
-		return gejalaItem ? gejalaItem.nama_gejala : idGejala;
+	const getGejalaNames = (premises) => {
+		return premises
+			.map((idGejala) => {
+				const gejalaItem = gejala.find((g) => g.id_gejala === idGejala);
+				return gejalaItem ? gejalaItem.nama_gejala : idGejala;
+			})
+			.join(", ");
 	};
 
 	return (
@@ -154,20 +174,20 @@ const AdminRules = () => {
 				</div>
 			) : (
 				<Card>
-					<Table headers={["ID Aturan", "Penyakit", "Gejala", "CF Aturan", "Aksi"]}>
+					<Table headers={["ID Ruleset", "Penyakit", "Gejala", "CF Ruleset", "Aksi"]}>
 						{rules.map((item) => (
-							<tr key={item.id_rule}>
+							<tr key={item.id_ruleset}>
 								<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-									{item.id_rule}
+									{item.id_ruleset}
 								</td>
 								<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
 									{getPenyakitName(item.id_penyakit)}
 								</td>
-								<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-									{getGejalaName(item.id_gejala)}
+								<td className="px-6 py-4 text-sm text-gray-500 max-w-md">
+									<div className="line-clamp-2">{getGejalaNames(item.premises)}</div>
 								</td>
 								<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-									{item.cf_rule}
+									{item.cf_ruleset}
 								</td>
 								<td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
 									<button className="text-blue-600 hover:text-blue-900 mr-3">
@@ -175,7 +195,7 @@ const AdminRules = () => {
 									</button>
 									<button
 										className="text-red-600 hover:text-red-900"
-										onClick={() => handleDelete(item.id_rule)}
+										onClick={() => handleDelete(item.id_ruleset)}
 									>
 										<i className="fas fa-trash"></i> Hapus
 									</button>
@@ -186,7 +206,6 @@ const AdminRules = () => {
 				</Card>
 			)}
 
-			{/* Modal Form Tambah Rule */}
 			<Modal isOpen={showForm} onClose={() => setShowForm(false)} title="Tambah Aturan Baru">
 				{formError && (
 					<div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -196,9 +215,9 @@ const AdminRules = () => {
 
 				<form onSubmit={handleSubmit}>
 					<FormInput
-						label="ID Aturan"
-						name="id_rule"
-						value={formData.id_rule}
+						label="ID Ruleset"
+						name="id_ruleset"
+						value={formData.id_ruleset}
 						onChange={handleInputChange}
 						placeholder="Contoh: R01"
 						required
@@ -241,14 +260,11 @@ const AdminRules = () => {
 					</div>
 
 					<FormInput
-						label="Certainty Factor (CF)"
+						label="Certainty Factor (CF Ruleset)"
 						type="text"
-						name="cf_rule"
-						value={formData.cf_rule}
+						name="cf_ruleset"
+						value={formData.cf_ruleset}
 						onChange={handleInputChange}
-						min="0"
-						max="1"
-						step="0.1"
 						placeholder="0.0 - 1.0"
 						required
 					/>
