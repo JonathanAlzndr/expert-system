@@ -191,11 +191,7 @@ const DiagnosisPage = () => {
 							</p>
 						)}
 					</div>
-					<Button
-						onClick={handleProcess}
-						disabled={processing || !allQuestionsAnswered}
-						className={!allQuestionsAnswered ? "opacity-50 cursor-not-allowed" : ""}
-					>
+					<Button onClick={handleProcess} disabled={processing || !allQuestionsAnswered}>
 						<i className="fas fa-cogs mr-2"></i>
 						{processing ? "Memproses..." : "Proses Diagnosis"}
 					</Button>

@@ -242,7 +242,7 @@ const AdminRules = () => {
 
 					<FormInput
 						label="Certainty Factor (CF)"
-						type="number"
+						type="text"
 						name="cf_rule"
 						value={formData.cf_rule}
 						onChange={handleInputChange}
