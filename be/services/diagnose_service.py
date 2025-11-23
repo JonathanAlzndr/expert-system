@@ -3,7 +3,7 @@ import math
 from repositories.diagnose_repository import DiagnosisRepository
 
 class DiagnosisService:
-    def __init__(self):
+    def _init_(self):
         self.repo = DiagnosisRepository()
 
     def _convert_user_cf(self, cf_user_value):

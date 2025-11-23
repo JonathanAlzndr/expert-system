@@ -92,14 +92,18 @@ const DiagnosisPage = () => {
 			return;
 		}
 
+		// Format answers sesuai dengan struktur yang diharapkan backend
 		const answers = answeredSymptoms.map((symptom) => ({
 			id_gejala: symptom.id,
 			cf_user: symptom.certainty,
 		}));
 
+		console.log("Submitting diagnosis with answers:", answers);
+
 		const result = await submitDiagnosis(answers);
 
 		if (result.success) {
+			// Navigate ke halaman result dengan membawa data diagnosis
 			navigate("/result", { state: { diagnosisResult: result.data } });
 		}
 	};
