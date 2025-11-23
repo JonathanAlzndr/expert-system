@@ -4,16 +4,17 @@ import Header from "../../components/common/Header";
 import Footer from "../../components/common/Footer";
 import DisclaimerModal from "../../components/diagnosis/DisclaimerModal";
 import Button from "../../components/ui/Button";
-import { useDiagnosis } from "../../hooks/useDiagnosis";
+import axios from "axios";
 
 const DiagnosisPage = () => {
 	const navigate = useNavigate();
-	const { questions, loading, error, fetchQuestions, submitDiagnosis } = useDiagnosis();
+	const [questions, setQuestions] = useState([]);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState("");
 	const [showDisclaimer, setShowDisclaimer] = useState(true);
 	const [symptoms, setSymptoms] = useState([]);
 	const [processing, setProcessing] = useState(false);
 
-	// Opsi jawaban dengan label dan nilai
 	const answerOptions = [
 		{ label: "Pilih jawaban...", value: null },
 		{ label: "Pasti Tidak", value: -1.0 },
@@ -27,23 +28,54 @@ const DiagnosisPage = () => {
 		{ label: "Pasti Ya", value: 1.0 },
 	];
 
-	// Single useEffect untuk semua side effects
+	const fetchQuestions = async () => {
+		setLoading(true);
+		setError("");
+		try {
+			const response = await axios.get("http://127.0.0.1:5000/api/diagnosis/pertanyaan");
+
+			if (response.data.pertanyaanList && Array.isArray(response.data.pertanyaanList)) {
+				setQuestions(response.data.pertanyaanList);
+			} else {
+				setError("Format data pertanyaan tidak sesuai");
+			}
+		} catch (err) {
+			setError(err.response?.data?.msg || "Gagal memuat data pertanyaan");
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const submitDiagnosis = async (answers) => {
+		setProcessing(true);
+		try {
+			const response = await axios.post("http://127.0.0.1:5000/api/diagnosis", { answers });
+			return { success: true, data: response.data };
+		} catch (err) {
+			const errorMessage = err.response?.data?.msg || "Gagal memproses diagnosis";
+			setError(errorMessage);
+			return { success: false, error: errorMessage };
+		} finally {
+			setProcessing(false);
+		}
+	};
+
 	useEffect(() => {
-		if (!showDisclaimer && questions.length === 0) {
-			// Hanya fetch questions jika disclaimer disetujui dan questions masih kosong
+		if (!showDisclaimer) {
 			fetchQuestions();
 		}
+	}, [showDisclaimer]);
 
-		// Update symptoms ketika questions berubah
-		if (questions.length > 0 && symptoms.length === 0) {
+	useEffect(() => {
+		if (questions.length > 0) {
 			const initialSymptoms = questions.map((q) => ({
 				id: q.id_gejala,
 				name: q.teks_pertanyaan,
-				certainty: null, // Default value null (belum dijawab)
+				certainty: null,
 			}));
 			setSymptoms(initialSymptoms);
 		}
-	}, [showDisclaimer, questions, symptoms.length, fetchQuestions]);
+	}, [questions]);
 
 	const handleCertaintyChange = (id, certaintyValue) => {
 		const value = certaintyValue === "null" ? null : parseFloat(certaintyValue);
@@ -53,14 +85,16 @@ const DiagnosisPage = () => {
 	};
 
 	const handleProcess = async () => {
-		setProcessing(true);
-
-		// Filter hanya gejala yang sudah dijawab (certainty tidak null)
 		const answeredSymptoms = symptoms.filter((symptom) => symptom.certainty !== null);
+
+		if (answeredSymptoms.length === 0) {
+			setError("Harap pilih jawaban untuk minimal satu gejala");
+			return;
+		}
 
 		const answers = answeredSymptoms.map((symptom) => ({
 			id_gejala: symptom.id,
-			cf_user: symptom.certainty, // Langsung kirim nilai certainty
+			cf_user: symptom.certainty,
 		}));
 
 		const result = await submitDiagnosis(answers);
@@ -68,12 +102,9 @@ const DiagnosisPage = () => {
 		if (result.success) {
 			navigate("/result", { state: { diagnosisResult: result.data } });
 		}
-		setProcessing(false);
 	};
 
-	// Check if all questions are answered (tidak ada yang null)
-	const allQuestionsAnswered =
-		symptoms.length > 0 && symptoms.every((symptom) => symptom.certainty !== null);
+	const answeredCount = symptoms.filter((s) => s.certainty !== null).length;
 
 	if (showDisclaimer) {
 		return (
@@ -99,7 +130,7 @@ const DiagnosisPage = () => {
 
 				{error && (
 					<div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-						{error}
+						<strong>Error:</strong> {error}
 					</div>
 				)}
 
@@ -110,7 +141,7 @@ const DiagnosisPage = () => {
 							<p className="text-gray-600">Memuat data gejala...</p>
 						</div>
 					</div>
-				) : (
+				) : symptoms.length > 0 ? (
 					<div className="bg-white rounded-lg shadow-md p-6 mb-8">
 						<div className="space-y-6">
 							{symptoms.map((symptom, index) => (
@@ -147,7 +178,6 @@ const DiagnosisPage = () => {
 										</select>
 									</div>
 
-									{/* Selected Value Indicator */}
 									{symptom.certainty !== null && (
 										<div className="mt-3 flex items-center justify-between">
 											<span className="text-sm text-gray-500">Tingkat keyakinan:</span>
@@ -169,7 +199,6 @@ const DiagnosisPage = () => {
 										</div>
 									)}
 
-									{/* Unanswered Warning */}
 									{symptom.certainty === null && (
 										<div className="mt-2 flex items-center text-orange-600 text-sm">
 											<i className="fas fa-exclamation-circle mr-1"></i>
@@ -180,18 +209,32 @@ const DiagnosisPage = () => {
 							))}
 						</div>
 					</div>
+				) : (
+					!loading && (
+						<div className="bg-white rounded-lg shadow-md p-6 mb-8 text-center">
+							<p className="text-gray-600">Tidak ada pertanyaan yang tersedia</p>
+							<Button onClick={fetchQuestions} className="mt-4">
+								<i className="fas fa-redo mr-2"></i> Coba Lagi
+							</Button>
+						</div>
+					)
 				)}
 
 				<div className="flex justify-between items-center">
 					<div>
-						{!allQuestionsAnswered && symptoms.length > 0 && (
+						{symptoms.length > 0 && (
+							<p className="text-sm text-gray-600">
+								{answeredCount} dari {symptoms.length} pertanyaan telah dijawab
+							</p>
+						)}
+						{answeredCount === 0 && symptoms.length > 0 && (
 							<p className="text-orange-600 text-sm">
 								<i className="fas fa-info-circle mr-1"></i>
-								{`${symptoms.filter((s) => s.certainty === null).length} pertanyaan belum dijawab`}
+								Harap pilih jawaban untuk minimal satu gejala
 							</p>
 						)}
 					</div>
-					<Button onClick={handleProcess} disabled={processing || !allQuestionsAnswered}>
+					<Button onClick={handleProcess} disabled={processing || answeredCount === 0}>
 						<i className="fas fa-cogs mr-2"></i>
 						{processing ? "Memproses..." : "Proses Diagnosis"}
 					</Button>

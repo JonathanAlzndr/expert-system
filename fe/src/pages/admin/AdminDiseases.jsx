@@ -13,46 +13,6 @@ const ErrorAlert = ({ message }) => (
 	</div>
 );
 
-const FormField = ({
-	label,
-	name,
-	value,
-	onChange,
-	placeholder,
-	required,
-	disabled = false,
-	type = "text",
-}) => (
-	<div>
-		<label className="block text-gray-700 mb-2 font-medium">{label}</label>
-		<input
-			type={type}
-			name={name}
-			value={value}
-			onChange={onChange}
-			placeholder={placeholder}
-			className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 disabled:bg-gray-100"
-			required={required}
-			disabled={disabled}
-		/>
-	</div>
-);
-
-const TextAreaField = ({ label, name, value, onChange, placeholder, rows, required }) => (
-	<div className="mb-4">
-		<label className="block text-gray-700 mb-2 font-medium">{label}</label>
-		<textarea
-			name={name}
-			value={value}
-			onChange={onChange}
-			rows={rows}
-			className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-			placeholder={placeholder}
-			required={required}
-		/>
-	</div>
-);
-
 const ActionButton = ({
 	onClick,
 	children,
@@ -81,7 +41,6 @@ const ActionButton = ({
 	);
 };
 
-// Form Modal sebagai komponen terpisah
 const FormModal = ({
 	editingPenyakit,
 	formData,
@@ -98,7 +57,6 @@ const FormModal = ({
 		? "Update Penyakit"
 		: "Simpan Penyakit";
 
-	// Handler untuk mencegah event bubbling
 	const handleModalClick = (e) => {
 		e.stopPropagation();
 	};
@@ -128,44 +86,58 @@ const FormModal = ({
 
 					<form onSubmit={onSubmit}>
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-							<FormField
-								label="ID Penyakit *"
-								name="id_penyakit"
-								value={formData.id_penyakit}
+							<div>
+								<label className="block text-gray-700 mb-2 font-medium">ID Penyakit *</label>
+								<input
+									type="text"
+									name="id_penyakit"
+									value={formData.id_penyakit}
+									onChange={onInputChange}
+									placeholder="Contoh: P01"
+									className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 disabled:bg-gray-100"
+									required
+									disabled={!!editingPenyakit}
+								/>
+							</div>
+							<div>
+								<label className="block text-gray-700 mb-2 font-medium">Nama Penyakit *</label>
+								<input
+									type="text"
+									name="nama_penyakit"
+									value={formData.nama_penyakit}
+									onChange={onInputChange}
+									placeholder="Masukkan nama penyakit"
+									className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+									required
+								/>
+							</div>
+						</div>
+
+						<div className="mb-4">
+							<label className="block text-gray-700 mb-2 font-medium">Deskripsi Penyakit *</label>
+							<textarea
+								name="deskripsi"
+								value={formData.deskripsi}
 								onChange={onInputChange}
-								placeholder="Contoh: P01"
-								required
-								disabled={!!editingPenyakit}
-							/>
-							<FormField
-								label="Nama Penyakit *"
-								name="nama_penyakit"
-								value={formData.nama_penyakit}
-								onChange={onInputChange}
-								placeholder="Masukkan nama penyakit"
+								rows={4}
+								className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+								placeholder="Masukkan deskripsi lengkap tentang penyakit..."
 								required
 							/>
 						</div>
 
-						<TextAreaField
-							label="Deskripsi Penyakit *"
-							name="deskripsi"
-							value={formData.deskripsi}
-							onChange={onInputChange}
-							placeholder="Masukkan deskripsi lengkap tentang penyakit..."
-							rows={4}
-							required
-						/>
-
-						<TextAreaField
-							label="Solusi & Perawatan *"
-							name="solusi"
-							value={formData.solusi}
-							onChange={onInputChange}
-							placeholder="Masukkan solusi dan langkah-langkah perawatan..."
-							rows={4}
-							required
-						/>
+						<div className="mb-4">
+							<label className="block text-gray-700 mb-2 font-medium">Solusi & Perawatan *</label>
+							<textarea
+								name="solusi"
+								value={formData.solusi}
+								onChange={onInputChange}
+								rows={4}
+								className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+								placeholder="Masukkan solusi dan langkah-langkah perawatan..."
+								required
+							/>
+						</div>
 
 						<div className="flex justify-end space-x-3">
 							<ActionButton
@@ -183,8 +155,7 @@ const FormModal = ({
 							>
 								{submitLoading ? (
 									<>
-										<i className="fas fa-spinner fa-spin"></i>
-										Menyimpan...
+										<i className="fas fa-spinner fa-spin"></i>Menyimpan...
 									</>
 								) : (
 									<>
@@ -201,85 +172,6 @@ const FormModal = ({
 	);
 };
 
-// API Service
-const createApiService = () => {
-	const getAuthHeader = () => {
-		const token = localStorage.getItem("adminToken");
-		return token ? { Authorization: `Bearer ${token}` } : {};
-	};
-
-	return {
-		async get(url) {
-			try {
-				const response = await axios.get(url, {
-					headers: {
-						"Content-Type": "application/json",
-						...getAuthHeader(),
-					},
-				});
-				return { success: true, data: response.data };
-			} catch (error) {
-				return {
-					success: false,
-					error: error.response?.data?.message || error.message,
-				};
-			}
-		},
-
-		async post(url, data) {
-			try {
-				const response = await axios.post(url, data, {
-					headers: {
-						"Content-Type": "application/json",
-						...getAuthHeader(),
-					},
-				});
-				return { success: true, data: response.data };
-			} catch (error) {
-				return {
-					success: false,
-					error: error.response?.data?.message || error.message,
-				};
-			}
-		},
-
-		async put(url, data) {
-			try {
-				const response = await axios.put(url, data, {
-					headers: {
-						"Content-Type": "application/json",
-						...getAuthHeader(),
-					},
-				});
-				return { success: true, data: response.data };
-			} catch (error) {
-				return {
-					success: false,
-					error: error.response?.data?.message || error.message,
-				};
-			}
-		},
-
-		async delete(url) {
-			try {
-				const response = await axios.delete(url, {
-					headers: {
-						"Content-Type": "application/json",
-						...getAuthHeader(),
-					},
-				});
-				return { success: true, data: response.data };
-			} catch (error) {
-				return {
-					success: false,
-					error: error.response?.data?.message || error.message,
-				};
-			}
-		},
-	};
-};
-
-// Main Component
 const AdminDiseases = () => {
 	const [penyakit, setPenyakit] = useState([]);
 	const [loading, setLoading] = useState(false);
@@ -295,18 +187,19 @@ const AdminDiseases = () => {
 	const [submitLoading, setSubmitLoading] = useState(false);
 	const [formError, setFormError] = useState("");
 
-	const api = createApiService();
 	const API_URL = "http://127.0.0.1:5000/api/penyakit";
 
-	// Fetch data
+	const getAuthHeader = () => {
+		const token = localStorage.getItem("adminToken");
+		return token ? { Authorization: `Bearer ${token}` } : {};
+	};
+
 	const fetchPenyakit = async () => {
 		setLoading(true);
 		setError("");
-
-		const result = await api.get(API_URL);
-
-		if (result.success) {
-			const data = result.data;
+		try {
+			const response = await axios.get(API_URL, { headers: getAuthHeader() });
+			const data = response.data;
 			if (Array.isArray(data)) {
 				setPenyakit(data);
 			} else if (data?.data && Array.isArray(data.data)) {
@@ -314,44 +207,47 @@ const AdminDiseases = () => {
 			} else {
 				setPenyakit([]);
 			}
-		} else {
-			setError(result.error);
+		} catch (error) {
+			setError(error.response?.data?.message || error.message);
 			setPenyakit([]);
+		} finally {
+			setLoading(false);
 		}
-
-		setLoading(false);
 	};
 
-	// Create penyakit
 	const handleCreatePenyakit = async (data) => {
-		const result = await api.post(API_URL, data);
-		return result;
+		try {
+			const response = await axios.post(API_URL, data, { headers: getAuthHeader() });
+			return { success: true, data: response.data };
+		} catch (error) {
+			return { success: false, error: error.response?.data?.message || error.message };
+		}
 	};
 
-	// Update penyakit
 	const handleUpdatePenyakit = async (id, data) => {
-		const result = await api.put(`${API_URL}/${id}`, data);
-		return result;
+		try {
+			const response = await axios.put(`${API_URL}/${id}`, data, { headers: getAuthHeader() });
+			return { success: true, data: response.data };
+		} catch (error) {
+			return { success: false, error: error.response?.data?.message || error.message };
+		}
 	};
 
-	// Delete penyakit
 	const handleDeletePenyakit = async (id) => {
-		const result = await api.delete(`${API_URL}/${id}`);
-		return result;
+		try {
+			await axios.delete(`${API_URL}/${id}`, { headers: getAuthHeader() });
+			return { success: true };
+		} catch (error) {
+			return { success: false, error: error.response?.data?.message || error.message };
+		}
 	};
 
 	useEffect(() => {
 		fetchPenyakit();
 	}, []);
 
-	// Form handlers dengan useCallback
 	const resetForm = useCallback(() => {
-		setFormData({
-			id_penyakit: "",
-			nama_penyakit: "",
-			deskripsi: "",
-			solusi: "",
-		});
+		setFormData({ id_penyakit: "", nama_penyakit: "", deskripsi: "", solusi: "" });
 		setEditingPenyakit(null);
 		setFormError("");
 	}, []);
@@ -374,10 +270,7 @@ const AdminDiseases = () => {
 
 	const handleInputChange = useCallback((e) => {
 		const { name, value } = e.target;
-		setFormData((prev) => ({
-			...prev,
-			[name]: value,
-		}));
+		setFormData((prev) => ({ ...prev, [name]: value }));
 	}, []);
 
 	const handleSubmit = async (e) => {
@@ -385,7 +278,6 @@ const AdminDiseases = () => {
 		setSubmitLoading(true);
 		setFormError("");
 
-		// Validate form
 		const { id_penyakit, nama_penyakit, deskripsi, solusi } = formData;
 		if (!id_penyakit || !nama_penyakit || !deskripsi || !solusi) {
 			setFormError("Semua field harus diisi");
@@ -393,21 +285,7 @@ const AdminDiseases = () => {
 			return;
 		}
 
-		// Check if token exists
-		const token = localStorage.getItem("adminToken");
-		if (!token) {
-			setFormError("Token admin tidak ditemukan. Silakan login kembali.");
-			setSubmitLoading(false);
-			return;
-		}
-
-		// Prepare data
-		const postData = {
-			id_penyakit: id_penyakit,
-			nama_penyakit: nama_penyakit,
-			deskripsi: deskripsi,
-			Solusi: solusi,
-		};
+		const postData = { id_penyakit, nama_penyakit, deskripsi, Solusi: solusi };
 
 		let result;
 		if (editingPenyakit) {
@@ -420,11 +298,10 @@ const AdminDiseases = () => {
 			setShowForm(false);
 			resetForm();
 			setError("");
-			await fetchPenyakit(); // Refresh data
+			await fetchPenyakit();
 		} else {
 			setFormError(result.error);
 		}
-
 		setSubmitLoading(false);
 	};
 
@@ -432,7 +309,7 @@ const AdminDiseases = () => {
 		if (window.confirm("Apakah Anda yakin ingin menghapus penyakit ini?")) {
 			const result = await handleDeletePenyakit(idPenyakit);
 			if (result.success) {
-				await fetchPenyakit(); // Refresh data
+				await fetchPenyakit();
 				setError("");
 			} else {
 				setError(result.error);
@@ -445,7 +322,6 @@ const AdminDiseases = () => {
 		resetForm();
 	}, [resetForm]);
 
-	// Table row component
 	const DiseaseRow = ({ disease }) => (
 		<tr className="hover:bg-gray-50 transition-colors">
 			<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
@@ -487,7 +363,6 @@ const AdminDiseases = () => {
 		</tr>
 	);
 
-	// Empty state component
 	const EmptyState = () => (
 		<tr>
 			<td colSpan="5" className="px-6 py-4 text-center text-gray-500">
@@ -499,7 +374,6 @@ const AdminDiseases = () => {
 	return (
 		<div className="min-h-screen bg-gray-50 p-6">
 			<div className="max-w-7xl mx-auto">
-				{/* Header */}
 				<div className="flex justify-between items-center mb-8">
 					<h1 className="text-3xl font-bold text-gray-800">Kelola Data Penyakit</h1>
 					<ActionButton onClick={handleCreate}>
@@ -507,10 +381,8 @@ const AdminDiseases = () => {
 					</ActionButton>
 				</div>
 
-				{/* Error Alert */}
 				{error && <ErrorAlert message={error} />}
 
-				{/* Content */}
 				<div className="bg-white rounded-lg shadow-md">
 					{loading ? (
 						<LoadingSpinner />
@@ -545,7 +417,6 @@ const AdminDiseases = () => {
 					)}
 				</div>
 
-				{/* Modal */}
 				{showForm && (
 					<FormModal
 						editingPenyakit={editingPenyakit}

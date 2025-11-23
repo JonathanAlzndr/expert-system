@@ -36,8 +36,6 @@ const ResultPage = () => {
 	}
 
 	const { hasil_utama, analisis_tambahan } = diagnosisResult;
-
-	// Filter kemungkinan lain yang persentase di bawah hasil utama
 	const kemungkinanLain = analisis_tambahan
 		? analisis_tambahan.filter((item) => item.cf_score < hasil_utama.cf_tertinggi)
 		: [];
@@ -47,7 +45,6 @@ const ResultPage = () => {
 			<Header />
 
 			<div className="flex-grow container mx-auto px-4 py-8">
-				{/* Breadcrumb */}
 				<nav className="flex mb-6" aria-label="Breadcrumb">
 					<ol className="flex items-center space-x-2 text-sm text-gray-600">
 						<li>
@@ -81,7 +78,6 @@ const ResultPage = () => {
 					Berikut adalah hasil diagnosis berdasarkan gejala yang Anda pilih
 				</p>
 
-				{/* Hasil Utama */}
 				<Card className="p-6 mb-8">
 					<div className="flex items-center mb-4">
 						<div className="bg-green-100 text-green-800 rounded-full w-12 h-12 flex items-center justify-center mr-4">
@@ -89,7 +85,6 @@ const ResultPage = () => {
 						</div>
 						<h2 className="text-2xl font-bold text-gray-800">Hasil Utama</h2>
 					</div>
-
 					<div className="bg-green-50 border border-green-200 rounded-lg p-6">
 						<div className="flex flex-col md:flex-row justify-between items-start md:items-center">
 							<div className="flex-1 mb-4 md:mb-0">
@@ -108,7 +103,6 @@ const ResultPage = () => {
 					</div>
 				</Card>
 
-				{/* Detail & Solusi */}
 				<Card className="p-6 mb-8">
 					<div className="flex items-center mb-6">
 						<div className="bg-blue-100 text-blue-800 rounded-full w-10 h-10 flex items-center justify-center mr-3">
@@ -116,7 +110,6 @@ const ResultPage = () => {
 						</div>
 						<h2 className="text-2xl font-bold text-gray-800">Detail & Solusi</h2>
 					</div>
-
 					<div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 						<div>
 							<div className="flex items-center mb-3">
@@ -127,7 +120,6 @@ const ResultPage = () => {
 								<p className="text-gray-700 leading-relaxed">{hasil_utama.deskripsi}</p>
 							</div>
 						</div>
-
 						<div>
 							<div className="flex items-center mb-3">
 								<i className="fas fa-hand-holding-medical text-green-500 mr-2"></i>
@@ -140,7 +132,6 @@ const ResultPage = () => {
 					</div>
 				</Card>
 
-				{/* Kemungkinan Lain */}
 				{kemungkinanLain.length > 0 && (
 					<Card className="p-6 mb-8">
 						<div className="flex items-center mb-6">
@@ -149,11 +140,9 @@ const ResultPage = () => {
 							</div>
 							<h2 className="text-2xl font-bold text-gray-800">Kemungkinan Lain</h2>
 						</div>
-
 						<p className="text-gray-600 mb-4">
 							Penyakit lain yang memiliki kemungkinan di bawah hasil utama:
 						</p>
-
 						<div className="space-y-4">
 							{kemungkinanLain.map((item, index) => (
 								<div
@@ -178,7 +167,6 @@ const ResultPage = () => {
 					</Card>
 				)}
 
-				{/* Informasi Penting */}
 				<Card className="p-6 mb-8 bg-orange-50 border-orange-200">
 					<div className="flex items-start">
 						<i className="fas fa-exclamation-triangle text-orange-500 text-xl mt-1 mr-3"></i>
@@ -193,7 +181,6 @@ const ResultPage = () => {
 					</div>
 				</Card>
 
-				{/* Tombol Aksi */}
 				<div className="flex flex-col sm:flex-row justify-center gap-4">
 					<Button
 						onClick={() => navigate("/diagnosis")}
