@@ -131,7 +131,7 @@ const AdminSymptoms = () => {
 										className="text-blue-600 hover:text-blue-900 mr-3"
 										onClick={() => handleEdit(item)}
 									>
-										<i className="fas fa-edit"></i> Edit
+										<i className="fas fa-edit"></i> Ubah
 									</button>
 									<button
 										className="text-red-600 hover:text-red-900"

@@ -23,7 +23,6 @@ const AdminRules = () => {
 	const [formError, setFormError] = useState("");
 	const [isEditMode, setIsEditMode] = useState(false);
 
-	// Auto-generate ID untuk mode tambah
 	useEffect(() => {
 		if (!isEditMode && !formData.id_ruleset && rules.length > 0) {
 			const nextId = rules.length + 1;
@@ -134,7 +133,7 @@ const AdminRules = () => {
 			<Modal
 				isOpen={showForm}
 				onClose={handleCloseForm}
-				title={isEditMode ? "Edit Aturan" : "Tambah Aturan Baru"}
+				title={isEditMode ? "Ubah Aturan" : "Tambah Aturan Baru"}
 			>
 				<RuleForm
 					formData={formData}

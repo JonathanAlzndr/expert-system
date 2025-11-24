@@ -21,7 +21,6 @@ const LoginPage = () => {
 			...prev,
 			[name]: value,
 		}));
-		// Clear error when user starts typing
 		if (error) setError("");
 	};
 
@@ -76,12 +75,12 @@ const LoginPage = () => {
 						/>
 
 						<FormInput
-							label="Password"
+							label="Kata sandi"
 							type="password"
 							name="password"
 							value={formData.password}
 							onChange={handleInputChange}
-							placeholder="Masukkan password"
+							placeholder="Masukkan kata sandi"
 							required
 							disabled={loading}
 						/>
@@ -104,13 +103,11 @@ const LoginPage = () => {
 					<div className="mt-6 p-4 bg-blue-50 rounded-lg">
 						<h3 className="font-semibold text-blue-800 mb-2">Info Login:</h3>
 						<p className="text-sm text-blue-700">
-							Gunakan credentials admin yang telah disediakan. Hubungi administrator jika lupa
-							password.
+							Gunakan credentials admin yang telah disediakan.
 						</p>
 					</div>
 				</div>
 			</div>
-
 			<Footer />
 		</div>
 	);
