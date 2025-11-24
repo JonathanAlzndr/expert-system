@@ -34,11 +34,19 @@ const DiagnosisPage = () => {
 		try {
 			const response = await axios.get("http://127.0.0.1:5000/api/diagnosis/pertanyaan");
 
+			// Handle different response formats
+			let questionsData = [];
+
 			if (response.data.pertanyaanList && Array.isArray(response.data.pertanyaanList)) {
-				setQuestions(response.data.pertanyaanList);
+				questionsData = response.data.pertanyaanList;
+			} else if (Array.isArray(response.data)) {
+				questionsData = response.data;
 			} else {
 				setError("Format data pertanyaan tidak sesuai");
+				return;
 			}
+
+			setQuestions(questionsData);
 		} catch (err) {
 			setError(err.response?.data?.msg || "Gagal memuat data pertanyaan");
 		} finally {
@@ -97,8 +105,6 @@ const DiagnosisPage = () => {
 			id_gejala: symptom.id,
 			cf_user: symptom.certainty,
 		}));
-
-		console.log("Submitting diagnosis with answers:", answers);
 
 		const result = await submitDiagnosis(answers);
 

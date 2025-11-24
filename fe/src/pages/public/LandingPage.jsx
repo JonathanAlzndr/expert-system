@@ -28,8 +28,8 @@ const LandingPage = () => {
 						</h1>
 						<p className="text-lg md:text-xl mb-6 leading-relaxed opacity-90">
 							Sistem pakar kesehatan menggunakan metode <strong>Forward Chaining</strong> dan{" "}
-							<strong>Certainty Factor</strong>
-							untuk identifikasi penyakit berdasarkan gejala.
+							<strong>Certainty Factor </strong>&nbsp;untuk identifikasi penyakit berdasarkan
+							gejala.
 						</p>
 						<a
 							href="/diagnosis"
