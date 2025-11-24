@@ -30,7 +30,6 @@ const AdminDashboard = () => {
 	return (
 		<>
 			<h1 className="text-3xl font-bold text-primary mb-8">Beranda Admin</h1>
-
 			{/* Error Display */}
 			{hasError && (
 				<div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
@@ -45,7 +44,6 @@ const AdminDashboard = () => {
 					</div>
 				</div>
 			)}
-
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
 				{/* Penyakit Card */}
 				<Card className="p-6">
@@ -107,7 +105,6 @@ const AdminDashboard = () => {
 					{errorRules && <p className="text-red-500 text-xs mt-2">Gagal memuat data</p>}
 				</Card>
 			</div>
-
 			{/* Recent Activity */}
 			<Card className="p-6">
 				<div className="flex justify-between items-center mb-4">
@@ -124,8 +121,8 @@ const AdminDashboard = () => {
 					</button>
 				</div>
 
-				<Table headers={["Waktu", "Aktivitas", "Pengguna"]}>
-					{recentActivity.map((activity, index) => (
+				<Table headers={["No", "Tanggal", "Hasil Penyakit", "Nilai Keyakinan", "Aksi"]}>
+					{/* {recentActivity.map((activity, index) => (
 						<tr key={index} className="hover:bg-gray-50">
 							<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
 								{activity.waktu}
@@ -145,21 +142,9 @@ const AdminDashboard = () => {
 								</span>
 							</td>
 						</tr>
-					))}
+					))} */}
 				</Table>
 			</Card>
-
-			{/* Debug Info (bisa dihapus di production) */}
-			{process.env.NODE_ENV === "development" && (
-				<div className="mt-6 p-4 bg-gray-100 rounded-lg">
-					<h4 className="font-semibold text-gray-700 mb-2">Debug Info:</h4>
-					<div className="text-sm text-gray-600 grid grid-cols-1 md:grid-cols-3 gap-2">
-						<div>Penyakit: {penyakit.length} items</div>
-						<div>Gejala: {gejala.length} items</div>
-						<div>Rules: {rules.length} items</div>
-					</div>
-				</div>
-			)}
 		</>
 	);
 };

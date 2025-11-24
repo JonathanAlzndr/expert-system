@@ -96,10 +96,10 @@ const RuleForm = ({
 					<Button type="submit" disabled={submitLoading}>
 						{submitLoading
 							? isEditMode
-								? "Mengupdate..."
+								? "Mengubah..."
 								: "Menyimpan..."
 							: isEditMode
-							? "Update"
+							? "Ubah"
 							: "Simpan"}
 					</Button>
 				</div>
