@@ -14,7 +14,7 @@ export const useRules = () => {
 			setRules(response.data || []);
 		} catch (err) {
 			setError(err.response?.data?.msg || "Failed to fetch rules");
-			setRules([]); // Set empty array on error
+			setRules([]);
 		} finally {
 			setLoading(false);
 		}
@@ -23,7 +23,7 @@ export const useRules = () => {
 	const createRule = async (data) => {
 		try {
 			const response = await ruleService.create(data);
-			await fetchRules(); // Refresh list
+			await fetchRules();
 			return { success: true, data: response };
 		} catch (err) {
 			return {
@@ -36,7 +36,7 @@ export const useRules = () => {
 	const updateRule = async (idRule, data) => {
 		try {
 			const response = await ruleService.update(idRule, data);
-			await fetchRules(); // Refresh list
+			await fetchRules();
 			return { success: true, data: response };
 		} catch (err) {
 			return {
@@ -48,9 +48,9 @@ export const useRules = () => {
 
 	const deleteRule = async (idRule) => {
 		try {
-			const response = await ruleService.delete(idRule);
-			await fetchRules(); // Refresh list
-			return { success: true, data: response };
+			await ruleService.delete(idRule);
+			await fetchRules();
+			return { success: true };
 		} catch (err) {
 			return {
 				success: false,
