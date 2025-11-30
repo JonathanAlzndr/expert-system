@@ -158,7 +158,6 @@ class DiagnosisService:
         return output
 
     def get_all_questions(self):
-        # 1. Get raw objects from Repo
         questions = self.repo.get_all_questions()
         
         # 2. Convert to List of Dictionaries
