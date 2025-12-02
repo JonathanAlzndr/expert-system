@@ -149,7 +149,7 @@ const AdminSymptoms = () => {
 			<Modal
 				isOpen={showForm}
 				onClose={handleCloseModal}
-				title={editingGejala ? "Edit Gejala" : "Tambah Gejala Baru"}
+				title={editingGejala ? "Ubah Gejala" : "Tambah Gejala Baru"}
 			>
 				{formError && (
 					<div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -195,7 +195,7 @@ const AdminSymptoms = () => {
 							Batal
 						</Button>
 						<Button type="submit" disabled={submitLoading}>
-							{submitLoading ? "Menyimpan..." : editingGejala ? "Update" : "Simpan"}
+							{submitLoading ? "Menyimpan..." : editingGejala ? "Perbarui" : "Simpan"}
 						</Button>
 					</div>
 				</form>

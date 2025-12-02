@@ -50,11 +50,11 @@ const FormModal = ({
 	onSubmit,
 	onInputChange,
 }) => {
-	const modalTitle = editingPenyakit ? "Edit Penyakit" : "Tambah Penyakit Baru";
+	const modalTitle = editingPenyakit ? "Ubah Penyakit" : "Tambah Penyakit Baru";
 	const submitButtonText = submitLoading
 		? "Menyimpan..."
 		: editingPenyakit
-		? "Update Penyakit"
+		? "Ubah Penyakit"
 		: "Simpan Penyakit";
 
 	const handleModalClick = (e) => {
