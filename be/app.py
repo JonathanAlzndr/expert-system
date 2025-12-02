@@ -15,6 +15,7 @@ from models.diagnosis import Diagnosis
 from models.diagnosis_detail import DiagnosisDetail
 from routes.gejala.gejala_routes import gejala_bp
 from routes.rule.rule_routes import rule_bp
+from routes.diagnosis.admin_diagnose import admin_diagnosis_bp
 from flask_cors import CORS
 
 def create_app():
@@ -45,6 +46,7 @@ def create_app():
     app.register_blueprint(penyakit_bp)
     app.register_blueprint(diagnosis_bp)
     app.register_blueprint(gejala_bp)
+    app.register_blueprint(admin_diagnosis_bp)
 
     with app.app_context():
         db.create_all()

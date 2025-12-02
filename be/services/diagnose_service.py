@@ -158,7 +158,6 @@ class DiagnosisService:
         return output
 
     def get_all_questions(self):
-        # 1. Get raw objects from Repo
         questions = self.repo.get_all_questions()
         
         # 2. Convert to List of Dictionaries
@@ -172,3 +171,53 @@ class DiagnosisService:
             })
             
         return output
+    
+    def get_all_diagnoses_for_admin(self):
+        history_data = self.repo.get_all_history()
+        result = []
+
+        for item in history_data:
+            nama_penyakit = item.penyakit_hasil.nama_penyakit if item.penyakit_hasil else "Tidak Teridentifikasi"
+            
+            result.append({
+                "id_diagnosis": item.id_diagnosis,
+                "tanggal": item.tanggal_diagnosis.strftime('%d-%m-%Y %H:%M'), # Format tanggal cantik
+                "nama_penyakit": nama_penyakit,
+                "cf_persen": f"{round(item.cf_tertinggi * 100, 1)}%" # Ubah jadi persen string (98.5%)
+            })
+        
+        return result
+
+    def get_diagnosis_detail_for_admin(self, id_diagnosis):
+        diagnosis = self.repo.get_by_id(id_diagnosis)
+        
+        if not diagnosis:
+            return None
+
+        list_gejala_user = []
+        for detail in diagnosis.details:
+            list_gejala_user.append({
+                "kode_gejala": detail.id_gejala,
+                "nama_gejala": detail.gejala.nama_gejala,
+                "jawaban_user": detail.jawaban, 
+                "cf_user": detail.cf_pengguna
+            })
+
+        nama_penyakit = diagnosis.penyakit_hasil.nama_penyakit if diagnosis.penyakit_hasil else "Unknown"
+        solusi = diagnosis.penyakit_hasil.solusi if diagnosis.penyakit_hasil else "-"
+
+        response_data = {
+            "info_diagnosis": {
+                "id_diagnosis": diagnosis.id_diagnosis,
+                "tanggal": diagnosis.tanggal_diagnosis.strftime('%d-%m-%Y %H:%M'),
+                "hasil_penyakit": nama_penyakit,
+                "cf_nilai": round(diagnosis.cf_tertinggi, 4),
+                "cf_persen": f"{round(diagnosis.cf_tertinggi * 100, 2)}%",
+                "solusi": solusi
+            },
+            "detail_jawaban": list_gejala_user
+        }
+
+        return response_data
+    
+    
