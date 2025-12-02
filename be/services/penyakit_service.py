@@ -12,7 +12,8 @@ class PenyakitService:
                 {
                     "id_penyakit": p.id_penyakit,
                     "nama_penyakit": p.nama_penyakit,
-                    "solusi": p.solusi
+                    "solusi": p.solusi,
+                    "deskripsi": p.deskripsi
                 } for p in data
             ]
         }
