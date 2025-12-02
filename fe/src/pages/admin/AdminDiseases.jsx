@@ -1,4 +1,3 @@
-// AdminDiseases.js
 import React, { useState, useEffect, useCallback } from "react";
 import { createApiService } from "./apiService";
 import {
@@ -25,76 +24,69 @@ export default function AdminDiseases() {
 	const [submitLoading, setSubmitLoading] = useState(false);
 	const [formError, setFormError] = useState("");
 
-	// Inisialisasi API service
-	const apiService = createApiService();
+	const apiService = React.useMemo(() => createApiService(), []);
 
-	const fetchPenyakit = useCallback(
-		async function () {
-			setLoading(true);
-			setError("");
+	const fetchPenyakit = useCallback(async () => {
+		setLoading(true);
+		setError("");
 
-			try {
-				const result = await apiService.penyakit.getAll();
+		try {
+			const result = await apiService.penyakit.getAll();
 
-				if (result.success) {
-					const data = result.data;
-					// Handle berbagai format response
-					if (Array.isArray(data)) {
-						setPenyakit(data);
-					} else if (data?.data && Array.isArray(data.data)) {
-						setPenyakit(data.data);
-					} else {
-						setPenyakit([]);
-					}
-				} else {
-					setError(result.error);
-					setPenyakit([]);
+			if (result.success) {
+				const data = result.data;
+				let penyakitData = [];
+
+				if (Array.isArray(data)) {
+					penyakitData = data;
+				} else if (data?.data && Array.isArray(data.data)) {
+					penyakitData = data.data;
 				}
-			} catch (error) {
-				setError("Terjadi kesalahan saat mengambil data");
+
+				setPenyakit(penyakitData);
+			} else {
+				setError(result.error);
 				setPenyakit([]);
-			} finally {
-				setLoading(false);
 			}
-		},
-		[apiService]
-	);
+		} catch (error) {
+			setError("Terjadi kesalahan saat mengambil data");
+			setPenyakit([]);
+		} finally {
+			setLoading(false);
+		}
+	}, [apiService]);
 
-	useEffect(
-		function () {
-			fetchPenyakit();
-		},
-		[fetchPenyakit]
-	);
+	useEffect(() => {
+		fetchPenyakit();
+	}, [fetchPenyakit]);
 
-	const resetForm = useCallback(function () {
+	function resetForm() {
 		setFormData({ id_penyakit: "", nama_penyakit: "", deskripsi: "", solusi: "" });
 		setEditingPenyakit(null);
 		setFormError("");
-	}, []);
+	}
 
 	function handleCreate() {
 		resetForm();
 		setShowForm(true);
 	}
 
-	function handleEdit(disease) {
+	const handleEdit = useCallback((disease) => {
+		// Data dari API mungkin tidak memiliki deskripsi dan solusi bisa null
 		setFormData({
-			id_penyakit: disease.id_penyakit,
-			nama_penyakit: disease.nama_penyakit,
-			deskripsi: disease.deskripsi,
-			solusi: disease.solusi,
+			id_penyakit: disease.id_penyakit || "",
+			nama_penyakit: disease.nama_penyakit || "",
+			deskripsi: "", // Selalu kosong karena tidak ada di response GET
+			solusi: disease.solusi || "", // Gunakan yang ada atau empty string jika null
 		});
 		setEditingPenyakit(disease);
 		setShowForm(true);
-	}
+	}, []);
 
-	function handleInputChange(e) {
+	const handleInputChange = useCallback((e) => {
 		const { name, value } = e.target;
-		setFormData(function (prev) {
-			return { ...prev, [name]: value };
-		});
-	}
+		setFormData((prev) => ({ ...prev, [name]: value }));
+	}, []);
 
 	async function handleSubmit(e) {
 		e.preventDefault();
@@ -103,32 +95,26 @@ export default function AdminDiseases() {
 
 		const { id_penyakit, nama_penyakit, deskripsi, solusi } = formData;
 
-		// Validasi form
-		if (!id_penyakit || !nama_penyakit || !deskripsi || !solusi) {
-			setFormError("Semua field harus diisi");
+		if (!id_penyakit || !nama_penyakit) {
+			setFormError("ID Penyakit dan Nama Penyakit harus diisi");
 			setSubmitLoading(false);
 			return;
 		}
 
 		let result;
 		if (editingPenyakit) {
-			// Method PUT - MASALAH UTAMA DIPERBAIKI DI SINI
-			// Menggunakan field 'Solusi' (huruf besar) untuk backend
-			const updateData = {
+			result = await apiService.penyakit.update(editingPenyakit.id_penyakit, {
 				nama_penyakit,
-				deskripsi,
-				solusi, // Akan diubah menjadi 'Solusi' di apiService
-			};
-			result = await apiService.penyakit.update(editingPenyakit.id_penyakit, updateData);
+				deskripsi: deskripsi || "", // Kirim meski kosong
+				solusi: solusi || "", // Kirim meski kosong
+			});
 		} else {
-			// Method POST
-			const createData = {
+			result = await apiService.penyakit.create({
 				id_penyakit,
 				nama_penyakit,
-				deskripsi,
-				solusi, // Akan diubah menjadi 'Solusi' di apiService
-			};
-			result = await apiService.penyakit.create(createData);
+				deskripsi: deskripsi || "",
+				solusi: solusi || "",
+			});
 		}
 
 		if (result.success) {
@@ -156,9 +142,24 @@ export default function AdminDiseases() {
 		}
 	}
 
-	function handleCloseModal() {
+	const handleCloseModal = useCallback(() => {
 		setShowForm(false);
 		resetForm();
+	}, []);
+
+	function renderTableRows() {
+		if (penyakit.length === 0) {
+			return <EmptyState />;
+		}
+
+		return penyakit.map((disease) => (
+			<DiseaseRow
+				key={disease.id_penyakit}
+				disease={disease}
+				onEdit={handleEdit}
+				onDelete={handleDelete}
+			/>
+		));
 	}
 
 	return (
@@ -181,34 +182,24 @@ export default function AdminDiseases() {
 							<table className="min-w-full divide-y divide-gray-200">
 								<thead className="bg-gray-50">
 									<tr>
-										{["ID Penyakit", "Nama Penyakit", "Deskripsi", "Solusi", "Aksi"].map(
-											(header) => (
-												<th
-													key={header}
-													className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-												>
-													{header}
-												</th>
-											)
-										)}
+										<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+											ID Penyakit
+										</th>
+										<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+											Nama Penyakit
+										</th>
+										<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">
+											Deskripsi
+										</th>
+										<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">
+											Solusi
+										</th>
+										<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+											Aksi
+										</th>
 									</tr>
 								</thead>
-								<tbody className="bg-white divide-y divide-gray-200">
-									{penyakit.length === 0 ? (
-										<EmptyState />
-									) : (
-										penyakit.map(function (disease) {
-											return (
-												<DiseaseRow
-													key={disease.id_penyakit}
-													disease={disease}
-													onEdit={handleEdit}
-													onDelete={handleDelete}
-												/>
-											);
-										})
-									)}
-								</tbody>
+								<tbody className="bg-white divide-y divide-gray-200">{renderTableRows()}</tbody>
 							</table>
 						</div>
 					)}
