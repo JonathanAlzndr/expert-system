@@ -6,7 +6,7 @@ from services.diagnose_service import DiagnosisService
 diagnosis_bp = Blueprint('diagnosis', __name__, url_prefix='/api/diagnosis')
 diagnosis_service = DiagnosisService()
 
-@diagnosis_bp.route('/', methods=['POST'])
+@diagnosis_bp.route('/', methods=['POST'], strict_slashes=False)
 def submit_diagnosis():    
     data = request.get_json()
     
