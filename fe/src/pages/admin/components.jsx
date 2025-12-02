@@ -1,7 +1,6 @@
 // components.js
 import React from "react";
 
-// LoadingSpinner Component
 export function LoadingSpinner() {
 	return (
 		<div className="flex justify-center items-center py-8">
@@ -10,7 +9,6 @@ export function LoadingSpinner() {
 	);
 }
 
-// ErrorAlert Component
 export function ErrorAlert(props) {
 	const { message } = props;
 
@@ -21,7 +19,6 @@ export function ErrorAlert(props) {
 	);
 }
 
-// ActionButton Component
 export function ActionButton(props) {
 	const {
 		onClick,
@@ -53,7 +50,6 @@ export function ActionButton(props) {
 	);
 }
 
-// FormModal Component
 export function FormModal(props) {
 	const { editingPenyakit, formData, formError, submitLoading, onClose, onSubmit, onInputChange } =
 		props;
@@ -179,59 +175,68 @@ export function FormModal(props) {
 		</div>
 	);
 }
-
-// DiseaseRow Component
-export function DiseaseRow(props) {
-	const { disease, onEdit, onDelete } = props;
-
-	return (
-		<tr className="hover:bg-gray-50 transition-colors">
-			<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-				{disease.id_penyakit}
-			</td>
-			<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">
-				{disease.nama_penyakit}
-			</td>
-			<td className="px-6 py-4 text-sm text-gray-600 max-w-md">
-				<div className="line-clamp-2">
-					{disease.deskripsi?.length > 100
-						? `${disease.deskripsi.substring(0, 100)}...`
-						: disease.deskripsi || "-"}
-				</div>
-			</td>
-			<td className="px-6 py-4 text-sm text-gray-600 max-w-md">
-				<div className="line-clamp-2">
-					{disease.solusi?.length > 100
-						? `${disease.solusi.substring(0, 100)}...`
-						: disease.solusi || "-"}
-				</div>
-			</td>
-			<td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-				<div className="flex gap-2">
-					<button
-						onClick={() => onEdit(disease)}
-						className="text-blue-600 hover:text-blue-900 transition duration-200 flex items-center gap-1 px-3 py-1 rounded "
-					>
-						<i className="fas fa-edit text-sm"></i> Ubah
-					</button>
-					<button
-						onClick={() => onDelete(disease.id_penyakit)}
-						className="text-red-600 hover:text-red-900 transition duration-200 flex items-center gap-1 px-3 py-1 rounded "
-					>
-						<i className="fas fa-trash text-sm"></i> Hapus
-					</button>
-				</div>
-			</td>
-		</tr>
-	);
-}
-
-// EmptyState Component
 export function EmptyState() {
 	return (
 		<tr>
 			<td colSpan="5" className="px-6 py-4 text-center text-gray-500">
 				Tidak ada data penyakit
+			</td>
+		</tr>
+	);
+}
+// Di components.js - DiseaseRow
+export function DiseaseRow(props) {
+	const { disease, onEdit, onDelete } = props;
+
+	// Debug: log setiap render DiseaseRow
+	console.log("DiseaseRow rendering for:", disease.id_penyakit);
+	console.log("  nama_penyakit:", disease.nama_penyakit);
+	console.log("  deskripsi:", disease.deskripsi);
+	console.log("  solusi:", disease.solusi);
+	console.log("  All props:", props);
+
+	return (
+		<tr className="hover:bg-gray-50 transition-colors">
+			<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+				{disease.id_penyakit || "-"}
+			</td>
+			<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">
+				{disease.nama_penyakit || "-"}
+			</td>
+			<td className="px-6 py-4 text-sm text-gray-600 max-w-md">
+				<div className="line-clamp-2">
+					{disease.deskripsi && disease.deskripsi.length > 100
+						? `${disease.deskripsi.substring(0, 100)}...`
+						: disease.deskripsi || "(kosong)"}
+				</div>
+			</td>
+			<td className="px-6 py-4 text-sm text-gray-600 max-w-md">
+				<div className="line-clamp-2">
+					{disease.solusi && disease.solusi.length > 100
+						? `${disease.solusi.substring(0, 100)}...`
+						: disease.solusi || "(kosong)"}
+				</div>
+			</td>
+			<td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+				<div className="flex gap-2">
+					<button
+						onClick={function () {
+							console.log("Edit button clicked for:", disease);
+							onEdit(disease);
+						}}
+						className="text-blue-600 hover:text-blue-900 transition duration-200 flex items-center gap-1 px-3 py-1 rounded "
+					>
+						<i className="fas fa-edit text-sm"></i> Ubah
+					</button>
+					<button
+						onClick={function () {
+							onDelete(disease.id_penyakit);
+						}}
+						className="text-red-600 hover:text-red-900 transition duration-200 flex items-center gap-1 px-3 py-1 rounded "
+					>
+						<i className="fas fa-trash text-sm"></i> Hapus
+					</button>
+				</div>
 			</td>
 		</tr>
 	);
