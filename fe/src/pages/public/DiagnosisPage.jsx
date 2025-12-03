@@ -120,7 +120,7 @@ const DiagnosisPage = () => {
 		return (
 			<div className="min-h-screen flex flex-col">
 				<Header />
-				<div className="flex-grow flex items-center justify-center bg-gray-100 p-4">
+				<div className="grow flex items-center justify-center bg-gray-100 p-4">
 					<DisclaimerModal isOpen={showDisclaimer} onAgree={() => setShowDisclaimer(false)} />
 				</div>
 				<Footer />
@@ -132,7 +132,7 @@ const DiagnosisPage = () => {
 		<div className="min-h-screen flex flex-col">
 			<Header />
 
-			<div className="flex-grow container mx-auto px-4 py-8">
+			<div className="grow container mx-auto px-4 py-8">
 				<h1 className="text-3xl font-bold text-primary mb-2">Diagnosis Penyakit</h1>
 				<p className="text-gray-600 mb-8">
 					Pilih tingkat keyakinan Anda untuk setiap gejala berikut
