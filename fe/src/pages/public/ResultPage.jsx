@@ -15,7 +15,7 @@ const ResultPage = () => {
 		return (
 			<div className="min-h-screen flex flex-col">
 				<Header />
-				<div className="flex-grow flex items-center justify-center">
+				<div className="grow flex items-center justify-center">
 					<div className="text-center">
 						<h2 className="text-xl font-bold mb-3">Tidak ada data diagnosis</h2>
 						<Button onClick={() => navigate("/diagnosis")}>Kembali</Button>
@@ -41,7 +41,7 @@ const ResultPage = () => {
 		<div className="min-h-screen flex flex-col">
 			<Header />
 
-			<div className="container mx-auto px-4 py-8 flex-grow">
+			<div className="container mx-auto px-4 py-8 grow">
 				<h1 className="text-3xl font-bold mb-6">Hasil Diagnosis</h1>
 
 				<div className="bg-white shadow rounded-lg p-6 mb-6">

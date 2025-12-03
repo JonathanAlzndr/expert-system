@@ -27,6 +27,22 @@ const DiagnosisPage = () => {
 		{ label: "Hampir Pasti Ya", value: 0.8 },
 		{ label: "Pasti Ya", value: 1.0 },
 	];
+	useEffect(() => {
+		if (!showDisclaimer) {
+			fetchQuestions();
+		}
+	}, [showDisclaimer]);
+
+	useEffect(() => {
+		if (questions.length > 0) {
+			const initialSymptoms = questions.map((q) => ({
+				id: q.id_gejala,
+				name: q.teks_pertanyaan,
+				certainty: null,
+			}));
+			setSymptoms(initialSymptoms);
+		}
+	}, [questions]);
 
 	const fetchQuestions = async () => {
 		setLoading(true);
@@ -67,23 +83,6 @@ const DiagnosisPage = () => {
 			setProcessing(false);
 		}
 	};
-
-	useEffect(() => {
-		if (!showDisclaimer) {
-			fetchQuestions();
-		}
-	}, [showDisclaimer]);
-
-	useEffect(() => {
-		if (questions.length > 0) {
-			const initialSymptoms = questions.map((q) => ({
-				id: q.id_gejala,
-				name: q.teks_pertanyaan,
-				certainty: null,
-			}));
-			setSymptoms(initialSymptoms);
-		}
-	}, [questions]);
 
 	const handleCertaintyChange = (id, certaintyValue) => {
 		const value = certaintyValue === "null" ? null : parseFloat(certaintyValue);
@@ -138,19 +137,10 @@ const DiagnosisPage = () => {
 					Pilih tingkat keyakinan Anda untuk setiap gejala berikut
 				</p>
 
-				{error && (
-					<div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-						<strong>Error:</strong> {error}
-					</div>
-				)}
+				{error && <Error error={error} />}
 
 				{loading ? (
-					<div className="flex justify-center items-center py-16">
-						<div className="text-center">
-							<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-							<p className="text-gray-600">Memuat data gejala...</p>
-						</div>
-					</div>
+					<Loading />
 				) : symptoms.length > 0 ? (
 					<div className="bg-white rounded-lg shadow-md p-6 mb-8">
 						<div className="space-y-6">
@@ -255,5 +245,23 @@ const DiagnosisPage = () => {
 		</div>
 	);
 };
+
+function Error({ error }) {
+	return (
+		<div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+			<strong>Error:</strong> {error}
+		</div>
+	);
+}
+function Loading() {
+	return (
+		<div className="flex justify-center items-center py-16">
+			<div className="text-center">
+				<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+				<p className="text-gray-600">Memuat data gejala...</p>
+			</div>
+		</div>
+	);
+}
 
 export default DiagnosisPage;
