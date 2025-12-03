@@ -31,7 +31,7 @@ const DisclaimerModal = ({ isOpen, onAgree }) => {
 					id="agree"
 					checked={agreed}
 					onChange={(e) => setAgreed(e.target.checked)}
-					className="h-5 w-5 text-[var(--color-primary)] rounded"
+					className="h-5 w-5 text-primary rounded"
 				/>
 				<label htmlFor="agree" className="ml-2 text-gray-700">
 					Saya mengerti dan menyetujui
