@@ -86,7 +86,7 @@ const MultiSelectDropdown = ({
 					aria-haspopup="listbox"
 				>
 					<div className="flex justify-between items-center">
-						<div className="flex flex-wrap gap-1 flex-1 min-h-[28px]">
+						<div className="flex flex-wrap gap-1 flex-1 min-h-7">
 							{selectedLabels.length > 0 ? (
 								selectedLabels.map((label, index) => (
 									<span
