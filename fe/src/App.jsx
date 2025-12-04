@@ -1,5 +1,8 @@
+/* hooks */
 import React from "react";
+import "./index.css";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+/* pages */
 import LandingPage from "./pages/public/LandingPage";
 import DiagnosisPage from "./pages/public/DiagnosisPage";
 import ResultPage from "./pages/public/ResultPage";
@@ -9,9 +12,12 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminDiseases from "./pages/admin/AdminDiseases";
 import AdminSymptoms from "./pages/admin/AdminSymptoms";
 import AdminRules from "./pages/admin/AdminRules";
+/* layouts */
+import LayoutDefault from "./components/layouts/LayoutDefault";
 import AdminLayout from "./components/layouts/AdminLayout";
+/* components */
 import ProtectedRoute from "./components/common/ProtectedRoute";
-import "./index.css";
+import Dev from "./pages/public/Dev";
 
 function App() {
 	return (
@@ -24,6 +30,9 @@ function App() {
 					<Route path="/result" element={<ResultPage />} />
 					<Route path="/diseases" element={<DiseasesPage />} />
 					<Route path="/login" element={<LoginPage />} />
+					<Route path="/dev" element={<LayoutDefault />}>
+						<Route index element={<Dev />} />
+					</Route>
 
 					{/* Protected Admin Routes dengan Layout */}
 					<Route
