@@ -16,7 +16,7 @@ const AdminRules = () => {
 	const [formData, setFormData] = useState({
 		id_ruleset: "",
 		id_penyakit: "",
-		id_gejala: "",
+		premises: [], // Array untuk multiple gejala
 		cf_ruleset: "",
 	});
 	const [submitLoading, setSubmitLoading] = useState(false);
@@ -40,28 +40,35 @@ const AdminRules = () => {
 		}));
 	};
 
-	const handleSubmit = async (e) => {
+	const handleSubmit = async (e, formDataWithPremises) => {
 		e.preventDefault();
 		setSubmitLoading(true);
 		setFormError("");
 
-		const cfValue = parseFloat(formData.cf_ruleset);
+		const cfValue = parseFloat(formDataWithPremises.cf_ruleset);
 		if (isNaN(cfValue) || cfValue < 0 || cfValue > 1) {
 			setFormError("CF Ruleset harus berupa angka antara 0.0 dan 1.0");
 			setSubmitLoading(false);
 			return;
 		}
 
+		// Validate that at least one gejala is selected
+		if (!formDataWithPremises.premises || formDataWithPremises.premises.length === 0) {
+			setFormError("Minimal pilih satu gejala");
+			setSubmitLoading(false);
+			return;
+		}
+
 		const submitData = {
-			id_ruleset: formData.id_ruleset,
-			id_penyakit: formData.id_penyakit,
+			id_ruleset: formDataWithPremises.id_ruleset,
+			id_penyakit: formDataWithPremises.id_penyakit,
 			cf_ruleset: cfValue,
-			premises: [formData.id_gejala],
+			premises: formDataWithPremises.premises,
 		};
 
 		let result;
 		if (isEditMode) {
-			result = await updateRule(formData.id_ruleset, submitData);
+			result = await updateRule(formDataWithPremises.id_ruleset, submitData);
 		} else {
 			result = await createRule(submitData);
 		}
@@ -79,7 +86,7 @@ const AdminRules = () => {
 		setFormData({
 			id_ruleset: rule.id_ruleset,
 			id_penyakit: rule.id_penyakit,
-			id_gejala: rule.premises[0] || "",
+			premises: rule.premises || [], // Menggunakan array premises
 			cf_ruleset: rule.cf_ruleset.toString(),
 		});
 		setIsEditMode(true);
@@ -99,7 +106,7 @@ const AdminRules = () => {
 		setFormData({
 			id_ruleset: "",
 			id_penyakit: "",
-			id_gejala: "",
+			premises: [], // Reset ke array kosong
 			cf_ruleset: "",
 		});
 		setIsEditMode(false);
