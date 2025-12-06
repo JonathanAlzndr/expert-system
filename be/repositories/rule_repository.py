@@ -10,13 +10,28 @@ class RuleRepository:
         return RuleSet.query.filter_by(id_ruleset=id_ruleset).first()
 
     def _generate_id(self):
-        last_rule = RuleSet.query.order_by(RuleSet.id_ruleset.desc()).first()
-        if not last_rule:
-            return "RS01"
-
-        last_num = int(last_rule.id_ruleset[2:])
+        """Membuat ID Ruleset baru secara otomatis (R01, R02, ...)."""
+        # Ambil semua rule, urutkan descending
+        rules = RuleSet.query.order_by(RuleSet.id_ruleset.desc()).all()
+        
+        last_num = 0
+        for rule in rules:
+            try:
+                # Coba ambil angka dari ID (misal R10 -> 10)
+                # Menggunakan filter agar hanya mengambil digit
+                num_part = ''.join(filter(str.isdigit, rule.id_ruleset))
+                current_num = int(num_part)
+                
+                # Cari angka terbesar yang pernah ada
+                if current_num > last_num:
+                    last_num = current_num
+            except ValueError:
+                continue # Skip jika ID aneh (misal R15A) dan tidak bisa diparsing
+        
         new_num = last_num + 1
-        return f"RS{new_num:02d}"
+        
+        # Format jadi R01, R02 ... R10, R11
+        return f"R{new_num:02d}"
 
     def create(self, data):
         new_id = self._generate_id()
