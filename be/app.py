@@ -22,12 +22,15 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    CORS(app)
+    CORS(app, 
+     resources={r"/api/*": {"origins": "http://localhost:5173"}},
+     supports_credentials=True)
 
     bcrypt.init_app(app)
     db.init_app(app)
     jwt.init_app(app)
     migrate.init_app(app, db)
+
 
     @jwt.unauthorized_loader
     def unauthorized_callback(error):

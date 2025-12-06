@@ -4,28 +4,35 @@ import Table from "../../components/ui/Table";
 import { usePenyakit } from "../../hooks/usePenyakit";
 import { useGejala } from "../../hooks/useGejala";
 import { useRules } from "../../hooks/useRules";
+import axios from "axios";
 
 const AdminDashboard = () => {
 	const { penyakit, loading: loadingPenyakit, error: errorPenyakit } = usePenyakit();
 	const { gejala, loading: loadingGejala, error: errorGejala } = useGejala();
 	const { rules, loading: loadingRules, error: errorRules } = useRules();
-	const [recentActivity, setRecentActivity] = useState([]);
+	const [row, setRow] = useState();
 
-	// Check if any data is still loading
-	const isLoading = loadingPenyakit || loadingGejala || loadingRules;
+	useEffect(() => {
+		fetchDiagnosisHistory();
+	}, []);
+	async function fetchDiagnosisHistory() {
+		try {
+			const token = localStorage.getItem("adminToken");
+			const { data } = await axios.get("http://127.0.0.1:5000/api/admin/diagnosis", {
+				headers: {
+					Authorization: `Bearer ${token}`, // token kamu
+				},
+			});
+
+			setRow(data);
+			console.log(data);
+		} catch (error) {
+			console.error(error);
+		}
+	}
 
 	// Check if there are any errors
 	const hasError = errorPenyakit || errorGejala || errorRules;
-
-	useEffect(() => {
-		// Simulate recent activities (you can replace this with real API call)
-		const activities = [
-			{ waktu: "10:30 AM", aktivitas: "Diagnosis penyakit berhasil", pengguna: "user123" },
-			{ waktu: "09:15 AM", aktivitas: "Data gejala diperbarui", pengguna: "admin" },
-			{ waktu: "08:45 AM", aktivitas: "Penyakit baru ditambahkan", pengguna: "admin" },
-		];
-		setRecentActivity(activities);
-	}, []);
 
 	return (
 		<>
@@ -121,29 +128,7 @@ const AdminDashboard = () => {
 					</button>
 				</div>
 
-				<Table headers={["No", "Tanggal", "Hasil Penyakit", "Nilai Keyakinan", "Aksi"]}>
-					{/* {recentActivity.map((activity, index) => (
-						<tr key={index} className="hover:bg-gray-50">
-							<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-								{activity.waktu}
-							</td>
-							<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-								{activity.aktivitas}
-							</td>
-							<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-								<span
-									className={`px-2 py-1 rounded-full text-xs font-medium ${
-										activity.pengguna === "admin"
-											? "bg-blue-100 text-blue-800"
-											: "bg-green-100 text-green-800"
-									}`}
-								>
-									{activity.pengguna}
-								</span>
-							</td>
-						</tr>
-					))} */}
-				</Table>
+				<Table headers={["No", "Tanggal", "Hasil Penyakit", "Nilai Keyakinan", "Aksi"]}></Table>
 			</Card>
 		</>
 	);
