@@ -10,29 +10,49 @@ const AdminDashboard = () => {
 	const { penyakit, loading: loadingPenyakit, error: errorPenyakit } = usePenyakit();
 	const { gejala, loading: loadingGejala, error: errorGejala } = useGejala();
 	const { rules, loading: loadingRules, error: errorRules } = useRules();
-	const [row, setRow] = useState();
 
+	const [row, setRow] = useState([]); // State untuk data dari API
+
+	// Fetch data dari API
+	const fetchDiagnosisHistory = async () => {
+		try {
+			const token = localStorage.getItem("adminToken");
+			const response = await axios.get("http://127.0.0.1:5000/api/admin/diagnosis", {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			});
+			// Update state row dengan data yang diterima dari API
+			setRow(response.data.data); // Mapping data ke state row
+		} catch (error) {
+			console.error("Error fetching data: ", error);
+		}
+	};
+
+	// Mengambil data dari API ketika komponen pertama kali di-render
 	useEffect(() => {
 		fetchDiagnosisHistory();
 	}, []);
-	async function fetchDiagnosisHistory() {
-		try {
-			const token = localStorage.getItem("adminToken");
-			const { data } = await axios.get("http://127.0.0.1:5000/api/admin/diagnosis", {
-				headers: {
-					Authorization: `Bearer ${token}`, // token kamu
-				},
-			});
-
-			setRow(data);
-			console.log(data);
-		} catch (error) {
-			console.error(error);
-		}
-	}
 
 	// Check if there are any errors
 	const hasError = errorPenyakit || errorGejala || errorRules;
+
+	// Fungsi untuk membuat baris tabel
+	const renderTableRows = () => {
+		return row.map((data, index) => (
+			<tr key={data.id_diagnosis}>
+				<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+					{index + 1}
+				</td>
+				<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{data.tanggal}</td>
+				<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{data.nama_penyakit}</td>
+				<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{data.cf_persen}</td>
+				<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+					<button className="text-primary">Lihat</button>
+				</td>
+			</tr>
+		));
+	};
 
 	return (
 		<>
@@ -128,7 +148,9 @@ const AdminDashboard = () => {
 					</button>
 				</div>
 
-				<Table headers={["No", "Tanggal", "Hasil Penyakit", "Nilai Keyakinan", "Aksi"]}></Table>
+				<Table headers={["No", "Tanggal", "Hasil Penyakit", "Nilai Keyakinan", "Aksi"]}>
+					{renderTableRows()}
+				</Table>
 			</Card>
 		</>
 	);
