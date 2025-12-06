@@ -9,7 +9,7 @@ diagnosis_service = DiagnosisService()
 # ======================================
 # GET ALL HISTORY (ADMIN)
 # ======================================
-@admin_diagnosis_bp.route('/', methods=['GET', 'OPTIONS'])
+@admin_diagnosis_bp.route('/', methods=['GET', 'OPTIONS'], strict_slashes=False)
 @cross_origin()
 def get_all_history():
     # PRE-FLIGHT OPTIONS → JANGAN CEK JWT
