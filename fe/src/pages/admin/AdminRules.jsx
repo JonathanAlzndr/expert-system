@@ -106,7 +106,7 @@ const AdminRules = () => {
 		setFormData({
 			id_ruleset: "",
 			id_penyakit: "",
-			premises: [], // Reset ke array kosong
+			premises: [], 
 			cf_ruleset: "",
 		});
 		setIsEditMode(false);
