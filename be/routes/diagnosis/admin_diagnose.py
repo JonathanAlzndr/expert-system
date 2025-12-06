@@ -6,6 +6,9 @@ from flask_cors import cross_origin
 admin_diagnosis_bp = Blueprint('admin_diagnosis', __name__, url_prefix='/api/admin/diagnosis')
 diagnosis_service = DiagnosisService()
 
+# ======================================
+# GET ALL HISTORY (ADMIN)
+# ======================================
 @admin_diagnosis_bp.route('/', methods=['GET', 'OPTIONS'], strict_slashes=False)
 @cross_origin()
 def get_all_history():
