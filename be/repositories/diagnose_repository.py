@@ -56,8 +56,9 @@ class DiagnosisRepository:
     def get_all_questions(self):
         return Pertanyaan.query.join(Gejala).all()
     
-    def get_all_history(self):
-        return Diagnosis.query.order_by(desc(Diagnosis.tanggal_diagnosis)).all()
+    def get_all_history(self, page, limit):
+        return Diagnosis.query.order_by(desc(Diagnosis.tanggal_diagnosis)).paginate(page=page, per_page=limit, error_out=False)
+
     
     def get_by_id(self, id_diagnosis):
         return Diagnosis.query.filter_by(id_diagnosis=id_diagnosis).first()

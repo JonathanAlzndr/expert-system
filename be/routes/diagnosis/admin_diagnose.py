@@ -23,12 +23,18 @@ def get_all_history():
 @jwt_required()
 def get_all_history_protected():
     try:
-        data = diagnosis_service.get_all_diagnoses_for_admin()
+        page = request.args.get('page', 1, type=int)
+        limit = request.args.get('limit', 10, type=int)
+
+        service_result = diagnosis_service.get_all_diagnoses_for_admin(page, limit)
+
         return jsonify({
             "status": True,
             "msg": "Berhasil mengambil data riwayat",
-            "data": data
+            "data": service_result['data'],
+            "meta": service_result['meta']  
         }), 200
+
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"status": False, "msg": "Terjadi kesalahan server"}), 500
