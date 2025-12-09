@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { createApiService } from "./apiService";
+import { Button } from "./components/Button";
 import {
 	LoadingSpinner,
 	ErrorAlert,
@@ -163,60 +164,58 @@ export default function AdminDiseases() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-50 p-6">
-			<div className="max-w-7xl mx-auto">
-				<div className="flex justify-between items-center mb-8">
-					<h1 className="text-3xl font-bold text-gray-800">Kelola Data Penyakit</h1>
-					<ActionButton onClick={handleCreate}>
-						<i className="fas fa-plus"></i> Tambah Penyakit
-					</ActionButton>
-				</div>
+		<div className="max-w-7xl mx-auto">
+			<div className="flex justify-between items-center mb-8">
+				<h1 className="text-3xl font-bold text-primary">Kelola Data Penyakit</h1>
+				<Button onClick={handleCreate}>
+					<i className="fas fa-plus mr-2"></i>Tambah Penyakit
+				</Button>
+			</div>
 
-				{error && <ErrorAlert message={error} />}
+			{error && <ErrorAlert message={error} />}
 
-				<div className="bg-white rounded-lg shadow-md">
-					{loading ? (
-						<LoadingSpinner />
-					) : (
-						<div className="overflow-x-auto">
-							<table className="min-w-full divide-y divide-gray-200">
-								<thead className="bg-gray-50">
-									<tr>
-										<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-											ID Penyakit
-										</th>
-										<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-											Nama Penyakit
-										</th>
-										<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">
-											Deskripsi
-										</th>
-										<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">
-											Solusi
-										</th>
-										<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-											Aksi
-										</th>
-									</tr>
-								</thead>
-								<tbody className="bg-white divide-y divide-gray-200">{renderTableRows()}</tbody>
-							</table>
-						</div>
-					)}
-				</div>
-
-				{showForm && (
-					<FormModal
-						editingPenyakit={editingPenyakit}
-						formData={formData}
-						formError={formError}
-						submitLoading={submitLoading}
-						onClose={handleCloseModal}
-						onSubmit={handleSubmit}
-						onInputChange={handleInputChange}
-					/>
+			<div className="bg-white rounded-lg shadow-md">
+				{loading ? (
+					<LoadingSpinner />
+				) : (
+					<div className="overflow-x-auto">
+						<table className="min-w-full divide-y divide-gray-200">
+							<thead className="bg-gray-50">
+								<tr>
+									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+										ID Penyakit
+									</th>
+									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+										Nama Penyakit
+									</th>
+									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">
+										Deskripsi
+									</th>
+									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">
+										Solusi
+									</th>
+									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+										Aksi
+									</th>
+								</tr>
+							</thead>
+							<tbody className="bg-white divide-y divide-gray-200">{renderTableRows()}</tbody>
+						</table>
+					</div>
 				)}
 			</div>
+
+			{showForm && (
+				<FormModal
+					editingPenyakit={editingPenyakit}
+					formData={formData}
+					formError={formError}
+					submitLoading={submitLoading}
+					onClose={handleCloseModal}
+					onSubmit={handleSubmit}
+					onInputChange={handleInputChange}
+				/>
+			)}
 		</div>
 	);
 }

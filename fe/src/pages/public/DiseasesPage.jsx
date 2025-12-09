@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import Header from "../../components/common/Header";
 import Footer from "../../components/common/Footer";
 import Card from "../../components/ui/Card";
-import Button from "../../components/ui/Button";
+import { Hero } from "./components/Hero";
+import { Modal } from "./components/Modal";
 
 const DiseasesPage = () => {
 	const [selectedDisease, setSelectedDisease] = useState(null);
 	const [diseases, setDiseases] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
+	const [searchTerm, setSearchTerm] = useState("");
 
 	useEffect(() => {
 		fetchDiseases();
@@ -25,7 +27,6 @@ const DiseasesPage = () => {
 
 			const data = await response.json();
 
-			// Handle berbagai kemungkinan format response
 			let penyakitData = [];
 			if (Array.isArray(data)) {
 				penyakitData = data;
@@ -33,35 +34,45 @@ const DiseasesPage = () => {
 				penyakitData = data.data;
 			}
 
-			// Transform data untuk sesuai dengan struktur yang diharapkan
 			const transformedData = penyakitData.map((penyakit, index) => ({
 				id: penyakit.id_penyakit || index + 1,
 				name: penyakit.nama_penyakit || "Nama tidak tersedia",
 				description: penyakit.deskripsi || "Deskripsi tidak tersedia",
 				symptoms: penyakit.solusi
-					? [penyakit.solusi.substring(0, 50) + "..."]
+					? [penyakit.solusi.substring(0, 100) + (penyakit.solusi.length > 100 ? "..." : "")]
 					: ["Informasi solusi tidak tersedia"],
+				fullSolusi: penyakit.solusi || "Solusi detail belum tersedia.",
 			}));
 
 			setDiseases(transformedData);
 			setError(null);
 		} catch (err) {
 			console.error("Error fetching diseases:", err);
-			setError("Gagal memuat data penyakit. Silakan coba lagi nanti.");
+			setError("Gagal memuat data penyakit. Menggunakan data offline sementara.");
 
-			// Fallback data jika API error
+			// Fallback data
 			setDiseases([
 				{
 					id: 1,
-					name: "Flu",
-					description: "Infeksi virus yang menyerang sistem pernapasan",
-					symptoms: ["Demam", "Batuk", "Sakit kepala"],
+					name: "Flu & Batuk",
+					description: "Infeksi virus umum yang menyerang sistem pernapasan atas.",
+					symptoms: ["Istirahat cukup", "Minum air putih hangat"],
+					fullSolusi: "Istirahat total, minum vitamin C, dan konsumsi obat pereda gejala.",
 				},
 				{
 					id: 2,
 					name: "Demam Berdarah",
-					description: "Penyakit yang disebabkan oleh virus dengue",
-					symptoms: ["Demam tinggi", "Nyeri otot", "Ruam kulit"],
+					description: "Penyakit menular yang disebabkan oleh virus dengue melalui nyamuk.",
+					symptoms: ["Minum banyak cairan", "Kompres hangat"],
+					fullSolusi:
+						"Segera ke rumah sakit jika trombosit turun drastis, perbanyak cairan isotonik.",
+				},
+				{
+					id: 3,
+					name: "Maag Akut",
+					description: "Peradangan pada dinding lambung akibat asam lambung naik.",
+					symptoms: ["Makan teratur", "Hindari pedas & asam"],
+					fullSolusi: "Minum antasida, makan porsi kecil tapi sering, hindari stres.",
 				},
 			]);
 		} finally {
@@ -69,116 +80,78 @@ const DiseasesPage = () => {
 		}
 	};
 
-	if (loading) {
-		return (
-			<div className="min-h-screen flex flex-col">
-				<Header />
-				<div className="grow container mx-auto px-4 py-8 flex items-center justify-center">
-					<div className="text-center">
-						<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-						<p className="text-gray-600">Memuat data penyakit...</p>
-					</div>
-				</div>
-				<Footer />
-			</div>
-		);
-	}
+	// Filter diseases based on search
+	const filteredDiseases = diseases.filter((disease) =>
+		disease.name.toLowerCase().includes(searchTerm.toLowerCase())
+	);
 
 	return (
-		<div className="min-h-screen flex flex-col">
+		<div className="min-h-screen flex flex-col bg-background">
 			<Header />
 
-			<div className="grow container mx-auto px-4 py-8">
-				<h1 className="text-3xl font-bold text-primary mb-8">Informasi Penyakit</h1>
+			<Hero />
 
+			<div className="grow container mx-auto px-4 -mt-12 mb-12 relative z-10">
 				{error && (
-					<div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-6">
-						{error}
+					<div className="bg-orange-50 border-l-4 border-orange-500 text-orange-700 p-4 rounded shadow-md mb-8 flex items-center">
+						<i className="fas fa-exclamation-triangle mr-3"></i>
+						<p>{error}</p>
 					</div>
 				)}
 
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-					{diseases.map((disease) => (
-						<Card
-							key={disease.id}
-							className="overflow-hidden hover:shadow-lg transition duration-300"
-						>
-							<div className="p-6">
-								<h3 className="text-xl font-bold text-gray-800 mb-2">{disease.name}</h3>
-								<p className="text-gray-600 mb-4 line-clamp-2">{disease.description}</p>
-
-								<div className="mb-4">
-									<h4 className="text-sm font-semibold text-gray-700 mb-1">Informasi:</h4>
-									<ul className="list-disc pl-5 text-sm text-gray-600">
-										{disease.symptoms.map((symptom, index) => (
-											<li key={index}>{symptom}</li>
-										))}
-									</ul>
-								</div>
-
-								<button
-									className="text-primary font-medium hover:text-[#0e556b] transition duration-300"
-									onClick={() => setSelectedDisease(disease)}
-								>
-									Lihat Detail <i className="fas fa-arrow-right ml-1"></i>
-								</button>
+				{loading ? (
+					<div className="flex flex-col items-center justify-center py-20">
+						<div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary mb-4"></div>
+						<p className="text-primary font-semibold animate-pulse">Memuat data kesehatan...</p>
+					</div>
+				) : (
+					<>
+						{filteredDiseases.length === 0 ? (
+							<div className="text-center py-20 bg-white rounded-xl shadow-sm">
+								<i className="fas fa-folder-open text-6xl text-gray-200 mb-4"></i>
+								<p className="text-gray-500 text-lg">Penyakit yang Anda cari tidak ditemukan.</p>
 							</div>
-						</Card>
-					))}
-				</div>
+						) : (
+							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+								{filteredDiseases.map((disease) => (
+									<Card
+										key={disease.id}
+										className="group hover:-translate-y-2 transition-all duration-300 border-t-4 border-primary"
+									>
+										<div className="p-6 flex flex-col h-full">
+											<div className="mb-4">
+												<div className="w-12 h-12 bg-background rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary transition-colors duration-300">
+													<i className="fas fa-notes-medical text-2xl text-primary group-hover:text-white transition-colors duration-300"></i>
+												</div>
+												<h3 className="text-xl font-bold text-text mb-2 group-hover:text-primary transition-colors">
+													{disease.name}
+												</h3>
+												<p className="text-gray-600 line-clamp-2 text-sm leading-relaxed">
+													{disease.description}
+												</p>
+											</div>
+
+											<div className="mt-auto pt-4 border-t border-gray-100">
+												<button
+													className="w-full flex items-center justify-between text-primary font-semibold hover:text-[#071c23] transition-colors"
+													onClick={() => setSelectedDisease(disease)}
+												>
+													<span>Baca Selengkapnya</span>
+													<i className="fas fa-arrow-right transform group-hover:translate-x-1 transition-transform"></i>
+												</button>
+											</div>
+										</div>
+									</Card>
+								))}
+							</div>
+						)}
+					</>
+				)}
 			</div>
 
-			{/* Modal Detail Penyakit */}
+			{/* Modern Modal */}
 			{selectedDisease && (
-				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-					<div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-						<div className="p-6">
-							<div className="flex justify-between items-center mb-4">
-								<h2 className="text-2xl font-bold text-gray-800">{selectedDisease.name}</h2>
-								<button
-									className="text-gray-500 hover:text-gray-700"
-									onClick={() => setSelectedDisease(null)}
-								>
-									<i className="fas fa-times text-xl"></i>
-								</button>
-							</div>
-
-							<div className="mb-6">
-								<h3 className="text-lg font-semibold text-gray-700 mb-2">Deskripsi</h3>
-								<p className="text-gray-600">{selectedDisease.description}</p>
-							</div>
-
-							<div className="mb-6">
-								<h3 className="text-lg font-semibold text-gray-700 mb-2">Informasi</h3>
-								<ul className="list-disc pl-5 text-gray-600">
-									{selectedDisease.symptoms.map((symptom, index) => (
-										<li key={index}>{symptom}</li>
-									))}
-								</ul>
-							</div>
-
-							<div className="mb-6">
-								<h3 className="text-lg font-semibold text-gray-700 mb-2">Pencegahan</h3>
-								<p className="text-gray-600">
-									Untuk pencegahan penyakit ini, disarankan untuk menjaga kebersihan diri dan
-									lingkungan, serta melakukan pemeriksaan kesehatan secara rutin.
-								</p>
-							</div>
-
-							<div className="mb-6">
-								<h3 className="text-lg font-semibold text-gray-700 mb-2">Pengobatan</h3>
-								<p className="text-gray-600">
-									Segera konsultasikan dengan dokter atau tenaga kesehatan profesional untuk
-									mendapatkan penanganan yang tepat sesuai dengan kondisi kesehatan Anda.
-								</p>
-							</div>
-
-							<div className="flex justify-end">
-								<Button onClick={() => setSelectedDisease(null)}>Tutup</Button>
-							</div>
-						</div>
-					</div>
-				</div>
+				<Modal selectedDisease={selectedDisease} setSelectedDisease={setSelectedDisease} />
 			)}
 
 			<Footer />

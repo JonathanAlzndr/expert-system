@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Button from "../../components/ui/Button";
 import Modal from "../../components/common/Modal";
 import { usePenyakit } from "../../hooks/usePenyakit";
 import { useGejala } from "../../hooks/useGejala";
@@ -16,7 +15,7 @@ const AdminRules = () => {
 	const [formData, setFormData] = useState({
 		id_ruleset: "",
 		id_penyakit: "",
-		premises: [], // Array untuk multiple gejala
+		premises: [],
 		cf_ruleset: "",
 	});
 	const [submitLoading, setSubmitLoading] = useState(false);
@@ -106,7 +105,7 @@ const AdminRules = () => {
 		setFormData({
 			id_ruleset: "",
 			id_penyakit: "",
-			premises: [], 
+			premises: [],
 			cf_ruleset: "",
 		});
 		setIsEditMode(false);
@@ -122,9 +121,9 @@ const AdminRules = () => {
 		<>
 			<div className="flex justify-between items-center mb-8">
 				<h1 className="text-3xl font-bold text-primary">Kelola Data Aturan</h1>
-				<Button onClick={() => setShowForm(true)}>
+				{/* <Button onClick={() => setShowForm(true)}>
 					<i className="fas fa-plus mr-2"></i> Tambah Aturan
-				</Button>
+				</Button> */}
 			</div>
 
 			<RulesTable

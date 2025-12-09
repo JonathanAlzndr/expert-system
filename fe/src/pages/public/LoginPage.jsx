@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../../components/common/Header";
 import Footer from "../../components/common/Footer";
 import FormInput from "../../components/ui/FormInput";
-import Button from "../../components/ui/Button";
+import { Button } from "./components/Button";
 import { useAuth } from "../../hooks/useAuth";
 
 const LoginPage = () => {
@@ -46,7 +46,7 @@ const LoginPage = () => {
 		<div className="min-h-screen flex flex-col bg-gray-100">
 			<Header />
 
-			<div className="flex-grow flex items-center justify-center p-4">
+			<div className="grow flex items-center justify-center p-4">
 				<div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
 					<div className="text-center mb-6">
 						<i className="fas fa-user-md text-4xl text-primary mb-4"></i>
