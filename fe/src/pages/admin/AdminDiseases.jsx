@@ -2,12 +2,12 @@ import React, { useState, useEffect, useCallback } from "react";
 import { createApiService } from "./apiService";
 import { Button } from "./components/Button";
 import {
-	LoadingSpinner,
-	ErrorAlert,
-	ActionButton,
-	FormModal,
-	DiseaseRow,
-	EmptyState,
+    LoadingSpinner,
+    ErrorAlert,
+    ActionButton,
+    FormModal,
+    DiseaseRow,
+    EmptyState,
 } from "./components";
 
 export default function AdminDiseases() {

@@ -1,21 +1,39 @@
 from repositories.gejala_repository import GejalaRepository
-
+import math 
 class GejalaService:
     def __init__(self):
         self.repo = GejalaRepository()
 
-    def get_all_gejala(self):
+    def get_all_gejala(self, page=1, per_page=10):
         data = self.repo.get_all()
+        
+        # Hitung Pagination
+        total_data = len(data)
+        total_pages = math.ceil(total_data / per_page)
+        
+        start = (page - 1) * per_page
+        end = start + per_page
+        
+        paginated_data = data[start:end]
+
+        formatted_data = [
+            {
+                "id_gejala": g.id_gejala,
+                "nama_gejala": g.nama_gejala,
+                "teks_pertanyaan": g.pertanyaan.teks_pertanyaan if g.pertanyaan else None
+            }
+            for g in paginated_data
+        ]
+
         return {
             "msg": "Success",
-            "data": [
-                {
-                    "id_gejala": g.id_gejala,
-                    "nama_gejala": g.nama_gejala,
-                    "teks_pertanyaan": g.pertanyaan.teks_pertanyaan if g.pertanyaan else None
-                }
-                for g in data
-            ]
+            "data": formatted_data,
+            "meta": {
+                "page": page,
+                "per_page": per_page,
+                "total_data": total_data,
+                "total_pages": total_pages
+            }
         }
 
     def create_gejala(self, data):

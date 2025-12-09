@@ -8,7 +8,10 @@ rule_service = RuleService()
 @rule_bp.route("/api/admin/rules", methods=["GET"])
 @jwt_required()
 def get_all_rules():
-    res, code = rule_service.get_all_rules()
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+    
+    res, code = rule_service.get_all_rules(page, per_page)
     return jsonify(res), code
 
 @rule_bp.route("/api/admin/rules", methods=["POST"])
