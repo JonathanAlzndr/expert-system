@@ -7,7 +7,10 @@ penyakit_service = PenyakitService()
 
 @penyakit_bp.route("/api/penyakit", methods=["GET"])
 def get_all_penyakit():
-    return jsonify(penyakit_service.get_all_penyakit())
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+    
+    return jsonify(penyakit_service.get_all_penyakit(page, per_page))
 
 @penyakit_bp.route("/api/penyakit", methods=["POST"])
 @jwt_required()

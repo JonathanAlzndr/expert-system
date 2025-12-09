@@ -8,7 +8,10 @@ gejala_service = GejalaService()
 @gejala_bp.route("/api/admin/gejala", methods=["GET"])
 @jwt_required()
 def get_all_gejala():
-    return jsonify(gejala_service.get_all_gejala())
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+    
+    return jsonify(gejala_service.get_all_gejala(page, per_page))
 
 @gejala_bp.route("/api/admin/gejala", methods=["POST"])
 @jwt_required()

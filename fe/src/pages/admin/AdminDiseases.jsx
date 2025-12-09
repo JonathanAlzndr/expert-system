@@ -1,222 +1,237 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { createApiService } from "./apiService";
+import React, { useState, useCallback } from "react";
+// Pastikan path import hook benar
+import { usePenyakit } from "../../hooks/usePenyakit"; 
 import {
-	LoadingSpinner,
-	ErrorAlert,
-	ActionButton,
-	FormModal,
-	DiseaseRow,
-	EmptyState,
+    LoadingSpinner,
+    ErrorAlert,
+    ActionButton,
+    FormModal,
+    DiseaseRow,
+    EmptyState,
 } from "./components";
 
 export default function AdminDiseases() {
-	const [penyakit, setPenyakit] = useState([]);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState("");
-	const [showForm, setShowForm] = useState(false);
-	const [editingPenyakit, setEditingPenyakit] = useState(null);
-	const [formData, setFormData] = useState({
-		id_penyakit: "",
-		nama_penyakit: "",
-		deskripsi: "",
-		solusi: "",
-	});
-	const [submitLoading, setSubmitLoading] = useState(false);
-	const [formError, setFormError] = useState("");
+    // 1. STATE PAGINATION
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(10);
 
-	const apiService = React.useMemo(() => createApiService(), []);
+    // 2. PANGGIL HOOK (Kirim page & perPage)
+    // Ambil 'meta' yang berisi total_data & total_pages dari backend
+    const { 
+        penyakit, 
+        meta, 
+        loading, 
+        error, 
+        fetchPenyakit, 
+        createPenyakit, 
+        updatePenyakit, 
+        deletePenyakit 
+    } = usePenyakit(currentPage, itemsPerPage);
 
-	const fetchPenyakit = useCallback(async () => {
-		setLoading(true);
-		setError("");
+    const [showForm, setShowForm] = useState(false);
+    const [editingPenyakit, setEditingPenyakit] = useState(null);
+    const [formData, setFormData] = useState({
+        id_penyakit: "",
+        nama_penyakit: "",
+        deskripsi: "",
+        solusi: "",
+    });
+    const [submitLoading, setSubmitLoading] = useState(false);
+    const [formError, setFormError] = useState("");
 
-		try {
-			const result = await apiService.penyakit.getAll();
+    const totalData = meta ? meta.total_data : 0;
+    const totalPages = meta ? meta.total_pages : 1;
 
-			if (result.success) {
-				const data = result.data;
-				let penyakitData = [];
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-				if (Array.isArray(data)) {
-					penyakitData = data;
-				} else if (data?.data && Array.isArray(data.data)) {
-					penyakitData = data.data;
-				}
+    function resetForm() {
+        setFormData({ id_penyakit: "", nama_penyakit: "", deskripsi: "", solusi: "" });
+        setEditingPenyakit(null);
+        setFormError("");
+    }
 
-				setPenyakit(penyakitData);
-			} else {
-				setError(result.error);
-				setPenyakit([]);
-			}
-		} catch (error) {
-			setError("Terjadi kesalahan saat mengambil data");
-			setPenyakit([]);
-		} finally {
-			setLoading(false);
-		}
-	}, [apiService]);
+    function handleCreate() {
+        resetForm();
+        setShowForm(true);
+    }
 
-	useEffect(() => {
-		fetchPenyakit();
-	}, [fetchPenyakit]);
+    const handleEdit = useCallback((disease) => {
+        setFormData({
+            id_penyakit: disease.id_penyakit || "",
+            nama_penyakit: disease.nama_penyakit || "",
+            deskripsi: disease.deskripsi || "", 
+            solusi: disease.solusi || "", 
+        });
+        setEditingPenyakit(disease);
+        setShowForm(true);
+    }, []);
 
-	function resetForm() {
-		setFormData({ id_penyakit: "", nama_penyakit: "", deskripsi: "", solusi: "" });
-		setEditingPenyakit(null);
-		setFormError("");
-	}
+    const handleInputChange = useCallback((e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    }, []);
 
-	function handleCreate() {
-		resetForm();
-		setShowForm(true);
-	}
+    async function handleSubmit(e) {
+        e.preventDefault();
+        setSubmitLoading(true);
+        setFormError("");
 
-	const handleEdit = useCallback((disease) => {
-		// Data dari API mungkin tidak memiliki deskripsi dan solusi bisa null
-		setFormData({
-			id_penyakit: disease.id_penyakit || "",
-			nama_penyakit: disease.nama_penyakit || "",
-			deskripsi: "", // Selalu kosong karena tidak ada di response GET
-			solusi: disease.solusi || "", // Gunakan yang ada atau empty string jika null
-		});
-		setEditingPenyakit(disease);
-		setShowForm(true);
-	}, []);
+        const { id_penyakit, nama_penyakit, deskripsi, solusi } = formData;
 
-	const handleInputChange = useCallback((e) => {
-		const { name, value } = e.target;
-		setFormData((prev) => ({ ...prev, [name]: value }));
-	}, []);
+        if (!id_penyakit || !nama_penyakit) {
+            setFormError("ID Penyakit dan Nama Penyakit harus diisi");
+            setSubmitLoading(false);
+            return;
+        }
 
-	async function handleSubmit(e) {
-		e.preventDefault();
-		setSubmitLoading(true);
-		setFormError("");
+        let result;
+        if (editingPenyakit) {
+            result = await updatePenyakit(editingPenyakit.id_penyakit, {
+                nama_penyakit,
+                deskripsi: deskripsi || "",
+                solusi: solusi || "",
+            });
+        } else {
+            result = await createPenyakit({
+                id_penyakit,
+                nama_penyakit,
+                deskripsi: deskripsi || "",
+                solusi: solusi || "",
+            });
+        }
 
-		const { id_penyakit, nama_penyakit, deskripsi, solusi } = formData;
+        if (result.success) {
+            setShowForm(false);
+            resetForm();
+        } else {
+            setFormError(result.error);
+        }
 
-		if (!id_penyakit || !nama_penyakit) {
-			setFormError("ID Penyakit dan Nama Penyakit harus diisi");
-			setSubmitLoading(false);
-			return;
-		}
+        setSubmitLoading(false);
+    }
 
-		let result;
-		if (editingPenyakit) {
-			result = await apiService.penyakit.update(editingPenyakit.id_penyakit, {
-				nama_penyakit,
-				deskripsi: deskripsi || "", // Kirim meski kosong
-				solusi: solusi || "", // Kirim meski kosong
-			});
-		} else {
-			result = await apiService.penyakit.create({
-				id_penyakit,
-				nama_penyakit,
-				deskripsi: deskripsi || "",
-				solusi: solusi || "",
-			});
-		}
+    async function handleDelete(idPenyakit) {
+        if (window.confirm("Apakah Anda yakin ingin menghapus penyakit ini?")) {
+            await deletePenyakit(idPenyakit);
+        }
+    }
 
-		if (result.success) {
-			setShowForm(false);
-			resetForm();
-			setError("");
-			await fetchPenyakit();
-		} else {
-			setFormError(result.error);
-		}
+    const handleCloseModal = useCallback(() => {
+        setShowForm(false);
+        resetForm();
+    }, []);
 
-		setSubmitLoading(false);
-	}
+    function renderTableRows() {
+        if (!loading && penyakit.length === 0) {
+            return <EmptyState />;
+        }
+        
+        
+        return penyakit.map((disease) => (
+            <DiseaseRow
+                key={disease.id_penyakit}
+                disease={disease}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+            />
+        ));
+    }
 
-	async function handleDelete(idPenyakit) {
-		if (window.confirm("Apakah Anda yakin ingin menghapus penyakit ini?")) {
-			const result = await apiService.penyakit.delete(idPenyakit);
+    return (
+        <div className="min-h-screen bg-gray-50 p-6">
+            <div className="max-w-7xl mx-auto">
+                <div className="flex justify-between items-center mb-8">
+                    <h1 className="text-3xl font-bold text-gray-800">Kelola Data Penyakit</h1>
+                    <ActionButton onClick={handleCreate}>
+                        <i className="fas fa-plus"></i> Tambah Penyakit
+                    </ActionButton>
+                </div>
 
-			if (result.success) {
-				await fetchPenyakit();
-				setError("");
-			} else {
-				setError(result.error);
-			}
-		}
-	}
+                {error && <ErrorAlert message={error} />}
 
-	const handleCloseModal = useCallback(() => {
-		setShowForm(false);
-		resetForm();
-	}, []);
+                <div className="bg-white rounded-lg shadow-md">
+                    {loading ? (
+                        <LoadingSpinner />
+                    ) : (
+                        <div className="overflow-x-auto">
+                            <table className="min-w-full divide-y divide-gray-200">
+                                <thead className="bg-gray-50">
+                                    <tr>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Penyakit</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">Deskripsi</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">Solusi</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="bg-white divide-y divide-gray-200">{renderTableRows()}</tbody>
+                            </table>
+                        </div>
+                    )}
 
-	function renderTableRows() {
-		if (penyakit.length === 0) {
-			return <EmptyState />;
-		}
+                    {/* --- KONTROL PAGINATION --- */}
+                    {!loading && !error && (
+                        <div className="flex justify-between items-center p-4 border-t border-gray-200">
+                            <span className="text-sm text-gray-600">
+                                {/* Gunakan totalData dari META, bukan penyakit.length */}
+                                Menampilkan {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, totalData)} dari {totalData} data
+                            </span>
+                            <div className="flex space-x-2">
+                                <button
+                                    onClick={() => paginate(currentPage - 1)}
+                                    disabled={currentPage === 1}
+                                    className={`px-3 py-1 rounded border ${
+                                        currentPage === 1
+                                            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                            : "bg-white text-blue-600 hover:bg-gray-50 border-gray-300"
+                                    }`}
+                                >
+                                    Previous
+                                </button>
 
-		return penyakit.map((disease) => (
-			<DiseaseRow
-				key={disease.id_penyakit}
-				disease={disease}
-				onEdit={handleEdit}
-				onDelete={handleDelete}
-			/>
-		));
-	}
+                                {/* Render Tombol Halaman berdasarkan totalPages */}
+                                {[...Array(totalPages)].map((_, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => paginate(index + 1)}
+                                        className={`px-3 py-1 rounded border ${
+                                            currentPage === index + 1
+                                                ? "bg-blue-600 text-white border-blue-600"
+                                                : "bg-white text-gray-700 hover:bg-gray-50 border-gray-300"
+                                        }`}
+                                    >
+                                        {index + 1}
+                                    </button>
+                                ))}
 
-	return (
-		<div className="min-h-screen bg-gray-50 p-6">
-			<div className="max-w-7xl mx-auto">
-				<div className="flex justify-between items-center mb-8">
-					<h1 className="text-3xl font-bold text-gray-800">Kelola Data Penyakit</h1>
-					<ActionButton onClick={handleCreate}>
-						<i className="fas fa-plus"></i> Tambah Penyakit
-					</ActionButton>
-				</div>
+                                <button
+                                    onClick={() => paginate(currentPage + 1)}
+                                    disabled={currentPage >= totalPages}
+                                    className={`px-3 py-1 rounded border ${
+                                        currentPage >= totalPages
+                                            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                            : "bg-white text-blue-600 hover:bg-gray-50 border-gray-300"
+                                    }`}
+                                >
+                                    Next
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
 
-				{error && <ErrorAlert message={error} />}
-
-				<div className="bg-white rounded-lg shadow-md">
-					{loading ? (
-						<LoadingSpinner />
-					) : (
-						<div className="overflow-x-auto">
-							<table className="min-w-full divide-y divide-gray-200">
-								<thead className="bg-gray-50">
-									<tr>
-										<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-											ID Penyakit
-										</th>
-										<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-											Nama Penyakit
-										</th>
-										<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">
-											Deskripsi
-										</th>
-										<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">
-											Solusi
-										</th>
-										<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-											Aksi
-										</th>
-									</tr>
-								</thead>
-								<tbody className="bg-white divide-y divide-gray-200">{renderTableRows()}</tbody>
-							</table>
-						</div>
-					)}
-				</div>
-
-				{showForm && (
-					<FormModal
-						editingPenyakit={editingPenyakit}
-						formData={formData}
-						formError={formError}
-						submitLoading={submitLoading}
-						onClose={handleCloseModal}
-						onSubmit={handleSubmit}
-						onInputChange={handleInputChange}
-					/>
-				)}
-			</div>
-		</div>
-	);
+                {showForm && (
+                    <FormModal
+                        editingPenyakit={editingPenyakit}
+                        formData={formData}
+                        formError={formError}
+                        submitLoading={submitLoading}
+                        onClose={handleCloseModal}
+                        onSubmit={handleSubmit}
+                        onInputChange={handleInputChange}
+                    />
+                )}
+            </div>
+        </div>
+    );
 }

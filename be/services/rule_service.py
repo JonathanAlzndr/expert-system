@@ -1,6 +1,7 @@
 from repositories.rule_repository import RuleRepository
 from repositories.penyakit_repository import PenyakitRepository
 from repositories.gejala_repository import GejalaRepository
+import math 
 
 class RuleService:
     def __init__(self):
@@ -67,14 +68,34 @@ class RuleService:
         self.repo.delete(rule)
         return {"msg": "Success: RuleSet berhasil dihapus."}, 200
 
-    def get_all_rules(self):
+    def get_all_rules(self, page=1, per_page=10):
         rules = self.repo.get_all()
+        
+        # Hitung Pagination
+        total_data = len(rules)
+        total_pages = math.ceil(total_data / per_page)
+        
+        start = (page - 1) * per_page
+        end = start + per_page
+        
+        paginated_rules = rules[start:end]
+        
         data = []
-        for r in rules:
+        for r in paginated_rules:
             data.append({
                 "id_ruleset": r.id_ruleset,
                 "id_penyakit": r.id_penyakit,
                 "cf_ruleset": r.cf_ruleset,
                 "premises": [p.id_gejala for p in r.premises]
             })
-        return {"msg": "Success", "data": data}, 200
+            
+        return {
+            "msg": "Success", 
+            "data": data,
+            "meta": {
+                "page": page,
+                "per_page": per_page,
+                "total_data": total_data,
+                "total_pages": total_pages
+            }
+        }, 200
