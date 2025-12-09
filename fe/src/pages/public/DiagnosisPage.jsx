@@ -15,18 +15,17 @@ const DiagnosisPage = () => {
 	const [symptoms, setSymptoms] = useState([]);
 	const [processing, setProcessing] = useState(false);
 
+	// SKALA KEYAKINAN BARU (0.0 hingga 1.0)
 	const answerOptions = [
 		{ label: "Pilih jawaban...", value: null },
-		{ label: "Pasti Tidak", value: -1.0 },
-		{ label: "Hampir Pasti Tidak", value: -0.8 },
-		{ label: "Kemungkinan Besar Tidak", value: -0.6 },
-		{ label: "Mungkin Tidak", value: -0.4 },
-		{ label: "Tidak Yakin", value: -0.2 },
-		{ label: "Mungkin Ya", value: 0.4 },
-		{ label: "Kemungkinan Besar Ya", value: 0.6 },
-		{ label: "Hampir Pasti Ya", value: 0.8 },
-		{ label: "Pasti Ya", value: 1.0 },
+		{ label: "Tidak Yakin", value: 0.0 }, 
+		{ label: "Kurang Yakin", value: 0.2 },
+		{ label: "Sedikit Yakin", value: 0.4 },
+		{ label: "Cukup Yakin", value: 0.6 },
+		{ label: "Yakin", value: 0.8 },
+		{ label: "Sangat Yakin", value: 1.0 },
 	];
+
 	useEffect(() => {
 		if (!showDisclaimer) {
 			fetchQuestions();
@@ -156,14 +155,15 @@ const DiagnosisPage = () => {
 										<select
 											value={symptom.certainty === null ? "null" : symptom.certainty}
 											onChange={(e) => handleCertaintyChange(symptom.id, e.target.value)}
+											// LOGIKA STYLING DROPDOWN BARU
 											className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition duration-200 ${
 												symptom.certainty === null
 													? "border-gray-300 bg-white"
-													: symptom.certainty < 0
-													? "border-red-300 bg-red-50"
-													: symptom.certainty === 0
+													: symptom.certainty === 0.0 // NETRAL (TIDAK YAKIN)
 													? "border-gray-300 bg-gray-50"
-													: "border-green-300 bg-green-50"
+													: symptom.certainty <= 0.6 // LOW/MEDIUM CONFIDENCE (0.2, 0.4, 0.6)
+													? "border-blue-300 bg-blue-50" 
+													: "border-green-300 bg-green-50" // HIGH CONFIDENCE (0.8, 1.0)
 											}`}
 										>
 											{answerOptions.map((option, optionIndex) => (
@@ -181,17 +181,14 @@ const DiagnosisPage = () => {
 									{symptom.certainty !== null && (
 										<div className="mt-3 flex items-center justify-between">
 											<span className="text-sm text-gray-500">Tingkat keyakinan:</span>
+											{/* LOGIKA STYLING LABEL TEXT BARU */}
 											<span
 												className={`text-sm font-semibold ${
-													symptom.certainty <= -0.6
-														? "text-red-600"
-														: symptom.certainty <= -0.2
-														? "text-orange-600"
-														: symptom.certainty === 0
+													symptom.certainty === 0.0 // NETRAL (TIDAK YAKIN)
 														? "text-gray-600"
-														: symptom.certainty <= 0.6
+														: symptom.certainty <= 0.6 // LOW/MEDIUM
 														? "text-blue-600"
-														: "text-green-600"
+														: "text-green-600" // HIGH
 												}`}
 											>
 												{answerOptions.find((opt) => opt.value === symptom.certainty)?.label}
