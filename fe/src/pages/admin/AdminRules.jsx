@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import Modal from "../../components/common/Modal";
 import { usePenyakit } from "../../hooks/usePenyakit";
 import { useGejala } from "../../hooks/useGejala";
-import { useRules } from "../../hooks/useRules"; 
+import { useRules } from "../../hooks/useRules";
 import RuleForm from "../../components/rules/RuleForm";
 import RulesTable from "../../components/rules/RuleTable";
+import { Button } from "./components/Button";
 
 const AdminRules = () => {
 	const { penyakit } = usePenyakit();
@@ -124,6 +125,9 @@ const AdminRules = () => {
 				{/* <Button onClick={() => setShowForm(true)}>
 					<i className="fas fa-plus mr-2"></i> Tambah Aturan
 				</Button> */}
+				<Button onClick={() => setShowForm(true)}>
+					<i className="fas fa-plus mr-2"></i> Tambah Aturan
+				</Button>
 			</div>
 
 			<RulesTable

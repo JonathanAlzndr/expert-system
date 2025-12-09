@@ -12,11 +12,11 @@ const Header = () => {
 			<div className="container mx-auto px-6 py-4 flex justify-between items-center">
 				{/* Logo Section */}
 				<Link to="/" className="flex items-center group">
-					<div className="bg-[#eef5ff] p-2 rounded-full mr-3 group-hover:bg-[#b4d4ff] transition-colors duration-300">
-						<i className="fas fa-stethoscope text-2xl text-[#176b87]"></i>
+					<div className="bg-primary p-2 rounded-full mr-3 group-hover:bg-secondary transition-colors duration-300">
+						<i className="fas fa-stethoscope text-2xl text-primary"></i>
 					</div>
-					<h1 className="text-2xl font-bold text-[#176b87] tracking-tight">
-						Tanya<span className="text-[#071c23]">Pakar</span>
+					<h1 className="text-2xl font-bold text-primary tracking-tight">
+						Tanya<span className="text-dark">Pakar</span>
 					</h1>
 				</Link>
 
