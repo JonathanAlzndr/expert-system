@@ -23,6 +23,7 @@ def submit_diagnosis():
         
         if result.get("hasil_utama"):
             return jsonify({
+                "tanggal_diagnosis": result['tanggal_diagnosis'],
                 "msg": "Diagnosis Complete",
                 "id_diagnosis": result['id_diagnosis'],
                 "hasil_utama": result['hasil_utama'],
