@@ -1,6 +1,4 @@
 import { Button } from "./Button";
-// Pastikan Anda sudah mengimpor ErrorAlert jika komponen itu ada di file lain,
-// contoh: import ErrorAlert from "./ErrorAlert";
 
 export const Modal = ({
 	editingPenyakit,
@@ -24,11 +22,6 @@ export const Modal = ({
 	}
 
 	return (
-		/*
-      PERUBAHAN DISINI:
-      Ditambahkan 'bg-black/50' agar latar belakang menjadi gelap transparan.
-      Ditambahkan 'backdrop-blur-sm' untuk efek blur pada background di belakang modal.
-    */
 		<div
 			className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-all duration-300"
 			onClick={onClose}
@@ -49,7 +42,6 @@ export const Modal = ({
 				</div>
 
 				<div className="p-6">
-					{/* Pastikan komponen ErrorAlert sudah di-import jika digunakan */}
 					{formError && (
 						<div
 							className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"

@@ -11,12 +11,12 @@ const Header = () => {
 		<header className="bg-white shadow-md sticky top-0 z-40 transition-all duration-300">
 			<div className="container mx-auto px-6 py-4 flex justify-between items-center">
 				{/* Logo Section */}
-				<Link to="/" className="flex items-center group">
-					<div className="bg-primary p-2 rounded-full mr-3 group-hover:bg-secondary transition-colors duration-300">
-						<i className="fas fa-stethoscope text-2xl text-primary"></i>
+				<Link to="/" className="flex items-center">
+					<div className=" p-2 rounded-full mr-3 hover:bg-primary transition-colors duration-300">
+						<i className="fas fa-stethoscope text-2xl text-primary hover:text-white"></i>
 					</div>
 					<h1 className="text-2xl font-bold text-primary tracking-tight">
-						Tanya<span className="text-dark">Pakar</span>
+						Tanya<span className="text-primary">Pakar</span>
 					</h1>
 				</Link>
 
@@ -27,7 +27,7 @@ const Header = () => {
 							<Link
 								to="/"
 								className={`text-sm font-semibold transition-colors duration-300 ${
-									isActive("/") ? "text-[#176b87]" : "text-gray-500 hover:text-[#176b87]"
+									isActive("/") ? "text-primary" : "text-gray-500 hover:text-primary"
 								}`}
 							>
 								Beranda
@@ -37,7 +37,7 @@ const Header = () => {
 							<Link
 								to="/diseases"
 								className={`text-sm font-semibold transition-colors duration-300 ${
-									isActive("/diseases") ? "text-[#176b87]" : "text-gray-500 hover:text-[#176b87]"
+									isActive("/diseases") ? "text-primary" : "text-gray-500 hover:text-primary"
 								}`}
 							>
 								Informasi Penyakit
@@ -46,7 +46,7 @@ const Header = () => {
 						<li>
 							<Link
 								to="/login"
-								className="bg-[#176b87] text-white px-6 py-2.5 rounded-full font-medium shadow-lg shadow-[#176b87]/30 hover:bg-[#071c23] hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
+								className="bg-primary text-white px-6 py-2.5 rounded-full font-medium shadow-lg shadow-primary/30 hover:bg-dark hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 flex"
 							>
 								Masuk
 							</Link>

@@ -50,7 +50,6 @@ const DiseasesPage = () => {
 			console.error("Error fetching diseases:", err);
 			setError("Gagal memuat data penyakit. Menggunakan data offline sementara.");
 
-			// Fallback data
 			setDiseases([
 				{
 					id: 1,
@@ -133,7 +132,7 @@ const DiseasesPage = () => {
 
 											<div className="mt-auto pt-4 border-t border-gray-100">
 												<button
-													className="w-full flex items-center justify-between text-primary font-semibold hover:text-[#071c23] transition-colors"
+													className="w-full flex items-center justify-between text-primary font-semibold hover:text-dark transition-colors"
 													onClick={() => setSelectedDisease(disease)}
 												>
 													<span>Baca Selengkapnya</span>

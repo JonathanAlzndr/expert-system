@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { createApiService } from "./apiService";
-
-// --- KOMPONEN YANG DIPERBARUI ---
-import Card from "../../components/ui/Card"; // Asumsi path Card
-import Table from "../../components/ui/Table"; // Asumsi path Table
+import Card from "../../components/ui/Card";
+import Table from "../../components/ui/Table";
 import { Button } from "./components/Button";
 import { Modal } from "./components/Modal";
 import { LoadingSpinner, ErrorAlert } from "./components";
-// Menghilangkan DiseaseRow dan EmptyState
 
 export default function AdminDiseases() {
 	const [penyakit, setPenyakit] = useState([]);
@@ -81,21 +78,11 @@ export default function AdminDiseases() {
 	}
 
 	const handleEdit = useCallback(async (disease) => {
-		// Karena API GET hanya mengembalikan id_penyakit dan nama_penyakit,
-		// kita perlu membuat call terpisah (atau mengasumsikan deskripsi/solusi ada)
-		// Berdasarkan kode Anda, kita hanya menggunakan data yang ada (yang mungkin kurang lengkap).
-		// Saya akan tambahkan logika untuk fetch detail penyakit jika diperlukan,
-		// tapi untuk saat ini, kita ikuti struktur yang Anda berikan.
-
-		// PENTING: Karena Anda menetapkan deskripsi = "" di handleEdit,
-		// jika Anda ingin mengedit deskripsi yang sudah ada, Anda harus fetch detailnya dulu
-		// atau mengambilnya dari objek disease (jika ia ada disana).
-		// Saya akan asumsikan data `disease` lengkap, seperti di `AdminSymptoms`.
 		setFormData({
 			id_penyakit: disease.id_penyakit || "",
 			nama_penyakit: disease.nama_penyakit || "",
-			deskripsi: disease.deskripsi || "", // Mengambil dari data yang di-fetch
-			solusi: disease.solusi || "", // Mengambil dari data yang di-fetch
+			deskripsi: disease.deskripsi || "",
+			solusi: disease.solusi || "",
 		});
 		setEditingPenyakit(disease);
 		setShowForm(true);
@@ -113,7 +100,6 @@ export default function AdminDiseases() {
 
 		const { id_penyakit, nama_penyakit, deskripsi, solusi } = formData;
 
-		// Menambahkan validasi wajib isi untuk semua field sesuai FormModal sebelumnya
 		if (!id_penyakit || !nama_penyakit || !deskripsi || !solusi) {
 			setFormError("Semua kolom harus diisi.");
 			setSubmitLoading(false);
@@ -160,7 +146,6 @@ export default function AdminDiseases() {
 				await fetchPenyakit();
 				setError("");
 			} else {
-				// Pesan error lebih informatif jika gagal karena data terikat
 				setError(
 					result.error ||
 						"Gagal menghapus data. Pastikan penyakit ini tidak terikat pada data aturan."
@@ -178,9 +163,7 @@ export default function AdminDiseases() {
 	return (
 		<div className="max-w-7xl mx-auto p-4 md:p-8">
 			<div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-200">
-				<h1 className="text-3xl font-bold text-primary flex items-center">
-					<i className="fas fa-stethoscope mr-3 text-primary"></i> Kelola Data Penyakit
-				</h1>
+				<h1 className="text-3xl font-bold text-primary flex items-center">Kelola Data Penyakit</h1>
 				<Button onClick={handleCreate}>
 					<i className="fas fa-plus mr-2"></i>Tambah Penyakit
 				</Button>
@@ -239,9 +222,13 @@ export default function AdminDiseases() {
 			{/* Modal untuk Form Tambah/Ubah */}
 			{showForm && (
 				<Modal
-					isOpen={showForm}
+					editingPenyakit={editingPenyakit}
+					formData={formData}
+					formError={formError}
+					submitLoading={submitLoading}
 					onClose={handleCloseModal}
-					title={editingPenyakit ? "Ubah Penyakit" : "Tambah Penyakit Baru"}
+					onSubmit={handleSubmit}
+					onInputChange={handleInputChange}
 				>
 					{formError && <ErrorAlert message={formError} className="mb-4" />}
 

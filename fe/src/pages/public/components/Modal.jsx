@@ -58,11 +58,6 @@ export const Modal = ({ setSelectedDisease, selectedDisease }) => (
 					</div>
 				</div>
 			</div>
-
-			{/* Modal Footer */}
-			<div className="flex justify-center px-2 py-3 ">
-				<Button onClick={() => setSelectedDisease(null)}>Mengerti</Button>
-			</div>
 		</div>
 	</div>
 );
