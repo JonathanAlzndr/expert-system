@@ -3,40 +3,25 @@ import math
 from repositories.diagnose_repository import DiagnosisRepository
 from datetime import datetime 
 import pytz
+from babel.dates import format_datetime
 
 class DiagnosisService:
     def __init__(self):
         self.repo = DiagnosisRepository()
 
-    from datetime import datetime # Pastikan ini atau 'from datetime import datetime' sudah ada di file service Anda
-
     def process_diagnosis(self, user_answers_raw):
     
-        # --- MODIFIKASI WAKTU: Konversi dari UTC ke WITA ---
-        # 1. Ambil waktu UTC (naive)
-        utc_dt_naive = datetime.utcnow()
-        
-        # 2. Localize sebagai UTC (aware)
-        utc_dt_aware = utc_dt_naive.replace(tzinfo=pytz.utc) 
-        
-        # 3. Konversi ke WITA (Asia/Makassar)
-        wita_tz = pytz.timezone('Asia/Makassar')
-        waktu_diagnosis = utc_dt_aware.astimezone(wita_tz) 
-        
-        # -----------------------------------------------------------------------
+        utc_dt_aware = datetime.now(pytz.utc)
         
         cf_disease = {}
 
-        # User CF numerik
         user_cf = {ans["id_gejala"]: float(ans["cf_user"]) for ans in user_answers_raw}
 
-        # Ambil semua rule lengkap dengan premises
         rule_list = self.repo.get_all_rules_with_premises()
 
         for rule in rule_list:
             premise_cfs = [user_cf.get(p.id_gejala, 0) for p in rule.premises]
 
-            # Abaikan rule jika ada gejala yang tidak dijawab
             if any(cf == 0 for cf in premise_cfs):
                 continue
 
@@ -60,30 +45,36 @@ class DiagnosisService:
         hasil_utama_id, cf_tertinggi = sorted_scores[0]
         hasil_utama_detail = self.repo.get_penyakit_details(hasil_utama_id)
 
-        # Simpan semua jawaban pengguna termasuk yang 0
         user_answers_for_save = []
         for ans in user_answers_raw:
             cf_value = float(ans['cf_user'])
             
-            # --- MENGUBAH KEY 'cf_user' MENJADI 'cf_pengguna' ---
             user_answers_for_save.append({
                 "id_gejala": ans['id_gejala'],
-                "cf_pengguna": cf_value, # KEY yang diharapkan Repository/Model
+                "cf_pengguna": cf_value, 
                 "jawaban_text": str(cf_value), 
             })
 
-        # Tambahkan parameter tanggal_diagnosis (menggunakan waktu WITA yang sudah dikonversi)
         id_diagnosis = self.repo.save_diagnosis(
             hasil_utama_id,
             cf_tertinggi,
             user_answers_for_save,
-            tanggal_diagnosis=waktu_diagnosis 
+            tanggal_diagnosis=utc_dt_aware
         )
+        
+        wita_dt_aware = utc_dt_aware.astimezone(pytz.timezone('Asia/Makassar'))
+        
+        formatted_date_babel = format_datetime(
+            wita_dt_aware,
+            format='EEEE, dd MMMM yyyy HH:mm:ss',
+            locale='id'
+        )
+        
+        formatted_date = f"{formatted_date_babel} WITA"
 
         output = {
             "id_diagnosis": id_diagnosis,
-            # Output waktu WITA dalam format ISO (termasuk offset +08:00)
-            "tanggal_diagnosis": waktu_diagnosis.isoformat(), 
+            "tanggal_diagnosis": formatted_date, 
             "hasil_utama": {
                 "id_penyakit": hasil_utama_detail.id_penyakit,
                 "nama_penyakit": hasil_utama_detail.nama_penyakit,
@@ -97,23 +88,29 @@ class DiagnosisService:
             ],
             "msg": "Diagnosis Complete"
         }
-
-        return output
         
+        return output
+            
     def get_all_diagnoses_for_admin(self, page, limit):
         pagination = self.repo.get_all_history(page, limit)
         history_data = pagination.items
         
         result = []
+        wita_tz = pytz.timezone('Asia/Makassar')
 
         for item in history_data:
             
-            utc_dt = item.tanggal_diagnosis.replace(tzinfo=pytz.utc)
-            wita_tz = pytz.timezone('Asia/Makassar')
-            wita_dt = utc_dt.astimezone(wita_tz)
+            utc_dt_aware = item.tanggal_diagnosis.replace(tzinfo=pytz.utc)
             
-            tanggal = wita_dt.strftime("%d-%m-%Y %H:%M:%S")
+            wita_dt = utc_dt_aware.astimezone(wita_tz)
+        
+            formatted_date_babel = format_datetime(
+                wita_dt,
+                format='EEEE, dd MMMM yyyy HH:mm:ss',
+                locale='id' 
+            )
             
+            tanggal = f"{formatted_date_babel} WITA"
             
             nama_penyakit = item.penyakit_hasil.nama_penyakit if item.penyakit_hasil else "Tidak Teridentifikasi"
             
@@ -123,8 +120,6 @@ class DiagnosisService:
                 "nama_penyakit": nama_penyakit,
                 "cf_persen": f"{round(item.cf_tertinggi * 100, 1)}%" 
             })
-
-            print(result)
         
         return {
             "data": result,
