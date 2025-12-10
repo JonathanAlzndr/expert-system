@@ -1,77 +1,93 @@
 import { useState, useCallback, useEffect } from 'react';
-import api from '../services/api'; // Adjust path if needed
+import api from '../services/api';
 
 export const useRules = (page = 1, perPage = 10) => {
-    const [rules, setRules] = useState([]);
-    const [meta, setMeta] = useState(null); // State for pagination metadata
+    const [rulesData, setRulesData] = useState({
+        data: [],
+        meta: {
+            page: 1,
+            per_page: 10,
+            total_data: 0,
+            total_pages: 0
+        }
+    });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    // FIX: Dependency array dikosongkan untuk mencegah infinite loop
     const fetchRules = useCallback(async (pageNum, limit) => {
         setLoading(true);
         setError(null);
         try {
-            // Pass page and per_page as query params
             const response = await api.get(`/admin/rules`, {
                 params: { page: pageNum, per_page: limit }
             });
 
-            // Handle successful response
-            // Adjust this condition based on your exact API response structure
-            if (response.data.msg === "Success" || response.status === 200) {
-                setRules(response.data.data || []); // The actual list of rules
-                setMeta(response.data.meta);       // The metadata object
+            if (response.data.msg === "Success" && response.status === 200) {
+                setRulesData(prev => ({
+                    data: response.data.data || [],
+                    meta: response.data.meta || prev.meta
+                }));
             } else {
                 setError("Gagal mengambil data aturan");
             }
         } catch (err) {
             setError(err.response?.data?.msg || err.message || "Terjadi kesalahan");
+            setRulesData(prev => ({...prev, data: []}));
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, []); 
 
-    // Create Rule
     const createRule = async (data) => {
         try {
-            const response = await api.post('/admin/rules', data);
-            await fetchRules(page, perPage); // Refresh current page
-            return { success: true, data: response.data };
+            await api.post('/admin/rules', data);
+            
+            const totalItemsAfterCreation = (rulesData.meta?.total_data || 0) + 1;
+            const newPage = Math.ceil(totalItemsAfterCreation / perPage);
+            
+            await fetchRules(newPage, perPage); 
+            return { success: true };
         } catch (err) {
             return { success: false, error: err.response?.data?.msg || 'Failed to create rule' };
         }
     };
 
-    // Update Rule
     const updateRule = async (id, data) => {
         try {
-            const response = await api.put(`/admin/rules/${id}`, data);
+            await api.put(`/admin/rules/${id}`, data);
             await fetchRules(page, perPage);
-            return { success: true, data: response.data };
+            return { success: true };
         } catch (err) {
             return { success: false, error: err.response?.data?.msg || 'Failed to update rule' };
         }
     };
 
-    // Delete Rule
     const deleteRule = async (id) => {
         try {
-            const response = await api.delete(`/admin/rules/${id}`);
-            await fetchRules(page, perPage);
-            return { success: true, data: response.data };
+            await api.delete(`/admin/rules/${id}`);
+            
+            const currentRulesCount = rulesData.data.length;
+            let targetPage = page;
+
+            if (currentRulesCount === 1 && page > 1) {
+                targetPage = page - 1;
+            }
+            
+            await fetchRules(targetPage, perPage);
+            return { success: true };
         } catch (err) {
             return { success: false, error: err.response?.data?.msg || 'Failed to delete rule' };
         }
     };
 
-    // Initial fetch
     useEffect(() => {
         fetchRules(page, perPage);
     }, [fetchRules, page, perPage]);
 
     return { 
-        rules, 
-        meta, // MUST RETURN THIS
+        rules: rulesData.data, 
+        meta: rulesData.meta, 
         loading, 
         error, 
         fetchRules,
