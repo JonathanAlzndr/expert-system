@@ -1,115 +1,85 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../../components/common/Header";
-import Footer from "../../components/common/Footer";
-import FormInput from "../../components/ui/FormInput";
-import { Button } from "./components/Button";
-import { useAuth } from "../../hooks/useAuth";
+import FormInput from "../../components/FormInput";
+import { Button } from "../../components/Button";
+import useFetch from "./../../api/useFetch";
+import Loading from "../../components/Loading";
 
 const LoginPage = () => {
 	const navigate = useNavigate();
-	const { login, loading } = useAuth();
-	const [formData, setFormData] = useState({
-		username: "",
-		password: "",
-	});
-	const [error, setError] = useState("");
+	const [formData, setFormData] = useState({ username: "", password: "" });
+
+	const { loading, error, execute } = useFetch("/auth/login", "POST", null, { autoFetch: false });
 
 	const handleInputChange = (e) => {
-		const { name, value } = e.target;
-		setFormData((prev) => ({
-			...prev,
-			[name]: value,
-		}));
-		if (error) setError("");
+		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
+		try {
+			const result = await execute(formData);
 
-		// Basic validation
-		if (!formData.username.trim() || !formData.password.trim()) {
-			setError("Username dan password harus diisi");
-			return;
-		}
+			if (result && result.token) {
+				localStorage.setItem("token", result.token);
+				console.log("Token tersimpan:", result.token);
 
-		const result = await login(formData.username, formData.password);
-
-		if (result.success) {
-			navigate("/admin");
-		} else {
-			setError(result.error);
+				navigate("/admin");
+			} else {
+				console.warn("Login berhasil, tetapi token tidak ditemukan di response:", result);
+			}
+		} catch (err) {
+			console.error("Gagal login:", err);
 		}
 	};
 
 	return (
-		<div className="min-h-screen flex flex-col bg-gray-100">
-			<Header />
-
-			<div className="grow flex items-center justify-center p-4">
-				<div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
-					<div className="text-center mb-6">
-						<i className="fas fa-user-md text-4xl text-primary mb-4"></i>
-						<h2 className="text-2xl font-bold text-gray-800">Masuk Admin</h2>
-						<p className="text-gray-600 mt-2">Masuk ke sistem admin</p>
-					</div>
-
-					{error && (
-						<div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-							<div className="flex items-center">
-								<i className="fas fa-exclamation-circle mr-2"></i>
-								{error}
-							</div>
+		<>
+			<div className="min-h-screen flex flex-col bg-gray-100">
+				{loading && <Loading />}
+				<div className="grow flex items-center justify-center p-4">
+					<div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
+						<button onClick={() => navigate("/")} className="active:scale-98 cursor-pointer">
+							<i className="fas fa-arrow-left text-gray-500 text-xl mb-4"></i>
+						</button>
+						<div className="text-center mb-6">
+							<i className="fas fa-user-md text-4xl text-primary mb-4"></i>
+							<h2 className="text-2xl font-bold text-gray-800">Masuk Admin</h2>
+							<p className="text-gray-600 mt-2">Masuk ke sistem admin</p>
 						</div>
-					)}
 
-					<form onSubmit={handleLogin}>
-						<FormInput
-							label="Username"
-							name="username"
-							value={formData.username}
-							onChange={handleInputChange}
-							placeholder="Masukkan username admin"
-							required
-							disabled={loading}
-						/>
+						{/* TAMPILKAN ERROR */}
+						{error && (
+							<div className="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm text-center border border-red-200">
+								{error || "Username atau password salah"}
+							</div>
+						)}
 
-						<FormInput
-							label="Kata sandi"
-							type="password"
-							name="password"
-							value={formData.password}
-							onChange={handleInputChange}
-							placeholder="Masukkan kata sandi"
-							required
-							disabled={loading}
-						/>
+						<form onSubmit={handleLogin}>
+							<FormInput
+								label="Username"
+								name="username"
+								value={formData.username}
+								onChange={handleInputChange}
+								required
+							/>
+							<FormInput
+								label="Kata sandi"
+								type="password"
+								name="password"
+								value={formData.password}
+								onChange={handleInputChange}
+								required
+							/>
 
-						<Button type="submit" size={"w-full"} disabled={loading}>
-							{loading ? (
-								<>
-									<i className="fas fa-spinner fa-spin mr-2"></i>
-									Memproses...
-								</>
-							) : (
-								<>
-									<i className="fas fa-sign-in-alt mr-2"></i>
-									Masuk
-								</>
-							)}
-						</Button>
-					</form>
-
-					<div className="mt-6 p-4 bg-blue-50 rounded-lg">
-						<h3 className="font-semibold text-blue-800 mb-2">Info Login:</h3>
-						<p className="text-sm text-blue-700">
-							Gunakan credentials admin yang telah disediakan.
-						</p>
+							<Button type="submit" size={"w-full"} disabled={loading}>
+								{loading ? "Memproses..." : "Masuk"}
+							</Button>
+						</form>
 					</div>
 				</div>
 			</div>
-			<Footer />
-		</div>
+		</>
 	);
 };
 

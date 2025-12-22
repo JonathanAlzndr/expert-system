@@ -1,114 +1,134 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../../components/common/Header";
-import Footer from "../../components/common/Footer";
-import DisclaimerModal from "../../components/diagnosis/DisclaimerModal";
-import Button from "../../components/ui/Button";
-import axios from "axios";
+import DisclaimerModal from "../../components/Disclaimer";
+import Button from "../../components/Button";
+import useFetch from "../../api/useFetch";
+
+// --- KONFIGURASI OPSI JAWABAN ---
+// Label: Teks yang muncul di layar (Tanpa angka)
+// Value: Nilai CF yang dikirim ke backend
+// Style: CSS Class untuk warna border & background dropdown saat dipilih
+// TextColor: CSS Class untuk warna teks label di bawah dropdown
+const ANSWER_OPTIONS = [
+	{
+		label: "Pilih jawaban...",
+		value: null,
+		style: "border-gray-300 bg-white text-gray-600",
+		textColor: "text-gray-500",
+	},
+	{
+		label: "Sangat Tidak Yakin / Tidak",
+		value: 0.0,
+		style: "border-red-300 bg-red-50 text-red-700 font-medium",
+		textColor: "text-red-600",
+	},
+	{
+		label: "Kurang Yakin",
+		value: 0.2,
+		style: "border-orange-300 bg-orange-50 text-orange-700 font-medium",
+		textColor: "text-orange-600",
+	},
+	{
+		label: "Sedikit Yakin",
+		value: 0.4,
+		style: "border-yellow-300 bg-yellow-50 text-yellow-700 font-medium",
+		textColor: "text-yellow-600",
+	},
+	{
+		label: "Cukup Yakin",
+		value: 0.6,
+		style: "border-teal-300 bg-teal-50 text-teal-700 font-medium",
+		textColor: "text-teal-600",
+	},
+	{
+		label: "Yakin",
+		value: 0.8,
+		style: "border-blue-300 bg-blue-50 text-blue-700 font-medium",
+		textColor: "text-blue-600",
+	},
+	{
+		label: "Sangat Yakin / Ya",
+		value: 1.0,
+		style: "border-green-300 bg-green-50 text-green-700 font-bold",
+		textColor: "text-green-600",
+	},
+];
+
+const extractQuestionsData = (response) => {
+	if (!response) return [];
+	if (Array.isArray(response)) return response;
+	if (Array.isArray(response.pertanyaanList)) return response.pertanyaanList;
+	if (Array.isArray(response.data)) return response.data;
+	return [];
+};
 
 const DiagnosisPage = () => {
 	const navigate = useNavigate();
-	const [questions, setQuestions] = useState([]);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState("");
 	const [showDisclaimer, setShowDisclaimer] = useState(true);
 	const [symptoms, setSymptoms] = useState([]);
-	const [processing, setProcessing] = useState(false);
 
-	// SKALA KEYAKINAN BARU (0.0 hingga 1.0)
-	const answerOptions = [
-		{ label: "Pilih jawaban...", value: null },
-		{ label: "Tidak Yakin", value: 0.0 }, 
-		{ label: "Kurang Yakin", value: 0.2 },
-		{ label: "Sedikit Yakin", value: 0.4 },
-		{ label: "Cukup Yakin", value: 0.6 },
-		{ label: "Yakin", value: 0.8 },
-		{ label: "Sangat Yakin", value: 1.0 },
-	];
+	// Fetch Pertanyaan
+	const {
+		data: questionsRawData,
+		loading: loadingQuestions,
+		error: errorQuestions,
+		execute: fetchQuestions,
+	} = useFetch("/diagnosis/pertanyaan", "GET", null, { autoFetch: false });
 
+	// Submit Diagnosis
+	const {
+		loading: processing,
+		error: errorSubmit,
+		execute: submitDiagnosis,
+	} = useFetch("/diagnosis", "POST", null, { autoFetch: false });
+
+	// Load pertanyaan setelah disclaimer disetujui
 	useEffect(() => {
 		if (!showDisclaimer) {
 			fetchQuestions();
 		}
-	}, [showDisclaimer]);
+	}, [showDisclaimer, fetchQuestions]);
 
+	// Format data pertanyaan ke state local
 	useEffect(() => {
-		if (questions.length > 0) {
-			const initialSymptoms = questions.map((q) => ({
+		if (questionsRawData) {
+			const validQuestions = extractQuestionsData(questionsRawData);
+			const formattedSymptoms = validQuestions.map((q) => ({
 				id: q.id_gejala,
 				name: q.teks_pertanyaan,
-				certainty: null,
+				certainty: null, // Default null
 			}));
-			setSymptoms(initialSymptoms);
+			setSymptoms(formattedSymptoms);
 		}
-	}, [questions]);
+	}, [questionsRawData]);
 
-	const fetchQuestions = async () => {
-		setLoading(true);
-		setError("");
-		try {
-			const response = await axios.get("http://127.0.0.1:5000/api/diagnosis/pertanyaan");
+	const handleCertaintyChange = (id, value) => {
+		// Convert string "null" kembali ke tipe data null, atau parse float
+		const parsedValue = value === "null" ? null : parseFloat(value);
 
-			// Handle different response formats
-			let questionsData = [];
-
-			if (response.data.pertanyaanList && Array.isArray(response.data.pertanyaanList)) {
-				questionsData = response.data.pertanyaanList;
-			} else if (Array.isArray(response.data)) {
-				questionsData = response.data;
-			} else {
-				setError("Format data pertanyaan tidak sesuai");
-				return;
-			}
-
-			setQuestions(questionsData);
-		} catch (err) {
-			setError(err.response?.data?.msg || "Gagal memuat data pertanyaan");
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	const submitDiagnosis = async (answers) => {
-		setProcessing(true);
-		try {
-			const response = await axios.post("http://127.0.0.1:5000/api/diagnosis", { answers });
-			return { success: true, data: response.data };
-		} catch (err) {
-			const errorMessage = err.response?.data?.msg || "Gagal memproses diagnosis";
-			setError(errorMessage);
-			return { success: false, error: errorMessage };
-		} finally {
-			setProcessing(false);
-		}
-	};
-
-	const handleCertaintyChange = (id, certaintyValue) => {
-		const value = certaintyValue === "null" ? null : parseFloat(certaintyValue);
-		setSymptoms(
-			symptoms.map((symptom) => (symptom.id === id ? { ...symptom, certainty: value } : symptom))
-		);
+		setSymptoms((prev) => prev.map((s) => (s.id === id ? { ...s, certainty: parsedValue } : s)));
 	};
 
 	const handleProcess = async () => {
-		const answeredSymptoms = symptoms.filter((symptom) => symptom.certainty !== null);
+		const answeredSymptoms = symptoms.filter((s) => s.certainty !== null);
 
 		if (answeredSymptoms.length === 0) {
-			setError("Harap pilih jawaban untuk minimal satu gejala");
+			alert("Harap pilih jawaban untuk minimal satu gejala");
 			return;
 		}
 
-		// Format answers sesuai dengan struktur yang diharapkan backend
-		const answers = answeredSymptoms.map((symptom) => ({
-			id_gejala: symptom.id,
-			cf_user: symptom.certainty,
+		const payload = answeredSymptoms.map((s) => ({
+			id_gejala: s.id,
+			cf_user: s.certainty,
 		}));
 
-		const result = await submitDiagnosis(answers);
-
-		if (result.success) {
-			// Navigate ke halaman result dengan membawa data diagnosis
-			navigate("/result", { state: { diagnosisResult: result.data } });
+		try {
+			const result = await submitDiagnosis({ answers: payload });
+			if (result) {
+				navigate("/result", { state: { diagnosisResult: result } });
+			}
+		} catch (err) {
+			console.error("Diagnosis Error:", err);
 		}
 	};
 
@@ -117,148 +137,165 @@ const DiagnosisPage = () => {
 	if (showDisclaimer) {
 		return (
 			<div className="min-h-screen flex flex-col">
-				<Header />
 				<div className="grow flex items-center justify-center bg-gray-100 p-4">
 					<DisclaimerModal isOpen={showDisclaimer} onAgree={() => setShowDisclaimer(false)} />
 				</div>
-				<Footer />
 			</div>
 		);
 	}
 
 	return (
-		<div className="min-h-screen flex flex-col">
-			<Header />
+		<div className="min-h-screen flex flex-col bg-gray-50">
+			<div className="grow container mx-auto px-4 py-8 max-w-4xl">
+				<div className="mb-8">
+					<h1 className="text-3xl font-bold text-primary mb-2">Diagnosis Penyakit</h1>
+					<p className="text-gray-600">
+						Jawab pertanyaan berikut sesuai dengan kondisi yang Anda rasakan saat ini.
+					</p>
+				</div>
 
-			<div className="grow container mx-auto px-4 py-8">
-				<h1 className="text-3xl font-bold text-primary mb-2">Diagnosis Penyakit</h1>
-				<p className="text-gray-600 mb-8">
-					Pilih tingkat keyakinan Anda untuk setiap gejala berikut
-				</p>
-
-				{error && <Error error={error} />}
-
-				{loading ? (
-					<Loading />
-				) : symptoms.length > 0 ? (
-					<div className="bg-white rounded-lg shadow-md p-6 mb-8">
-						<div className="space-y-6">
-							{symptoms.map((symptom, index) => (
-								<div key={symptom.id} className="border-b border-gray-200 pb-6 last:border-b-0">
-									<div className="mb-4">
-										<h3 className="text-lg font-semibold text-gray-800 mb-2">
-											{index + 1}. {symptom.name}
-										</h3>
-									</div>
-
-									<div className="max-w-md">
-										<select
-											value={symptom.certainty === null ? "null" : symptom.certainty}
-											onChange={(e) => handleCertaintyChange(symptom.id, e.target.value)}
-											// LOGIKA STYLING DROPDOWN BARU
-											className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition duration-200 ${
-												symptom.certainty === null
-													? "border-gray-300 bg-white"
-													: symptom.certainty === 0.0 // NETRAL (TIDAK YAKIN)
-													? "border-gray-300 bg-gray-50"
-													: symptom.certainty <= 0.6 // LOW/MEDIUM CONFIDENCE (0.2, 0.4, 0.6)
-													? "border-blue-300 bg-blue-50" 
-													: "border-green-300 bg-green-50" // HIGH CONFIDENCE (0.8, 1.0)
-											}`}
-										>
-											{answerOptions.map((option, optionIndex) => (
-												<option
-													key={optionIndex}
-													value={option.value === null ? "null" : option.value}
-													className={option.value === null ? "text-gray-400" : ""}
-												>
-													{option.label}
-												</option>
-											))}
-										</select>
-									</div>
-
-									{symptom.certainty !== null && (
-										<div className="mt-3 flex items-center justify-between">
-											<span className="text-sm text-gray-500">Tingkat keyakinan:</span>
-											{/* LOGIKA STYLING LABEL TEXT BARU */}
-											<span
-												className={`text-sm font-semibold ${
-													symptom.certainty === 0.0 // NETRAL (TIDAK YAKIN)
-														? "text-gray-600"
-														: symptom.certainty <= 0.6 // LOW/MEDIUM
-														? "text-blue-600"
-														: "text-green-600" // HIGH
-												}`}
-											>
-												{answerOptions.find((opt) => opt.value === symptom.certainty)?.label}
-											</span>
-										</div>
-									)}
-
-									{symptom.certainty === null && (
-										<div className="mt-2 flex items-center text-orange-600 text-sm">
-											<i className="fas fa-exclamation-circle mr-1"></i>
-											Belum dijawab
-										</div>
-									)}
-								</div>
-							))}
-						</div>
-					</div>
-				) : (
-					!loading && (
-						<div className="bg-white rounded-lg shadow-md p-6 mb-8 text-center">
-							<p className="text-gray-600">Tidak ada pertanyaan yang tersedia</p>
-							<Button onClick={fetchQuestions} className="mt-4">
-								<i className="fas fa-redo mr-2"></i> Coba Lagi
-							</Button>
-						</div>
-					)
+				{(errorQuestions || errorSubmit) && (
+					<ErrorDisplay message={errorQuestions || errorSubmit} />
 				)}
 
-				<div className="flex justify-between items-center">
-					<div>
-						{symptoms.length > 0 && (
-							<p className="text-sm text-gray-600">
-								{answeredCount} dari {symptoms.length} pertanyaan telah dijawab
-							</p>
-						)}
-						{answeredCount === 0 && symptoms.length > 0 && (
-							<p className="text-orange-600 text-sm">
-								<i className="fas fa-info-circle mr-1"></i>
-								Harap pilih jawaban untuk minimal satu gejala
-							</p>
-						)}
+				{loadingQuestions ? (
+					<LoadingSpinner />
+				) : symptoms.length > 0 ? (
+					<div className="space-y-6 mb-24">
+						{/* Added margin bottom for sticky footer */}
+						{symptoms.map((symptom, index) => (
+							<SymptomItem
+								key={symptom.id}
+								index={index}
+								symptom={symptom}
+								onChange={handleCertaintyChange}
+							/>
+						))}
 					</div>
-					<Button onClick={handleProcess} disabled={processing || answeredCount === 0}>
-						<i className="fas fa-cogs mr-2"></i>
-						{processing ? "Memproses..." : "Proses Diagnosis"}
-					</Button>
+				) : (
+					!loadingQuestions && <EmptyState onRetry={() => fetchQuestions()} />
+				)}
+
+				{/* Sticky Footer Status Bar */}
+				<div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-lg z-20">
+					<div className="container mx-auto max-w-4xl flex justify-between items-center">
+						<div>
+							<p className="text-sm text-gray-500">Progress</p>
+							<p className="text-sm font-semibold text-gray-800">
+								<span className="text-primary">{answeredCount}</span> dari {symptoms.length}{" "}
+								terjawab
+							</p>
+						</div>
+						<div className="w-48">
+							<Button
+								onClick={handleProcess}
+								disabled={processing || answeredCount === 0}
+								fullWidth
+							>
+								<i className="fas fa-stethoscope mr-2"></i>
+								{processing ? "Menganalisis..." : "Proses Diagnosis"}
+							</Button>
+						</div>
+					</div>
 				</div>
 			</div>
-
-			<Footer />
 		</div>
 	);
 };
 
-function Error({ error }) {
+// --- SUB COMPONENTS ---
+
+const SymptomItem = ({ index, symptom, onChange }) => {
+	// Cari opsi yang sesuai dengan nilai saat ini untuk styling
+	const currentOption =
+		ANSWER_OPTIONS.find((opt) => opt.value === symptom.certainty) || ANSWER_OPTIONS[0];
+	const isAnswered = symptom.certainty !== null;
+
 	return (
-		<div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-			<strong>Error:</strong> {error}
-		</div>
-	);
-}
-function Loading() {
-	return (
-		<div className="flex justify-center items-center py-16">
-			<div className="text-center">
-				<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-				<p className="text-gray-600">Memuat data gejala...</p>
+		<div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 transition-all hover:shadow-md">
+			<div className="mb-4">
+				<h3 className="text-lg font-medium text-gray-800">
+					<span className="font-bold text-primary mr-2">{index + 1}.</span>
+					{symptom.name}
+				</h3>
+			</div>
+
+			<div className="flex flex-col gap-2">
+				{/* Dropdown */}
+				<div className="relative">
+					<select
+						value={symptom.certainty === null ? "null" : symptom.certainty}
+						onChange={(e) => onChange(symptom.id, e.target.value)}
+						className={`w-full appearance-none px-4 py-3 rounded-lg border outline-none cursor-pointer transition-colors duration-200 ${currentOption.style}`}
+					>
+						{ANSWER_OPTIONS.map((option, idx) => (
+							<option
+								key={idx}
+								value={option.value === null ? "null" : option.value}
+								className="bg-white text-gray-700 py-2" // Reset style option list
+							>
+								{option.label}
+							</option>
+						))}
+					</select>
+					{/* Custom Arrow Icon */}
+					<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+						<i className="fas fa-chevron-down text-xs"></i>
+					</div>
+				</div>
+
+				{/* Status Text di Bawah/Kanan */}
+				<div className="flex justify-between items-center mt-1 px-1">
+					<span className="text-xs text-gray-400 font-medium uppercase tracking-wide">
+						Tingkat Keyakinan:
+					</span>
+
+					{isAnswered ? (
+						<span className={`text-sm font-bold ${currentOption.textColor} flex items-center`}>
+							{currentOption.label}
+							<i className="fas fa-check-circle ml-2"></i>
+						</span>
+					) : (
+						<span className="text-sm text-orange-500 font-medium flex items-center animate-pulse">
+							<i className="fas fa-exclamation-circle mr-1"></i>
+							Belum dijawab
+						</span>
+					)}
+				</div>
 			</div>
 		</div>
 	);
-}
+};
+
+const EmptyState = ({ onRetry }) => (
+	<div className="text-center flex flex-col items-center gap-4 p-12 bg-white rounded-xl shadow-sm border border-gray-100">
+		<div className="text-gray-300 mb-2">
+			<i className="fas fa-clipboard-list text-6xl"></i>
+		</div>
+		<p className="text-gray-600 text-lg">Tidak ada data gejala yang ditemukan.</p>
+		<div className="w-40">
+			<Button onClick={onRetry} className="mt-2" variant="outline">
+				Coba Lagi
+			</Button>
+		</div>
+	</div>
+);
+
+const ErrorDisplay = ({ message }) => (
+	<div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded mb-6 flex items-start">
+		<i className="fas fa-exclamation-triangle mt-1 mr-3"></i>
+		<div>
+			<h4 className="font-bold">Terjadi Kesalahan</h4>
+			<p>{message}</p>
+		</div>
+	</div>
+);
+
+const LoadingSpinner = () => (
+	<div className="flex flex-col justify-center items-center py-20">
+		<div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-primary mb-4"></div>
+		<p className="text-gray-500 font-medium">Sedang memuat pertanyaan diagnosis...</p>
+	</div>
+);
 
 export default DiagnosisPage;

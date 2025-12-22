@@ -1,0 +1,22 @@
+import React from "react";
+import { Outlet } from "react-router-dom";
+import AdminSidebar from "../components/AdminSidebar";
+import Footer from "../components/Footer";
+
+const AdminLayout = () => {
+	return (
+		<div className="min-h-screen flex flex-col">
+			<div className="flex flex-1">
+				<AdminSidebar />
+				<div className="grow bg-gray-100">
+					<div className="p-8">
+						<Outlet />
+					</div>
+				</div>
+			</div>
+			<Footer />
+		</div>
+	);
+};
+
+export default AdminLayout;
