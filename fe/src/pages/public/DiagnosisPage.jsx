@@ -4,11 +4,6 @@ import DisclaimerModal from "../../components/Disclaimer";
 import Button from "../../components/Button";
 import useFetch from "../../api/useFetch";
 
-// --- KONFIGURASI OPSI JAWABAN ---
-// Label: Teks yang muncul di layar (Tanpa angka)
-// Value: Nilai CF yang dikirim ke backend
-// Style: CSS Class untuk warna border & background dropdown saat dipilih
-// TextColor: CSS Class untuk warna teks label di bawah dropdown
 const ANSWER_OPTIONS = [
 	{
 		label: "Pilih jawaban...",
@@ -17,7 +12,7 @@ const ANSWER_OPTIONS = [
 		textColor: "text-gray-500",
 	},
 	{
-		label: "Sangat Tidak Yakin / Tidak",
+		label: "Tidak Yakin",
 		value: 0.0,
 		style: "border-red-300 bg-red-50 text-red-700 font-medium",
 		textColor: "text-red-600",
@@ -47,7 +42,7 @@ const ANSWER_OPTIONS = [
 		textColor: "text-blue-600",
 	},
 	{
-		label: "Sangat Yakin / Ya",
+		label: "Sangat Yakin",
 		value: 1.0,
 		style: "border-green-300 bg-green-50 text-green-700 font-bold",
 		textColor: "text-green-600",
