@@ -1,7 +1,7 @@
 // components/RuleForm.jsx
 import React, { useState, useEffect } from "react";
-import MultiSelectDropdown from "./MultiSelectDropdown"; // Tetap pakai punya kamu
-
+import MultiSelectDropdown from "./MultiSelectDropdown";
+import Button from "./Button";
 const RuleForm = ({
 	formData,
 	onChange,
@@ -10,12 +10,11 @@ const RuleForm = ({
 	isEditMode,
 	submitLoading,
 	formError,
-	penyakit = [], // Default value array kosong agar tidak error saat mapping
-	gejala = [], // Default value array kosong agar tidak error saat mapping
+	penyakit = [],
+	gejala = [],
 }) => {
 	const [selectedGejala, setSelectedGejala] = useState([]);
 
-	// Initialize selectedGejala from formData.premises
 	useEffect(() => {
 		if (formData.premises && Array.isArray(formData.premises)) {
 			setSelectedGejala(formData.premises);
@@ -30,8 +29,6 @@ const RuleForm = ({
 
 	const handleGejalaChange = (newSelectedGejala) => {
 		setSelectedGejala(newSelectedGejala);
-		// Update parent state manual (karena parent pakai handleInputChange biasa)
-		// Kita panggil onChange dengan parameter ("premises", [array])
 		if (typeof onChange === "function") {
 			onChange("premises", newSelectedGejala);
 		}
@@ -46,7 +43,6 @@ const RuleForm = ({
 		onSubmit(e, dataToSubmit);
 	};
 
-	// FIX: Tambahkan (gejala || []) untuk mencegah error jika data gejala belum load
 	const gejalaOptions = (gejala || []).map((g) => ({
 		value: g.id_gejala,
 		label: `${g.id_gejala} - ${g.nama_gejala}`,
@@ -68,7 +64,7 @@ const RuleForm = ({
 					onChange={(e) => onChange("id_ruleset", e.target.value)}
 					className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
 					required
-					disabled={true} // ID Ruleset biasanya auto-gen, jadi disable/readonly
+					disabled={true}
 					readOnly
 				/>
 			</div>
@@ -82,7 +78,6 @@ const RuleForm = ({
 					required
 				>
 					<option value="">Pilih Penyakit</option>
-					{/* FIX: Tambahkan (penyakit || []) */}
 					{(penyakit || []).map((p) => (
 						<option key={p.id_penyakit} value={p.id_penyakit}>
 							{p.id_penyakit} - {p.nama_penyakit}
@@ -92,7 +87,6 @@ const RuleForm = ({
 			</div>
 
 			<div className="mb-4">
-				{/* Component Kesayanganmu Tetap Disini */}
 				<MultiSelectDropdown
 					label="Gejala"
 					options={gejalaOptions}

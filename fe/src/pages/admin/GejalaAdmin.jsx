@@ -295,22 +295,32 @@ const GejalaForm = ({ formData, onChange, onSubmit, onCancel, loading, error, is
 				></textarea>
 			</div>
 
-			<div className="flex justify-end space-x-3 pt-4 border-t border-gray-100">
-				<Button variant="secondary" onClick={onCancel} disabled={loading} type="button">
+			<div className="flex justify-end space-x-3">
+				<button
+					type="button"
+					onClick={onCancel}
+					className="px-4 py-2 border cursor-pointer border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
+					disabled={loading}
+				>
 					Batal
-				</Button>
-				<Button type="submit" disabled={loading} className="min-w-[120px]">
+				</button>
+				<button
+					type="submit"
+					className="px-4 py-2 bg-blue-600 cursor-pointer text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+					disabled={loading}
+				>
 					{loading ? (
 						<>
-							<i className="fas fa-spinner fa-spin mr-2"></i>Menyimpan...
+							<i className="fas fa-spinner fa-spin mr-2"></i>
+							Menyimpan...
 						</>
 					) : (
 						<>
-							<i className={`fas ${isEdit ? "fa-save" : "fa-plus"} mr-2`}></i>
-							{isEdit ? "Simpan" : "Tambah"}
+							<i className="fas fa-save mr-2"></i>
+							Simpan
 						</>
 					)}
-				</Button>
+				</button>
 			</div>
 		</form>
 	);

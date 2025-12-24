@@ -1,5 +1,5 @@
 import React from "react";
-export function Button({ type, onClick, children }) {
+function Button({ type, onClick, children }) {
 	return (
 		<button
 			type={type}

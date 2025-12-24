@@ -1,7 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
-import Card from "../../components/Card";
 
 const HasilDiagnosisPage = () => {
 	const location = useLocation();
@@ -13,13 +12,13 @@ const HasilDiagnosisPage = () => {
 		return (
 			<div className="min-h-screen flex flex-col bg-background">
 				<div className="grow flex items-center justify-center p-4">
-					<Card className="text-center p-8 max-w-md w-full">
+					<div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden text-center p-8 max-w-md w-full">
 						<h2 className="text-xl font-bold mb-3 text-gray-800">Tidak ada data diagnosis</h2>
 						<p className="text-gray-600 mb-6">Silakan lakukan diagnosis ulang.</p>
 						<Button onClick={() => navigate("/diagnosis")} fullWidth>
 							Kembali
 						</Button>
-					</Card>
+					</div>
 				</div>
 			</div>
 		);
@@ -46,7 +45,7 @@ const HasilDiagnosisPage = () => {
 					)}
 				</div>
 
-				<Card className="mb-6 p-6 border-t-4 border-primary">
+				<div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden mb-6 p-6 border-t-4 border-primary">
 					<h2 className="text-2xl font-bold mb-2 text-gray-800">
 						{nama_penyakit || "Tidak diketahui"}
 					</h2>
@@ -62,30 +61,30 @@ const HasilDiagnosisPage = () => {
 							></div>
 						</div>
 					)}
-				</Card>
+				</div>
 
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-					<Card className="p-6 h-full">
+					<div className="p-6 h-full bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">
 						<h3 className="text-lg font-bold mb-3 text-primary flex items-center">
 							<i className="fas fa-info-circle mr-2"></i>Deskripsi Penyakit
 						</h3>
 						<p className="text-gray-700 leading-relaxed text-justify">
 							{deskripsi || "Tidak ada deskripsi tersedia"}
 						</p>
-					</Card>
+					</div>
 
-					<Card className="p-6 h-full">
+					<div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden p-6 h-full">
 						<h3 className="text-lg font-bold mb-3 text-green-600 flex items-center">
 							<i className="fas fa-prescription-bottle-alt mr-2"></i>Solusi & Rekomendasi
 						</h3>
 						<div className="text-gray-700 whitespace-pre-line leading-relaxed">
 							{solusi || "Belum ada solusi untuk penyakit ini."}
 						</div>
-					</Card>
+					</div>
 				</div>
 
 				{analisis_tambahan && analisis_tambahan.length > 0 && (
-					<Card className="mb-8 p-6">
+					<div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden mb-8 p-6">
 						<h3 className="text-lg font-bold mb-4 text-gray-800">Kemungkinan Penyakit Lain</h3>
 						<div className="space-y-4">
 							{analisis_tambahan.map((penyakit, index) => (
@@ -108,7 +107,7 @@ const HasilDiagnosisPage = () => {
 								</div>
 							))}
 						</div>
-					</Card>
+					</div>
 				)}
 
 				<div className="flex justify-between items-center mt-8">

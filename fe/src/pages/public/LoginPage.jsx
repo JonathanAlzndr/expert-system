@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FormInput from "../../components/FormInput";
-import { Button } from "../../components/Button";
+import Button from "../../components/Button";
 import useFetch from "./../../api/useFetch";
 import Loading from "../../components/Loading";
 
