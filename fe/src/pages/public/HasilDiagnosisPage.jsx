@@ -1,126 +1,142 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Button from "../../components/Button";
 
 const HasilDiagnosisPage = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
-
 	const diagnosisResult = location.state?.diagnosisResult || null;
 
 	if (!diagnosisResult) {
 		return (
-			<div className="min-h-screen flex flex-col bg-background">
-				<div className="grow flex items-center justify-center p-4">
-					<div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden text-center p-8 max-w-md w-full">
-						<h2 className="text-xl font-bold mb-3 text-gray-800">Tidak ada data diagnosis</h2>
-						<p className="text-gray-600 mb-6">Silakan lakukan diagnosis ulang.</p>
-						<Button onClick={() => navigate("/diagnosis")} fullWidth>
-							Kembali
-						</Button>
-					</div>
+			<div className="min-h-screen flex items-center justify-center bg-gray-50 p-6 font-sans">
+				<div className="bg-white border border-gray-200 rounded-lg shadow-sm p-8 max-w-md w-full text-center">
+					<h2 className="text-xl font-bold text-gray-800 mb-2">Tidak ada data diagnosis</h2>
+					<p className="text-sm text-gray-600 mb-6">
+						Silakan lakukan diagnosis ulang dari halaman utama.
+					</p>
+					<button
+						onClick={() => navigate("/diagnosis")}
+						className="w-full bg-[#176B87] text-white py-2.5 rounded-md font-bold text-sm hover:bg-[#12556c] transition-colors"
+					>
+						Kembali ke Diagnosis
+					</button>
 				</div>
 			</div>
 		);
 	}
 
-	const { msg, id_diagnosis, hasil_utama, analisis_tambahan = [] } = diagnosisResult;
-	const { id_penyakit, nama_penyakit, cf_tertinggi, deskripsi, solusi } = hasil_utama || {};
-	const cfPercentage = cf_tertinggi ? `${(cf_tertinggi * 100).toFixed(1)}%` : "0%";
+	const { id_diagnosis, hasil_utama, analisis_tambahan = [] } = diagnosisResult;
+	const { nama_penyakit, cf_tertinggi, deskripsi, solusi } = hasil_utama || {};
+	const cfPercentage = cf_tertinggi ? (cf_tertinggi * 100).toFixed(1) : "0";
 
 	return (
-		<div className="min-h-screen flex flex-col bg-background">
-			<div className="container mx-auto px-4 py-8 grow">
-				<div className="mb-6">
-					<div className="flex justify-between items-center mb-4">
-						<h1 className="text-3xl font-bold text-primary">Hasil Diagnosis</h1>
-						<div className="text-sm text-gray-500 bg-white px-3 py-1 rounded-lg shadow-sm border border-gray-100">
-							ID: <span className="font-semibold text-gray-700">{id_diagnosis || "-"}</span>
-						</div>
-					</div>
-					{msg && (
-						<div className="bg-blue-50 border-l-4 border-blue-500 text-blue-700 p-4 rounded shadow-sm">
-							<p className="font-medium">{msg}</p>
-						</div>
-					)}
+		<div className="min-h-screen bg-white font-sans text-gray-900 pb-12">
+			<div className="max-w-5xl mx-auto px-6 py-8">
+				{/* Header Section */}
+				<div className="flex justify-between items-start mb-1">
+					<h1 className="text-3xl font-bold text-gray-800 tracking-tight">Hasil Diagnosis</h1>
+					<span className="text-[11px] text-gray-400 mt-2 font-medium">
+						ID Diagnosis: {id_diagnosis || "99"}
+					</span>
 				</div>
 
-				<div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden mb-6 p-6 border-t-4 border-primary">
-					<h2 className="text-2xl font-bold mb-2 text-gray-800">
-						{nama_penyakit || "Tidak diketahui"}
-					</h2>
-					<p className="text-gray-600 mb-4 flex items-center">
-						<span className="font-semibold mr-2">Tingkat Keyakinan:</span>
-						<span className="text-primary font-bold text-lg">{cfPercentage}</span>
-					</p>
-					{cf_tertinggi && (
-						<div className="w-full bg-gray-200 rounded-full h-3 mb-2 overflow-hidden">
-							<div
-								className="bg-primary h-full rounded-full transition-all duration-1000 ease-out"
-								style={{ width: `${cf_tertinggi * 100}%` }}
-							></div>
-						</div>
-					)}
+				<div className="mb-8">
+					<span className="bg-blue-100 text-blue-600 text-[10px] px-3 py-1 rounded font-bold border border-blue-200 uppercase tracking-wider">
+						Diagnosis Complete
+					</span>
 				</div>
 
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-					<div className="p-6 h-full bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">
-						<h3 className="text-lg font-bold mb-3 text-primary flex items-center">
-							<i className="fas fa-info-circle mr-2"></i>Deskripsi Penyakit
-						</h3>
-						<p className="text-gray-700 leading-relaxed text-justify">
-							{deskripsi || "Tidak ada deskripsi tersedia"}
+				{/* Main Result Card */}
+				<div className="border border-gray-200 rounded-xl p-6 mb-6 shadow-sm bg-white">
+					<div className="mb-4">
+						<h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+							{nama_penyakit || "Penyakit"}
+							<span className="text-xs text-gray-400 font-normal opacity-70">(ID: P01)</span>
+						</h2>
+						<p className="text-sm font-bold text-gray-600 mt-1">
+							Tingkat Keyakinan: <span className="text-[#176B87]">{cfPercentage}%</span>
 						</p>
 					</div>
-
-					<div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden p-6 h-full">
-						<h3 className="text-lg font-bold mb-3 text-green-600 flex items-center">
-							<i className="fas fa-prescription-bottle-alt mr-2"></i>Solusi & Rekomendasi
-						</h3>
-						<div className="text-gray-700 whitespace-pre-line leading-relaxed">
-							{solusi || "Belum ada solusi untuk penyakit ini."}
-						</div>
+					{/* Progress Bar Utama */}
+					<div className="w-full bg-gray-100 rounded-full h-3.5 overflow-hidden border border-gray-200">
+						<div
+							className="bg-[#176B87] h-full transition-all duration-1000 ease-out"
+							style={{ width: `${cfPercentage}%` }}
+						></div>
 					</div>
 				</div>
 
-				{analisis_tambahan && analisis_tambahan.length > 0 && (
-					<div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden mb-8 p-6">
-						<h3 className="text-lg font-bold mb-4 text-gray-800">Kemungkinan Penyakit Lain</h3>
-						<div className="space-y-4">
-							{analisis_tambahan.map((penyakit, index) => (
-								<div
-									key={penyakit.id_penyakit || index}
-									className="border-b border-gray-100 pb-4 last:border-b-0 last:pb-0"
-								>
-									<div className="flex justify-between items-center mb-1">
-										<span className="font-medium text-gray-700">{penyakit.nama_penyakit}</span>
-										<span className="text-sm font-bold text-gray-500">
+				{/* Deskripsi Penyakit Card */}
+				<div className="border border-gray-200 rounded-xl p-6 mb-6 shadow-sm">
+					<h3 className="text-sm font-bold text-gray-800 mb-3 uppercase tracking-widest border-b border-gray-50 pb-2">
+						Deskripsi Penyakit
+					</h3>
+					<p className="text-[14px] text-gray-600 leading-relaxed text-justify italic">
+						{deskripsi || "Deskripsi penyakit tidak tersedia."}
+					</p>
+				</div>
+
+				{/* Solusi dan Rekomendasi Card */}
+				<div className="border border-gray-200 rounded-xl p-6 mb-6 shadow-sm">
+					<h3 className="text-sm font-bold text-gray-800 mb-3 uppercase tracking-widest border-b border-gray-50 pb-2">
+						Solusi dan Rekomendasi
+					</h3>
+					<p className="text-[14px] text-gray-700 leading-relaxed bg-slate-50/50 p-4 rounded-lg">
+						{solusi || "Hubungi tenaga medis terdekat untuk konsultasi lebih lanjut."}
+					</p>
+				</div>
+
+				{/* Kemungkinan Penyakit Lain Card */}
+				<div className="border border-gray-200 rounded-xl p-6 mb-10 shadow-sm">
+					<h3 className="text-sm font-bold text-gray-800 mb-6 uppercase tracking-widest border-b border-gray-50 pb-2">
+						Kemungkinan Penyakit Lain
+					</h3>
+					<div className="space-y-8">
+						{analisis_tambahan.length > 0 ? (
+							analisis_tambahan.map((penyakit, index) => (
+								<div key={index} className="space-y-2.5">
+									<div className="flex justify-between items-center">
+										<span className="text-[12px] text-gray-400 font-bold uppercase tracking-tight">
+											{penyakit.nama_penyakit || "Penyakit Lain"}
+											<span className="ml-2 opacity-50 text-[11px]">
+												(ID: {penyakit.id_penyakit || `P0${index + 2}`})
+											</span>
+										</span>
+										<span className="text-base text-[#176B87] font-black">
 											{(penyakit.cf_score * 100).toFixed(1)}%
 										</span>
 									</div>
-									<div className="w-full bg-gray-100 rounded-full h-2">
+									{/* Progress Bar Penyakit Lain */}
+									<div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden border border-gray-200">
 										<div
-											className="bg-blue-400 h-2 rounded-full"
+											className="bg-blue-300 h-full opacity-80"
 											style={{ width: `${penyakit.cf_score * 100}%` }}
 										></div>
 									</div>
 								</div>
-							))}
-						</div>
+							))
+						) : (
+							<p className="text-sm text-gray-400 italic">
+								Tidak ada kemungkinan penyakit lain yang terdeteksi.
+							</p>
+						)}
 					</div>
-				)}
+				</div>
 
-				<div className="flex justify-between items-center mt-8">
-					<div className="w-30">
-						<Button onClick={() => navigate("/")} variant="secondary">
-							<i className="fas fa-home mr-2"></i> Beranda
-						</Button>
-					</div>
-					<div className="w-40">
-						<Button onClick={() => navigate("/diagnosis")}>
-							<i className="fas fa-redo mr-2"></i> Diagnosis Baru
-						</Button>
-					</div>
+				{/* Action Buttons */}
+				<div className="flex justify-between items-center gap-4">
+					<button
+						onClick={() => navigate("/")}
+						className="flex items-center gap-2 border border-gray-300 text-gray-600 px-8 py-3 rounded-lg text-sm font-bold hover:bg-gray-50 transition-all active:scale-95"
+					>
+						<i className="fas fa-home"></i> Beranda
+					</button>
+					<button
+						onClick={() => navigate("/diagnosis")}
+						className="flex items-center gap-2 bg-[#176B87] text-white px-8 py-3 rounded-lg text-sm font-bold hover:bg-[#12556c] transition-all shadow-sm active:scale-95"
+					>
+						<i className="fas fa-redo"></i> Diagnosis Baru
+					</button>
 				</div>
 			</div>
 		</div>
