@@ -81,7 +81,7 @@ const HasilDiagnosisPage = () => {
 					<h3 className="text-sm font-bold text-gray-800 mb-3 uppercase tracking-widest border-b border-gray-50 pb-2">
 						Solusi dan Rekomendasi
 					</h3>
-					<p className="text-[14px] text-gray-700 leading-relaxed bg-slate-50/50 p-4 rounded-lg">
+					<p className="text-[14px] text-gray-700 leading-relaxed bg-slate-50/50 rounded-lg">
 						{solusi || "Hubungi tenaga medis terdekat untuk konsultasi lebih lanjut."}
 					</p>
 				</div>
@@ -96,9 +96,9 @@ const HasilDiagnosisPage = () => {
 							analisis_tambahan.map((penyakit, index) => (
 								<div key={index} className="space-y-2.5">
 									<div className="flex justify-between items-center">
-										<span className="text-[12px] text-gray-400 font-bold uppercase tracking-tight">
+										<span className="text-[12px] text-gray-500 font-bold uppercase tracking-tight">
 											{penyakit.nama_penyakit || "Penyakit Lain"}
-											<span className="ml-2 opacity-50 text-[11px]">
+											<span className="ml-2 text-[11px]">
 												(ID: {penyakit.id_penyakit || `P0${index + 2}`})
 											</span>
 										</span>
