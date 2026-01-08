@@ -4,12 +4,12 @@ import useFetch from "../../api/useFetch";
 
 const ANSWER_OPTIONS = [
 	{ label: "Pilih jawaban...", value: null, style: "border-gray-200 bg-white text-gray-400" },
-	{ label: "Hampir Pasti Tidak", value: 0.0, style: "border-red-200 bg-red-50 text-red-600" },
+	{ label: "Tidak Yakin", value: 0.0, style: "border-red-200 bg-red-50 text-red-600" },
 	{ label: "Kurang Yakin", value: 0.2, style: "border-orange-200 bg-orange-50 text-orange-600" },
 	{ label: "Sedikit Yakin", value: 0.4, style: "border-yellow-200 bg-yellow-50 text-yellow-600" },
 	{ label: "Cukup Yakin", value: 0.6, style: "border-teal-200 bg-teal-50 text-teal-700" },
 	{ label: "Yakin", value: 0.8, style: "border-blue-200 bg-blue-50 text-blue-600" },
-	{ label: "Pasti Ya", value: 1.0, style: "border-green-200 bg-green-50 text-green-600" },
+	{ label: "Sangat Yakin", value: 1.0, style: "border-green-200 bg-green-50 text-green-600" },
 ];
 
 const DiagnosisPage = () => {
