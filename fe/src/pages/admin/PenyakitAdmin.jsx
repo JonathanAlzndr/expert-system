@@ -192,14 +192,14 @@ const PenyakitAdmin = () => {
 											<div className="flex gap-3">
 												<button
 													onClick={() => handleEdit(disease)}
-													className="text-blue-600 hover:text-blue-900 flex items-center gap-1 font-bold decoration-dotted transition"
+													className="text-blue-600 hover:text-blue-900 flex items-center gap-1 font-bold hover:underline transition"
 													disabled={isBusy}
 												>
 													<i className="fas fa-edit text-xs"></i> Ubah
 												</button>
 												<button
 													onClick={() => handleDelete(disease.id_penyakit)}
-													className="text-red-600 hover:text-red-900 flex items-center gap-1 font-bold underline decoration-dotted transition"
+													className="text-red-600 hover:text-red-900 flex items-center gap-1 font-bold hover:underline transition"
 													disabled={isBusy}
 												>
 													<i className="fas fa-trash text-xs"></i> Hapus

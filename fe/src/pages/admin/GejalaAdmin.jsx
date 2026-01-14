@@ -183,14 +183,14 @@ const GejalaAdmin = () => {
 												<div className="flex gap-4">
 													<button
 														onClick={() => handleEdit(item)}
-														className="text-blue-600 hover:text-blue-800 font-bold decoration-dotted transition active:scale-90"
+														className="text-blue-600 hover:text-blue-800 font-bold hover:underline transition active:scale-90"
 														disabled={isBusy}
 													>
 														<i className="fas fa-edit mr-1"></i> Ubah
 													</button>
 													<button
 														onClick={() => handleDelete(item.id_gejala)}
-														className="text-red-600 hover:text-red-800 font-bold decoration-dotted transition active:scale-90"
+														className="text-red-600 hover:text-red-800 font-bold hover:underline transition active:scale-90"
 														disabled={isBusy}
 													>
 														<i className="fas fa-trash mr-1"></i> Hapus
