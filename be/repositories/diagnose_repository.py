@@ -34,10 +34,7 @@ class DiagnosisRepository:
             details_list = []
             for answer in user_answers:
                 
-                # Catatan: Sesuaikan nama field 'jawaban' dan 'cf_pengguna'
-                # dengan field di model DiagnosisDetail Anda.
-                # Berdasarkan kode Service sebelumnya, field yang dikirim adalah:
-                # answer['jawaban_text'] dan answer['cf_pengguna']
+        
                 
                 detail = DiagnosisDetail(
                     id_diagnosis=new_diagnosis.id_diagnosis,
