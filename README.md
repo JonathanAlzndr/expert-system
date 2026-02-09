@@ -25,6 +25,7 @@ Dengan adanya sistem pakar ini, pengguna dapat melakukan konsultasi awal secara 
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-yellow)
 ![HTML5](https://img.shields.io/badge/HTML5-Markup-orange)
 ![CSS3](https://img.shields.io/badge/CSS3-Styling-blue)
+![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-Utility--First-38B2AC?logo=tailwind-css&logoColor=white)
 
 ### Backend
 ![Python](https://img.shields.io/badge/Python-Flask-green)
